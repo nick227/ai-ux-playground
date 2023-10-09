@@ -1,0 +1,29 @@
+{
+  "name": "ai-tools-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "nrios",
+  "license": "ISC",
+  "dependencies": {
+    "compromise": "^14.10.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "module-alias": "^2.2.3",
+    "nedb": "^1.8.0",
+    "openai": "^4.11.1",
+    "util": "^0.12.5",
+    "ws": "^8.14.2"
+  },
+  "_moduleAliases": {
+    "@root": "./",
+    "@helpers": "./helpers",
+    "@commands": "./helpers/commands"
+  }
+}
