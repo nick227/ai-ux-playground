@@ -5,7 +5,7 @@ function cleanString(str) {
             .trim();               // Trim the string
 }
 
-function promptValidator(prompt, type) {
+function promptValidator(prompt) {
 	//validate prompt
 	return prompt;
 }

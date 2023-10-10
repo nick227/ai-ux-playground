@@ -1,11 +1,9 @@
 require('module-alias/register');
-const queryChatGpt = require('@commands/query/template/queryChatGpt');
+const queryChatGpt = require('@commands/query/queryChatGpt');
 const apiHandlers = require('@helpers/apiHandlers');
+const { collectionNames, methods } = require('@helpers/constants');
 
-const methods = ['get', 'post', 'put', 'delete'];
-const endpoints = ['styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates'];
-
-const routes = endpoints.reduce((acc, endpoint) => {
+const routes = collectionNames.reduce((acc, endpoint) => {
   methods.forEach(method => {
     acc.push({
       type: method,

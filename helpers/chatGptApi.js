@@ -2,12 +2,12 @@ require('dotenv').config();
 require('module-alias/register');
 
 const OpenAIAPI = require('openai');
-const { 
+const {
     htmlTagAttributesObject,
-    htmlElementTypesEmum  } = require('@helpers/constants.js');
-  
+    htmlElementTypesEmum } = require('@helpers/constants.js');
+
 class Command {
-    execute() {}
+    execute() { }
 }
 
 class InitializeOpenAICommand extends Command {
@@ -36,17 +36,13 @@ class CallOpenAICommand extends Command {
         }
         try {
             const maxTokens = Number(process.env.OPENAI_MAX_TOKENS) - prompt.length;
-            console.log('maxTokens:', maxTokens);
-            console.log('prompt.length', prompt.length);
             const model = process.env.OPENAI_MODEL;
             const completion = await this.openai.chat.completions.create({
                 model,
                 max_tokens: maxTokens,
                 messages: [{ role: 'user', content: prompt }]
             });
-            const message = completion.choices[0]?.message?.content || 'No content returned from OpenAI.';
-            
-            return message;
+            return completion;
         } catch (error) {
             console.error("Error sending prompt to ChatGPT:", error);
             throw new Error('Failed to get response from OpenAI.');

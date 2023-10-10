@@ -1,5 +1,5 @@
-
-
+const collectionNames = ['styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates', 'descriptions', 'fields', 'chatGptTransactions'];
+const methods = ['get', 'post', 'put', 'delete'];
 const htmlElementTypesEmum = [
   'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo',
   'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
@@ -33,5 +33,7 @@ const htmlTagAttributesObject = arrayToObject(htmlTagAttributes);
 module.exports = {
   elementStatesAndMouseEventsObject,
   htmlTagAttributesObject,
-  htmlElementTypesEmum
+  htmlElementTypesEmum,
+  collectionNames,
+  methods
 };

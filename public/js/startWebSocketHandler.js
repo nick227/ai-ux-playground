@@ -17,18 +17,37 @@ function setupWebSocket(popup) {
         ws.send('Hello from client');
     });
 
-    ws.addEventListener('message', (event) => {
-        console.log(`Received: ${event.data}`);
+    let messageQueue = [];
+    let isProcessing = false;
+    
+    async function processQueue() {
+      if (isProcessing) return;
+      isProcessing = true;
+    
+      while (messageQueue.length > 0) {
+        const event = messageQueue.shift();
         const popupBody = popup.document.body.querySelector('section#main');
         const newElement = popup.document.createElement('p');
         newElement.innerHTML = event.data;
         newElement.className = /error/i.test(event.data) ? 'error' : '';
+    
         if (popupBody.firstChild) {
-            popupBody.insertBefore(newElement, popupBody.firstChild);
+          popupBody.insertBefore(newElement, popupBody.firstChild);
         } else {
-            popupBody.appendChild(newElement);
+          popupBody.appendChild(newElement);
         }
+    
+        await new Promise(resolve => setTimeout(resolve, 1111)); // Wait for 3 seconds
+      }
+    
+      isProcessing = false;
+    }
+    
+    ws.addEventListener('message', async (event) => {
+      messageQueue.push(event);
+      processQueue();
     });
+    
 
 }
 
@@ -36,12 +55,12 @@ function addConsole() {
 
     const popup = window.open("", "AI Console Window", "width=600,height=400");
     if (!popup) {
-        alert("Please allow the console to open");
+        alert("Please allow pipups to use the console window.");
         return;
     }
     const styles = `
           body {
-            background-color: #1E1E1E;
+            background-color: #1E1E1E !important;
             color: #A9B7C6;
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
@@ -58,6 +77,9 @@ function addConsole() {
             content: "•";
             margin-right: 10px;
             display: inline-block;
+          }
+          p.error {
+              color: red;
           }
           textarea#prompt {
             width: 100%;
@@ -78,9 +100,10 @@ function addConsole() {
             animation: slideFade 0.5s ease-out forwards;
             opacity: 0;
             max-height: 0;
-            overflow: hidden;
+            border-top: 11px solid gray;
+            margin-top: 15px;
+            padding-top: 15px;
             }
-
             @keyframes slideFade {
             0% {
                 opacity: 0;

@@ -1,6 +1,6 @@
 const nlp = require('compromise');
 
-function promptAnalyzer(prompt, type) {
+function promptAnalyzer(prompt) {
   //get nlp do things
   return prompt;
 }

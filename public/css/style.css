@@ -9,8 +9,16 @@ textarea {
     margin: 20px;
 }
 
+h1.main{
+    font-family: 'Rock Salt';
+    color: #111;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+}
+
 .stage {
-    width: 70vw;
+    width: 75vw;
     height: 100%;
     float: right;
     content: "";
@@ -20,7 +28,7 @@ textarea {
     float: left;
     height: 100%;
     overflow-y: auto;
-
+    max-height: 88vh;
 }
 
 .outer-section {
@@ -33,7 +41,7 @@ textarea {
 }
 
 .formTitles.wrapper {
-    width: 20vw;
+    width: 10vw;
 }
 
 .elementNames.wrapper {
@@ -61,11 +69,10 @@ textarea {
 }
 
 .wrapper .title {
-    margin: 12px 0 0 0;
-}
-
-.error {
-    color: red;
+    margin-bottom: 10px;
+    padding: 5px;
+    background: whitesmoke;
+    border-radius: 5px;
 }
 
 .loading {

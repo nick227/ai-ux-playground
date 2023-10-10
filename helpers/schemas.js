@@ -36,6 +36,39 @@ module.exports = {
         type: htmlElementTypesEmum,
         name: 'string'
     },
+    'forms': {
+        title: 'string',
+        description: 'string',
+        keywords: 'string'
+    },
+    'fieldLists': {
+        name: 'string',
+        category: 'string',
+        list: ['string']
+    },
+    'fields': {
+        value: 'string',
+        type: ''
+    },
+    'descriptions': {
+        text: 'string',
+        category: 'string',
+        name: 'string'
+    },
+    'labels': {
+        textContent: 'string',
+        keywords: 'string'
+    }, 
+    'layouts': {
+        name: 'string',
+        description: 'string',
+        css: 'string'
+    },
+    'themes': {
+        name: 'string',
+        description: 'string',
+        css: 'string'
+    },
     'palettes': {
         name: 'string',
         description: 'string',
@@ -47,39 +80,49 @@ module.exports = {
             rgba: 'string'
         }
     },
-    'layouts': {
-        name: 'string',
-        description: 'string',
-        css: 'string'
-    },
-    'themes': {
-        name: 'string',
-        description: 'string',
-        css: 'string'
-    },
-    'forms': {
-        title: 'string',
-        description: 'string',
-        keywords: 'string'
-    },
-    'labels': {
-        textContent: 'string',
-        keywords: 'string'
-    }, 
     'content': {
         textContent: 'string',
         type: 'string',
         keywords: 'string'
     },
     'prompts': {
-        textContent: 'string',
+        text: 'string',
         type: 'string',
         userId: 'string'
     },
+    "chatgptTransactions": {
+        response: {
+            id: 'string',
+            object: 'string',
+            created: 'number',
+            model: 'string',
+            choices: [
+              {
+                index: 'number',
+                message: {
+                  role: 'string',
+                  content: 'any'
+                },
+                finish_reason: 'string'
+              }
+            ],
+            usage: {
+              prompt_tokens: 'number',
+              completion_tokens: 'number',
+              total_tokens: 'number'
+            }
+          },
+        prompt: 'string',
+        userId: 'string'
+    },
     'promptTemplates': {
-        template: 'string',
-        type: ['section', 'style', 'textContent', 'image'],
-        keywords: 'string'
+        templates: [{
+            title: 'string',
+            collectionName: 'string',
+            type: ['common-fields', 'form-description', 'form-template'],
+            template: 'string'
+        }],
+        type: ['initial-prompt', 'text-improve', 'image-enhance', 'template-make']
     },
     'promptModifiers': {
         textContent: 'string',

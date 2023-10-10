@@ -13,7 +13,9 @@ const execute = async (operation, req, res) => {
       const { limit, ...params } = req.query;
       const options = limit ? { limit: parseInt(limit) } : {};
       if(options.limit === 1){
+        console.log('finding one');
         results = await db.findOne(params);
+        console.log('found', results);
       } else {
         results = await db.find(req.query);
       }

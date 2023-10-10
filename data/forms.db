@@ -1,20 +1,31 @@
 {"title":"Travel Authorization Form","description":"Form to approve and manage business travel.","_id":"5gOResQ79oZOwNwN"}
 {"title":"Sales Lead Capture Form","description":"Form to collect information on potential sales leads.","_id":"7TbHZrl49tHp1xT0"}
+{"title":"Employee Onboarding Form","description":"Collects essential information from new hires, including tax forms, identification, and job preferences.","_id":"8AehAHpEF0ybh6HD"}
 {"title":"IT Security Compliance Form","description":"Form to ensure compliance with IT security policies.","_id":"8Vrvtmy9x9b1FdwW"}
 {"title":"Customer Feedback Survey","description":"Survey form to collect customer opinions on products or services.","_id":"BRlWDFMl3f113lzV"}
 {"title":"Software Bug Report","description":"Form to report software bugs and issues.","_id":"GskHef2ofhBvQWnj"}
 {"title":"Product Development Request","description":"Form to propose new product ideas or improvements.","_id":"HecXeFQGg6FGoPM8"}
+{"title":"Software Request Form","description":"Allows employees to request new software or updates to existing software.","_id":"K0wdFTA4LPZFvjre"}
+{"title":"Employee Exit Form","description":"Captures feedback and formalizes procedures when an employee is leaving the company.","_id":"NodAz15Xy1fshuj0"}
 {"title":"Financial Audit Checklist","description":"Checklist for internal or external financial audits.","_id":"Q68vDnsiJSTuxVYZ"}
 {"title":"Project Initiation Document","description":"Form to kick-off new projects with essential details.","_id":"Qe787kWw3qfGnrsl"}
+{"title":"Performance Review Form","description":"Used for evaluating employee performance, typically on an annual or semi-annual basis.","_id":"QyZsfY2YZBL8Frfr"}
 {"title":"Inventory Management Report","description":"A form to track and manage inventory levels.","_id":"RLw2dtDFYgRxDk2v"}
+{"title":"Contract Approval Form","description":"Used for obtaining necessary approvals before entering into a contractual agreement.","_id":"TGvooSPshGXXtbRZ"}
 {"title":"Annual Performance Review","description":"Evaluation form for assessing employee performance over the year.","_id":"UtLVoT1Q9Jk7bylJ"}
 {"title":"Health and Safety Incident Report","description":"Form to report workplace health and safety incidents.","_id":"XTYXderGrEr8Sqta"}
+{"title":"Expense Reimbursement Form","description":"Used by employees to request reimbursement for business-related expenses.","_id":"Xg1dUikb19SEfiiK"}
 {"title":"Vendor Qualification Assessment","description":"Form to evaluate and qualify new vendors or suppliers.","_id":"cVLAOy0FhoF9Yyld"}
 {"title":"Client Intake Form","description":"Form to collect essential information from new clients.","_id":"fErXJynqr0jqHVt4"}
 {"title":"Confidentiality Agreement","description":"Form to ensure confidentiality between parties.","_id":"holzId21RLSWXSYy"}
+{"title":"Purchase Order Form","description":"Facilitates the procurement of goods or services, often used in supply chain operations.","_id":"kndZKZraBXkkea1d"}
+{"title":"Leave Request Form","description":"Allows employees to formally request time off for vacation, medical leave, etc.","_id":"lDTDQEkhTwtE33jB"}
+{"title":"Incident Report Form","description":"Used to document workplace incidents for legal and safety purposes.","_id":"noRfSLhqhC0nYFgX"}
 {"title":"Marketing Campaign Approval","description":"Form for approving new marketing campaigns.","_id":"rTCu9EzvgUGcRgYa"}
 {"title":"Procurement Request Form","description":"Form to request the purchase of goods or services.","_id":"rejSE8PxfAefUo0B"}
 {"title":"Employee Exit Interview","description":"Form to collect feedback from departing employees.","_id":"t1m657LOjjkAmdnk"}
+{"title":"Customer Feedback Form","description":"Collects customer opinions on products, services, or experiences for quality improvement.","_id":"tmUCJIMIUzfCSeHV"}
 {"title":"Facility Maintenance Request","description":"Form to request maintenance or repairs in facilities.","_id":"xRVfUlPSf88CXimd"}
+{"title":"Asset Allocation Form","description":"Tracks the distribution and assignment of company assets like laptops, phones, and software licenses.","_id":"y95YHaGiaPlyAmtK"}
 {"title":"New Supplier Onboarding","description":"Form to onboard new suppliers with necessary documentation.","_id":"zFDU6acCsg73fEhD"}
 {"title":"Employee Onboarding Checklist","description":"A comprehensive list of tasks and documents required for new hires.","_id":"zKSXdyk1NFQrTp0b"}

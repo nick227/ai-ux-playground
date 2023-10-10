@@ -1,4 +1,4 @@
-function promptSave(prompt, type){
+function promptSave(prompt){
 	//save the prompt
 	return prompt;
 }

@@ -1,14 +1,12 @@
 const sendSocketMsgToClient = require('@helpers/sendSocketMsgToClient.js');
 const promptAnalyzer = require('./promptAnalyzer.js');
 const promptCompiler = require('./promptCompiler.js');
-const promptSave = require('./promptSave.js');
 const promptValidator = require('./promptValidator.js');
+const sentMessages = new Set();
 
-async function promptBuilder(req) {
+async function buildPrompt(req, template) {
   const initialPrompt = req.query.prompt;
-  const type = req.query.type;
   const commandSequence = [
-    promptSave,
     promptAnalyzer,
     promptCompiler,
     promptValidator,
@@ -17,10 +15,13 @@ async function promptBuilder(req) {
   let result = initialPrompt;
 
   for (const command of commandSequence) {
-    result = await command(result, type);
+    result = await command(result, template);
     const msg = `${result}`;
-    sendSocketMsgToClient(msg, req);
+    if (!sentMessages.has(msg)) {
+      sendSocketMsgToClient(msg, req);
+      sentMessages.add(msg);
+    }
   }
   return result;
 }
-module.exports = promptBuilder;
+module.exports = buildPrompt;

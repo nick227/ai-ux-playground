@@ -59,7 +59,9 @@ const getStaticPromptsList = (index, prompt) => {
      name: 'string',
      css: 'string',
      textContent: 'string'
-    } the result must pass JSON.parse()`
+    } the result must pass JSON.parse()`,
+    //5
+    `return valid html document with red background`
     ][index];
 
 }

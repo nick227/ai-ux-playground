@@ -1,4 +1,7 @@
 function createHtmlElement(options) {
+    if(!options){
+        return document.createElement('div');
+    }
     const { elementType, className, css, cssStates = {}, textContent, attributes = {}, children = [] } = options;
 
     const el = document.createElement(elementType);

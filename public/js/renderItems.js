@@ -15,3 +15,8 @@ function renderStage(stageData) {
     stage.appendChild(stageContents);
     document.body.appendChild(stage);
 }
+
+function prependToStage(html) {
+    const stage = document.querySelector('.stage');
+    stage.prepend(html);
+}

@@ -1,7 +1,7 @@
 (async () => {
 
     const formTitles = await api.read('api/forms');
-    const template1 = await api.read('api/templates', { name: 'Travel Authorization Form' });
+    const template1 = await api.read('api/templates', { limit: 1 });
     const elementNames = await api.read('api/elements');
     elementNames.sort((a, b) => a.name.localeCompare(b.name));
 

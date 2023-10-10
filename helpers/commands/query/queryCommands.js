@@ -2,20 +2,30 @@ require('dotenv').config();
 require('module-alias/register');
 const chatGptApi = require('@helpers/chatGptApi');
 const DB = require('@helpers/DB');
-const promptBuilder = require('@commands/prompt/build/promptBuilder');
+const buildPrompt = require('@commands/prompt/build/buildPrompt');
 const fs = require('fs').promises;
 
 class Command {
   execute() { throw new Error('Method not implemented.'); }
 }
 
+class QueryPromptTemplatesCommand extends Command {
+  async execute(type) {
+    if (!type) {
+      throw new Error('Missing required query parameters.');
+    }
+    const db = new DB('promptTemplates.db');
+    return await db.findOne({ type: type });
+  }
+}
+
 class BuildPromptCommand extends Command {
-  async execute(req) {
+  async execute(req, template = null) {
     if (!req.query.prompt) {
       throw new Error('Missing required query parameters.');
     }
-    const prompt = await promptBuilder(req);
-    
+    const prompt = await buildPrompt(req, template);
+
     return prompt;
   }
 }
@@ -31,21 +41,25 @@ class AddToQueueCommand extends Command {
 
 class SavePromptResultCommand extends Command {
   async execute(prompt, result) {
-    if (!process.env.OPENAI_MODEL) {
-      throw new Error('OPENAI_MODEL environment variable is not set.');
-    }
-    const filename = `../${Math.floor(Date.now() / 1000)}-${process.env.OPENAI_MODEL}-queries.txt`;
-    const data = `prompt:\n${prompt}\n\nresponse:\n${result}`;
-    await fs.writeFile(filename, data);
+    writeDataToFile(prompt, result);
+    const insertToDB = new InsertToDBCommand();
+    return await insertToDB.execute({
+      prompt: prompt,
+      response: result
+    }, 'chatgptTransactions');
   }
 }
 
-class InsertToTemplateDBCommand extends Command {
-  async execute(result) {
+class InsertToDBCommand extends Command {
+  async execute(result, tableName) {
+    console.log('Inserting to DB...', tableName);
+    console.log('w--------w-w-w-w-w-w-w-w-w-w-w-w-w-w');
     if (!result) {
-      throw new Error('Result is empty.');
+      console.log('FAILED');
+      console.log(result);
+      throw new Error('Result is empty!');
     }
-    const db = new DB('templates.db');
+    const db = new DB(`${tableName}.db`);
     return await db.insert(result);
   }
 }
@@ -68,7 +82,7 @@ function extractAndSanitizeJSON(input) {
     const lastCurly = input.lastIndexOf('}');
 
     if (firstCurly === -1 || lastCurly === -1 || firstCurly >= lastCurly) {
-      return false;
+      return input;
     }
 
     const extracted = input.substring(firstCurly, lastCurly + 1);
@@ -79,6 +93,12 @@ function extractAndSanitizeJSON(input) {
       return sanitizeJSON(extracted);
     }
   }
+}
+
+async function writeDataToFile(prompt, result) {
+  const filename = `../${Math.floor(Date.now() / 1000)}-${process.env.OPENAI_MODEL}-queries.txt`;
+  const data = `prompt:\n${prompt}\n\nresponse:\n${result}`;
+  await fs.writeFile(filename, data);
 }
 
 function sanitizeJSON(input) {
@@ -106,9 +126,10 @@ function sanitizeJSON(input) {
 }
 
 module.exports = {
-    BuildPromptCommand,
-    AddToQueueCommand,
-    SavePromptResultCommand,
-    ExtractAndSanitizeJSONCommand,
-    InsertToTemplateDBCommand
+  BuildPromptCommand,
+  AddToQueueCommand,
+  SavePromptResultCommand,
+  ExtractAndSanitizeJSONCommand,
+  InsertToDBCommand,
+  QueryPromptTemplatesCommand
 };
