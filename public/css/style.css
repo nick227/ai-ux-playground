@@ -1,6 +1,7 @@
 body {
     width: 100%;
     height: 100%;
+    display: flex;
 }
 
 input,
@@ -9,70 +10,103 @@ textarea {
     margin: 20px;
 }
 
-h1.main{
+h1.main {
     font-family: 'Rock Salt';
     color: #111;
     font-size: 16px;
-    width: 100%;
-    text-align: center;
+    bottom: 5px;
+    right: 5px;
+    position: fixed;
 }
 
 .stage {
-    width: 75vw;
+    width: auto;
     height: 100%;
-    float: right;
     content: "";
+    flex-grow: 1;
+    animation: simpleFadeIn 2s ease-in-out;
 }
 
 .wrapper {
-    float: left;
     height: 100%;
     overflow-y: auto;
-    max-height: 88vh;
+    font-family: Roboto;
+    max-width: 200px;
+}
+
+.wrapper h1,
+.wrapper h2,
+.wrapper h3,
+.wrapper h4,
+.wrapper h5,
+.wrapper h6,
+p {
+    padding: 3px 0;
+    margin: 0;
+}
+
+.row {
+    display: flex;
+}
+
+.description{
+    margin-bottom: 20px;
 }
 
 .outer-section {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 40px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-.example {
-    margin: 20px;
+.wrapper {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    min-width: 150px;
+    width: 20vw;
+    padding: 20px;
+    margin: 20px 20px 0 0;
+    animation: simpleFadeIn 1s ease-in-out;
 }
 
-.formTitles.wrapper {
-    width: 10vw;
+.elements {
+    padding: 2px;
 }
 
-.elementNames.wrapper {
-    width: 10vw;
+.title {
+    margin-bottom: 10px;
 }
 
-.elementNames.wrapper>div {
-    width: 98%;
+.element-name {
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid gray;
-    border-radius: 5px;
-    margin: 1%;
     cursor: pointer;
+    padding: 5px 20px;
+    background: whitesmoke;
 }
 
-.elementNames.wrapper>div:hover {
+.element-name:hover {
     background: lightgray;
 }
-
-.wrapper p {
-    margin: 0;
+.palette .row {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 25px;
 }
 
-.wrapper .title {
-    margin-bottom: 10px;
-    padding: 5px;
-    background: whitesmoke;
-    border-radius: 5px;
+.palette .row > div {
+    width: 20%;
+    height: 30px;
+}
+
+.example {
+    margin: 0 20px 20px 0;
 }
 
 .loading {
@@ -83,5 +117,15 @@ h1.main{
 }
 
 .hidden {
-    display:none;
+    display: none;
 }
+
+  @keyframes simpleFadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  

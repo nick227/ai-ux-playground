@@ -1,18 +1,28 @@
+startWebSocketHandler();
+
 (async () => {
 
-    const formTitles = await api.read('api/forms');
-    const template1 = await api.read('api/templates', { limit: 1 });
-    const elementNames = await api.read('api/elements');
-    elementNames.sort((a, b) => a.name.localeCompare(b.name));
+    async function renderDataObject(key){
+        const data = await api.read(`api/${key}`);
+        console.log(key, data);
+        renderList(data, key);
+    }
 
-    startWebSocketHandler();
+    const keys = ['palettes', 'fieldLists', 'elements', 'forms', 'descriptions'];
+    const buildPromises = keys.map((key) => {
+        return renderDataObject(key);  // Note the return here
+    });
 
-    renderList(formTitles, 'formTitles');
+    try {
+        await Promise.all(buildPromises);
+        await new Promise(resolve => setTimeout(resolve, 500));  // Fixed setTimeout
 
-    renderList(elementNames, 'elementNames');
+        const template1 = await api.read('api/templates', { limit: 1 });
+        renderStage(template1);
 
-    renderStage(template1[0]);
-
-    document.querySelector('.loading').classList.toggle('hidden');
+        document.querySelector('.loading').classList.toggle('hidden');
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
 
 })();

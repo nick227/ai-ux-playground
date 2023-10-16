@@ -1,8 +1,8 @@
 
-const routes = require('./routes');
+import routes from './routes/index.js';
 const API_PORT = 4200;
 
-function startApiListeners(app) {
+export default function startApiListeners(app) {
 
     function registerRoutes(routes) {
         routes.forEach(({ type, path, fn }) => {
@@ -12,11 +12,8 @@ function startApiListeners(app) {
 
     registerRoutes(routes);
 
-    app.listen(API_PORT, () => {
+    return app.listen(API_PORT, () => {
         console.log("\n");
         console.log(`*  API Server running at http://localhost:${API_PORT}/`);
       });
-      
 }
-
-module.exports = startApiListeners;

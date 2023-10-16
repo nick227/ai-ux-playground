@@ -1,10 +1,12 @@
+import dotenv from 'dotenv';
+import path from 'path';
+import express from 'express';
+import session from 'express-session';
+import startWebSocket from './startWebSocket.js';
+import startApiListeners from './startApiListeners.js';
+import 'module-alias/register.js';
 
-require('dotenv').config();
-const path = require('path');
-const express = require('express');
-const session = require('express-session');
-const startWebSocket = require('./startWebSocket');
-const startApiListeners = require('./startApiListeners');
+dotenv.config();
 
 const app = express();
 const expressSession = session({
@@ -13,7 +15,7 @@ const expressSession = session({
   saveUninitialized: true
 });
 app.use(expressSession);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('./public'));
 
-startApiListeners(app);
-startWebSocket(app, expressSession);
+const server = startApiListeners(app);
+startWebSocket(server, app, expressSession);

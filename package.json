@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
@@ -10,11 +11,13 @@
   "author": "nrios",
   "license": "ISC",
   "dependencies": {
+    "completions": "^2.9.0",
     "compromise": "^14.10.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
+    "langchain": "^0.0.165",
     "module-alias": "^2.2.3",
     "mongoose": "^7.6.1",
     "nedb": "^1.8.0",
@@ -25,7 +28,9 @@
   },
   "_moduleAliases": {
     "@root": "./",
-    "@helpers": "./helpers",
-    "@commands": "./helpers/commands"
+    "@src": "./src",
+    "@db": "./src/db",
+    "@interfaces": "./src/interfaces",
+    "@commands": "./src/commands"
   }
 }

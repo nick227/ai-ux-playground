@@ -1,7 +1,7 @@
-require('module-alias/register');
-const queryChatGpt = require('@commands/query/queryChatGpt');
-const apiHandlers = require('@helpers/apiHandlers');
-const { collectionNames, methods } = require('@helpers/constants');
+
+import chatGptControllers from '../src/controllers/chatGptControllers.js';
+import apiHandlers from '../src/controllers/apiControllers.js';
+import { collectionNames, methods } from '../src/constants.js';
 
 const routes = collectionNames.reduce((acc, endpoint) => {
   methods.forEach(method => {
@@ -15,9 +15,9 @@ const routes = collectionNames.reduce((acc, endpoint) => {
 }, [
   {
     type: 'get',
-    path: '/api/chatgpt',
-    fn: queryChatGpt
-  }
+    path: '/api/chatgpt/:template?/:item?',
+    fn: chatGptControllers
+  }, 
 ]);
 
-module.exports = routes;
+export default routes;

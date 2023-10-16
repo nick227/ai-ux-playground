@@ -1,28 +1,28 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const WebSocket = require('ws');
 
-function startWebSocket(app, expressSession) {
-    const server = require('http').createServer(app);
-    const wss = new WebSocket.Server({ server });
-
-    wss.on('connection', (ws, req) => {
-        expressSession(req, {}, () => {
-            ws.id = req.session.id;
-        });
-        ws.on('message', (message) => {
-            console.log(`Received: ${message}`);
-        });
-        ws.send('Hello from server');
+export default function startWebSocket(httpServer, app, expressSession) {
+  const wss = new WebSocket.Server({ server: httpServer });
+  app.set('wss', wss);
+  wss.on('connection', (ws, req) => {
+    expressSession(req, {}, () => {
+      ws.id = req.session.id;
     });
 
-    wss.on('error', (error) => {
-        console.error('WebSocket Server Error:', error);
-      });
-
-    server.listen(8080, () => {
-        console.log('*  WebSocket Server started on http://localhost:8080/');
+    ws.on('message', (message) => {
+      console.log(`Received: ${message}`);
     });
 
-    app.set('wss', wss);
+    ws.on('error', (error) => {
+      console.error('WebSocket Error:', error);
+    });
+
+    // Try sending the message after a delay to ensure the client is ready
+    setTimeout(() => {
+      ws.send('Hello from server');
+    }, 1000);
+  });
+
+  console.log('* WebSocket Server attached to http://localhost:4200/');
 }
-
-module.exports = startWebSocket;
