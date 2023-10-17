@@ -3,6 +3,7 @@ import {
   QueryChatGptCommand,
   GetPromptTemplateCommand
 } from '../query/index.js';
+
 import { TemplateRenderCommand } from '../build/index.js';
 
 export default class Prompt {
@@ -11,6 +12,7 @@ export default class Prompt {
     this.promptParams = typeof params === 'object' ? params : {};
     this.responseObj = null;
     this.responseText = null;
+    this.response = null;
     this.templates = null;
     this.functions = null;
     this.function_call = null;
@@ -25,10 +27,10 @@ export default class Prompt {
     }
 
     const response = await QueryChatGptCommand.execute(extendedParams);
-    return {
-      responseObj: JSON.parse(response.choices[0]?.message?.function_call.arguments) || '',
-      responseText: response.choices[0]?.message?.content || ''
-    };
+    this.response = response;
+    this.responseObj = JSON.parse(response.choices[0]?.message?.function_call.arguments) || '';
+    this.responseText = response.choices[0]?.message?.content || '';
+    this.saveResponse();
   }
 
   async executeSingleQuery(prompt) {
@@ -40,9 +42,10 @@ export default class Prompt {
       const func = this.functions ? this.functions[index] : null;
       return this.queryPrompt(template, func ? { function: func } : {});
     }));
-
+    /*
     this.responseObj = responses.map(r => r.responseObj);
     this.responseText = responses.map(r => r.responseText);
+    */
   }
 
   async queryChatGpt() {
@@ -60,7 +63,7 @@ export default class Prompt {
 
   async saveResponse() {
     const savePromptResult = new SavePromptResultCommand();
-    await savePromptResult.execute(this.promptText, this.responseObj);
+    await savePromptResult.execute(this.promptText, this.response);
   }
 
   //interpolate the template with the prompt params
