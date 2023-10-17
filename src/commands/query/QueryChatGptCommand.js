@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 import OpenAIAPI from 'openai';
 
+//gpt-3.5-turbo-16k
+//gpt-4-0613
+//gpt-3.5-turbo
 class Command {
     execute() { }
 }
@@ -46,9 +49,6 @@ class CallOpenAICommand extends Command {
                 if (params.functions) {
                     options.functions = [];
                     options.functions.push(params.functions);
-                    //console.log(typeof options.functions);
-                    //console.log( options.functions);
-                    //console.log('----------------------');
                 }
                 if (params.function_call) {
                     options.function_call = params.function_call;
@@ -57,13 +57,14 @@ class CallOpenAICommand extends Command {
             console.log('options');
             console.log(JSON.stringify(options, null, 2));
 
-//gpt-3.5-turbo-16k
-//gpt-4-0613
 
             const completion = await this.openai.chat.completions.create(options);
 
             console.log('COMPLETION');
             console.log(JSON.stringify(completion, null, 2));
+            
+            //const savePromptResult = new SavePromptResultCommand();
+            //await savePromptResult.execute(prompt, completion);
 
             return completion;
         } catch (error) {
@@ -77,7 +78,7 @@ class QueryChatGptCommand extends Command {
     constructor(queue) {
         super();
         this.queue = queue;
-        this.execute = this.execute.bind(this);  // Bind the method
+        this.execute = this.execute.bind(this);  
     }
 
     execute(item) {

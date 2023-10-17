@@ -1,7 +1,6 @@
 import DB from '../../src/db/DB.js';
 const execute = async (operation, req, res) => {
   const dbName = req.path.split('/')[req.path.split('/').length - 1] + '.db';
-  console.log(dbName);
   const db = new DB(dbName);
   let results;
 
@@ -17,7 +16,6 @@ const execute = async (operation, req, res) => {
         results = await db.findOne(params);
       } else {
         results = await db.find(req.query);
-        console.log(req.query, results);
       }
         break;
       case 'put':

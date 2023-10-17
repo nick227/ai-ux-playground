@@ -102,7 +102,11 @@ export default {
                 index: 'number',
                 message: {
                   role: 'string',
-                  content: 'any'
+                  content: 'any',
+                  function_call: {
+                    name: 'string',
+                    arguments: 'string'
+                  }
                 },
                 finish_reason: 'string'
               }
