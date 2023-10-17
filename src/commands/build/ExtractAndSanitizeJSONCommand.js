@@ -3,7 +3,7 @@ import Command from "../../interfaces/Command.js";
 export default class ExtractAndSanitizeJSONCommand extends Command {
   execute(input) {
     if (!input) {
-      throw new Error('Input is empty.');
+      return input;
     }
     return typeof input === 'object' ? input : extractAndSanitizeJSON(input);
   }

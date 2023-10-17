@@ -27,7 +27,7 @@ export default class Prompt {
 
     const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
     const response = await QueryChatGptCommand.execute(extendedParams);
-    const responseObj = extractAndSanitizeJSONCommand.execute(response.choices[0]?.message?.function_call.arguments);
+    const responseObj = extractAndSanitizeJSONCommand.execute(response.choices[0]?.message?.function_call?.arguments);
     const responseText = response.choices[0]?.message?.content || '';
 
     return {
