@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import OpenAIAPI from 'openai';
+import {
+    SavePromptResultCommand
+  } from './index.js';
 
 class Command {
     execute() { }
@@ -59,11 +62,15 @@ class CallOpenAICommand extends Command {
 
 //gpt-3.5-turbo-16k
 //gpt-4-0613
+//gpt-3.5-turbo
 
             const completion = await this.openai.chat.completions.create(options);
 
             console.log('COMPLETION');
             console.log(JSON.stringify(completion, null, 2));
+            
+            //const savePromptResult = new SavePromptResultCommand();
+            //await savePromptResult.execute(prompt, completion);
 
             return completion;
         } catch (error) {
