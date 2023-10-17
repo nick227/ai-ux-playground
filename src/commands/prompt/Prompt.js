@@ -3,7 +3,7 @@ import {
   GetPromptTemplateCommand
 } from '../query/index.js';
 
-import { TemplateRenderCommand } from '../build/index.js';
+import { TemplateRenderCommand, ExtractAndSanitizeJSONCommand } from '../build/index.js';
 
 export default class Prompt {
   constructor(templateType, params) {
@@ -25,12 +25,15 @@ export default class Prompt {
       extendedParams.function_call = this.function_call;
     }
 
+    const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
     const response = await QueryChatGptCommand.execute(extendedParams);
+    const responseObj = extractAndSanitizeJSONCommand.execute(response.choices[0]?.message?.function_call.arguments);
+    const responseText = response.choices[0]?.message?.content || '';
 
     return {
-      response: this.response,
-      responseObj: JSON.parse(response.choices[0]?.message?.function_call.arguments) || '',
-      responseText: response.choices[0]?.message?.content || ''
+      response: response,
+      responseObj: responseObj,
+      responseText: responseText
     };
   }
 
