@@ -7,6 +7,5 @@ export default async function specialPrompt(req, res) {
     await prompt.setTemplates();
     await prompt.queryChatGpt();
     console.log('COMPLETE');
-    
-    res.send(prompt);
+    res.send(prompt.responseObj);
 }

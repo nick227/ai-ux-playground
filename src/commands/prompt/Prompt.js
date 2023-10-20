@@ -49,6 +49,7 @@ export default class Prompt {
       const func = this.functions ? this.functions[index] : null;
       return this.queryPrompt(template, func ? { function: func } : {});
     }));
+    this.response = responses.map(r => r.response);
     this.responseObj = responses.map(r => r.responseObj);
     this.responseText = responses.map(r => r.responseText);
   }
