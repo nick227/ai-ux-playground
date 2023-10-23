@@ -4,17 +4,14 @@ body {
     height: 100%;
     font-family: Roboto;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 body {
     background: whitesmoke;
-}
-
-body>section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 h3 {
@@ -24,6 +21,15 @@ h3 {
     font-weight: 600;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
 p {
     font-size: 1em;
     color: #666;
@@ -31,19 +37,15 @@ p {
     margin: 0;
 }
 
-section:nth-child(1) {
-    height: 50vh;
-    justify-content: flex-end;
+section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-section:nth-child(2) {
-    height: 50vh;
-    justify-content: center;
-}
-
-section:nth-child(3) {
-    height: 30vh;
-    justify-content: center;
+.section-2 {
+    position: absolute;
 }
 
 .hidden {
@@ -70,29 +72,50 @@ button {
     margin: 10px;
     padding: 12px 24px;
     transition: all 0.3s ease-in-out;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #e6e6e6;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  button:focus {
+}
+
+button:focus {
     outline: none;
     box-shadow: 0px 0px 4px 2px rgba(0, 128, 255, 0.5);
-  }
-  
-  button:active {
+}
+
+button:active {
     background-color: #d4d4d4;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     transform: scale(0.98);
-  }
+}
 
-  button.accent {
+button.accent {
     background-color: #007bff;
     color: white;
-  }
-  
+}
+
+
+/************************
+* grid 
+************************/
+
+.grid {
+    position: fixed;
+    z-index: -2;
+}
+
+
+/************************
+* mockup 
+************************/
+
+.mockup {
+    position: fixed;
+    z-index: -1;
+    opacity: 0.32;
+}
+
 
 /************************
 * typeahead 
@@ -102,12 +125,25 @@ button {
     border: 1px solid #ccc;
     padding: 15px;
     height: 25px;
-    position: relative;
+    position: absolute;
     border-radius: 30px;
     width: 640px;
     font-size: 20px;
     color: white;
     background-color: #232325;
+}
+.bounce-up {
+    animation: bounce-up 1.3s ease-in-out forwards;
+}
+
+@keyframes bounce-up {
+    0% {
+        top: 50%;
+    }
+
+    100% {
+        top: 20px;
+    }
 }
 
 #typeahead [contenteditable=true]:empty::before {
@@ -116,6 +152,7 @@ button {
 }
 
 #typeahead:focus-within {
+    transition: box-shadow 0.3s ease-in-out;
     box-shadow: 0 4px 8px 3px rgba(0, 0, 0, 0.25);
 }
 
@@ -129,6 +166,7 @@ button {
 }
 
 #typeahead i {
+    cursor: pointer;
     position: absolute;
     right: 22px;
     top: 14px;
@@ -136,9 +174,12 @@ button {
     color: gray;
 }
 
-#typeahead i.loader {
-    font-size: 2.5px;
-    top: 12px;
+#typeahead i:hover {
+    color: white;
+}
+
+#typeahead i:active {
+    font-size: 24px;
 }
 
 #typeahead #suggestionText {
@@ -247,8 +288,9 @@ button {
 }
 
 .loader {
+    position: fixed;
+    margin: auto;
     font-size: 10px;
-    position: relative;
     text-indent: -9999em;
     border-top: 1.17em solid rgba(255, 255, 255, 0.2);
     border-right: 1.17em solid rgba(255, 255, 255, 0.2);
@@ -277,17 +319,18 @@ button {
 * text-fader-container, form tips
 ************************/
 
-.text-fader-container>div {
+.text-fader-container {
     background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px 16px;
     margin: 16px 0;
     width: 420px;
-    font-family: 'Arial', sans-serif;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }
 
-.form-tips h3::before {
+.text-fader-container h3::before {
     content: '💡';
     margin-right: 8px;
 }
@@ -295,6 +338,17 @@ button {
 /************************
 * form ideas
 ************************/
+
+.form-ideas {
+    max-width: 720px;
+}
+
+.form-ideas .row {
+    background-color: rgba(255, 255, 255, 0.99);
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 35px;
+}
 
 .form-ideas img {
     margin-right: 20px;
@@ -340,11 +394,13 @@ button {
 
 .slide-in-right {
     animation: slideInRight 1.25s ease-in-out forwards;
-  }
-  
-  .slide-out-left {
+}
+
+.slide-out-left {
     animation: slideOutLeft 2.2s ease-in-out forwards;
-  }
+}
+
+
 
 @keyframes slide-fade-up {
     0% {
@@ -367,26 +423,27 @@ button {
         opacity: 0;
     }
 }
-  
-  @keyframes slideInRight {
+
+@keyframes slideInRight {
     0% {
-      transform: translateX(30px);
-      opacity: 0;
+        transform: translateX(30px);
+        opacity: 0;
     }
+
     100% {
-      transform: translateX(0);
-      opacity: 1;
+        transform: translateX(0);
+        opacity: 1;
     }
-  }
-  
-  @keyframes slideOutLeft {
+}
+
+@keyframes slideOutLeft {
     0% {
-      transform: translateX(0);
-      opacity: 1;
+        transform: translateX(0);
+        opacity: 1;
     }
+
     100% {
-      transform: translateX(-30px);
-      opacity: 0;
+        transform: translateX(-30px);
+        opacity: 0;
     }
-  }
-  
+}

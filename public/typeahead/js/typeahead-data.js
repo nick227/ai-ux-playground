@@ -1,17 +1,18 @@
-/*
-const fruits = ["Apple", "Apricot", "Banana", "Cherry"];
-const freuitsObject = {
-    "Apple": ["Healthy Snacks", "Cider Production", "Tech Giant"],
-    "Apricot": ["Dessert Ingredient", "Skin Care", "Mediterranean Origin"],
-    "Banana": ["Smoothie Base", "Tropical Regions", "Peel Slips"],
-    "Cherry": ["Flavor Liqueurs", "Pie Filling", "Wood Furniture"]
-};
-*/
-
 const formsTips = [
     `<div><h3>Did you know?</h3><p>A short welcome video can make new hires feel more connected.</p></div>`,
     `<div><h3>Progress tracking</h3><p>Using a checklist is a good way to ensure form completion.</p></div>`,
-    `<div><h3>The buddy system</h3><p>Give the new hire-ways to connect with current employees for guidance.</p></div>`];
+    `<div><h3>The buddy system</h3><p>Give the new hire-ways to connect with current employees for guidance.</p></div>`,
+    `<div><h3>Form Validation</h3><p>Implement client-side and server-side validation to ensure data integrity.</p></div>`,
+    `<div><h3>Progress Indicators</h3><p>Use progress bars or steps to inform users of their completion status.</p></div>`,
+    `<div><h3>Field Labels</h3><p>Clearly label each form field and use placeholder text for additional guidance.</p></div>`,
+    `<div><h3>Responsive Design</h3><p>Ensure your form is mobile-friendly and accessible on various screen sizes.</p></div>`,
+    `<div><h3>Error Feedback</h3><p>Provide immediate, clear error messages for incorrect or missing data.</p></div>`,
+    `<div><h3>CTA Placement</h3><p>Place Call-To-Action buttons like 'Submit' in an easily accessible location.</p></div>`,
+    `<div><h3>Grouping Fields</h3><p>Logically group related fields together to guide users through the form.</p></div>`,
+    `<div><h3>Auto-Fill</h3><p>Enable auto-fill capabilities to make the form filling process faster for users.</p></div>`,
+    `<div><h3>Required Markers</h3><p>Clearly indicate which fields are required using visual cues like asterisks.</p></div>`,
+    `<div><h3>Field Focus</h3><p>Auto-focus the first input field and manage tab order for usability.</p></div>`
+];
 
 const relatedTermObject = {
     "Academic Transcript Request": ["Courses", "Grades", "Credits"],
