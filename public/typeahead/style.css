@@ -21,6 +21,10 @@ h3 {
     font-weight: 600;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
 p {
     font-size: 1em;
     color: #666;
@@ -302,6 +306,9 @@ button.accent {
     padding: 10px 16px;
     margin: 16px 0;
     width: 420px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }
 
 .text-fader-container h3::before {
@@ -313,11 +320,15 @@ button.accent {
 * form ideas
 ************************/
 
+.form-ideas {
+    max-width: 720px;
+}
+
 .form-ideas .row {
     background-color: rgba(255, 255, 255, 0.99);
     background-color: rgb(255, 255, 255);
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 35px;
 }
 
     .form-ideas img {

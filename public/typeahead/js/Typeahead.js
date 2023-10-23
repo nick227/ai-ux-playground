@@ -8,9 +8,6 @@ async function toggleNextAnimation(remove=false) {
   const section2 = document.querySelector('.section-2');
   if (!remove) {
     this.userText.contentEditable = false;
-    await setTimeout(() => section2.classList.toggle('hidden'), 1000);
-	  const img = section2.querySelector("img");
-  	new ImageReloader(img, 3200, 200, 200);
     new Grid();
     new MockUp('polished');
   } else {
