@@ -21,7 +21,12 @@ h3 {
     font-weight: 600;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
 }
 
@@ -120,12 +125,25 @@ button.accent {
     border: 1px solid #ccc;
     padding: 15px;
     height: 25px;
-    position: relative;
+    position: absolute;
     border-radius: 30px;
     width: 640px;
     font-size: 20px;
     color: white;
     background-color: #232325;
+}
+.bounce-up {
+    animation: bounce-up 1.3s ease-in-out forwards;
+}
+
+@keyframes bounce-up {
+    0% {
+        top: 50%;
+    }
+
+    100% {
+        top: 20px;
+    }
 }
 
 #typeahead [contenteditable=true]:empty::before {
@@ -270,8 +288,9 @@ button.accent {
 }
 
 .loader {
+    position: fixed;
+    margin: auto;
     font-size: 10px;
-    position: relative;
     text-indent: -9999em;
     border-top: 1.17em solid rgba(255, 255, 255, 0.2);
     border-right: 1.17em solid rgba(255, 255, 255, 0.2);
@@ -331,7 +350,7 @@ button.accent {
     border-radius: 35px;
 }
 
-    .form-ideas img {
+.form-ideas img {
     margin-right: 20px;
     width: 200px;
     height: 200px;
@@ -380,19 +399,7 @@ button.accent {
 .slide-out-left {
     animation: slideOutLeft 2.2s ease-in-out forwards;
 }
-  
-.bounce-up {
-    animation: slide-up 1.3s ease-in-out forwards;
-}
 
-@keyframes slide-up {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-235px);
-    }
-  }  
 
 
 @keyframes slide-fade-up {

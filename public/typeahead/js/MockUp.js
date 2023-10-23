@@ -78,7 +78,7 @@ class MockUp {
         { type: 'image', url: 'https://placehold.co/600x400', x: "10%", y: "82%", width: "80%", height: "18%" },
       ],
       polished: [
-        { color: "#cccccc", x: 0, y: 0, width: "100%", height: "10%" },
+        { color: "#cccccc", x: 0, y: 0, width: "100%", height: "100px" },
         // Row 1: 33% height
         { color: "transparent", borderColor: "", borderWidth: 2, x: 0, y: 0, width: "100%", height: "33%" },
         // Combined Column 1 & 2 with Image
@@ -97,7 +97,7 @@ class MockUp {
         { color: "transparent", borderColor: "", borderWidth: 2, x: 0, y: "66%", width: "100%", height: "33%" },
         // Vertical Line 3 (newly added)
         { color: "transparent", borderColor: "", borderWidth: 2, x: "50%", y: 0, width: "1%", height: "100%" },
-        { color: "#cccccc", x: 0, y: "90%", width: "100%", height: "10%" },
+        { color: "#cccccc", x: 0, y: "90%", width: "100%", height: "100px" },
       ]
     };
 
