@@ -1,11 +1,33 @@
+async function toggleNextAnimation(remove=false) {
+  document.querySelectorAll('canvas').forEach(el => el.remove());
+  this.typeaheadElement.classList.toggle('bounce-up');
+  this.typeaheadElement.classList.toggle('disabled');
+  this.searchIcon.classList.toggle('hidden');
+  this.reloadIcon.classList.toggle('hidden');
+
+  const section2 = document.querySelector('.section-2');
+  if (!remove) {
+    this.userText.contentEditable = false;
+    await setTimeout(() => section2.classList.toggle('hidden'), 1000);
+	  const img = section2.querySelector("img");
+  	new ImageReloader(img, 3200, 200, 200);
+    new Grid();
+    new MockUp('polished');
+  } else {
+    section2.classList.toggle('hidden');
+    this.userText.contentEditable = true;
+  }
+}
+
 class Typeahead {
   constructor(typeaheadElement, suggestions) {
     this.userText = typeaheadElement.querySelector('span');
-    this.searchIcon = typeaheadElement.querySelector('i');
-    this.loadingSpinner = typeaheadElement.querySelector('.loader');
+    this.searchIcon = typeaheadElement.querySelectorAll('i')[0];
+    this.reloadIcon = typeaheadElement.querySelectorAll('i')[1];
     this.suggestionText = this.userText.nextElementSibling;
     this.suggestions = suggestions;
     this.typeaheadElement = typeaheadElement;
+    this.toggleLoader = toggleNextAnimation.bind(this);
     this.init();
   }
 
@@ -15,15 +37,23 @@ class Typeahead {
       this.update();
     });
     this.userText.addEventListener('keydown', e => e.key === "Tab" && this.complete(e));
-    this.userText.addEventListener('keyup', e => e.key === "Enter" && this.submit(e));
+    this.userText.addEventListener('keyup', e => e.key === "Enter" && this.submit());
     this.userText.addEventListener('focusout', () => this.clear());
+    this.searchIcon.addEventListener('click', () => this.submit());
+    this.reloadIcon.addEventListener('click', () => this.reload());
     this.userText.parentElement.addEventListener('click', () => this.userText.focus());
   }
 
   submit() {
-    this.clear();
-    submitNewTitle(this.userText.textContent);
-    this.toggleLoader();
+    if(this.userText.textContent){
+      this.clear();
+      this.toggleLoader();
+      submitNewTitle(this.userText.textContent);
+    }
+  }
+
+  reload() {
+    this.toggleLoader(true);
   }
 
   togglePlaceholder() {
@@ -42,13 +72,6 @@ class Typeahead {
     }
     const suggestion = this.suggestions.find(s => s.toLowerCase().startsWith(query));
     this.suggestionText.textContent = suggestion ? suggestion.slice(query.length) : "";
-  }
-
-  toggleLoader() {
-    this.searchIcon.classList.toggle('hidden');
-    this.loadingSpinner.classList.toggle('hidden');
-    this.typeaheadElement.classList.toggle('disabled');
-    this.userText.contentEditable = !this.userText.contentEditable;
   }
 
   complete(event) {

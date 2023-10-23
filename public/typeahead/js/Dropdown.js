@@ -38,9 +38,9 @@ class Dropdown {
         }
         break;
       case 'keydown':
-        if (target === this.userText) {
+        //if (target === this.userText) {
           this.handleKeydown(event);
-        }
+        //}
         break;
       case 'mouseover':
         if (target.closest('ul') === this.dropdownList || target.closest('ul') === this.relatedTermsList) {

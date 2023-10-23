@@ -15,13 +15,11 @@
 <body>
     <!---------------- typeahead  ---------------->
     <section>
-        <!---------------- tips  ---------------->
-        <div class="text-fader-container form-tips"></div>
         <div id="typeahead" style="display: flex;">
             <span id="userText" contenteditable="true" data-placeholder="Name your creation"></span>
             <span id="suggestionText"></span>
             <i class="fas fa-search"></i>
-            <i class="loader hidden"></i>
+            <i class="fa-solid fa-rotate-right hidden"></i>
             <div id="dropdown" class="hidden">
                 <div id="inner">
                     <ul class="matched-terms"></ul>
@@ -32,8 +30,12 @@
             </div>
         </div>
     </section>
+    <!---------------- tips  ---------------->
+    <section class="hidden">
+        <div class="text-fader-container form-tips"></div>
+    </section>
     <!---------------- ideas  ---------------->
-    <section>
+    <section class="hidden section-2 slide-in-right">
         <div class="form-ideas">
             <div class="row">
                 <img src="https://picsum.photos/200/200" alt="idea">
@@ -55,8 +57,9 @@
             </div>
         </div>
     </section>
-
     <script src="./js/typeahead-data.js"></script>
+    <script src="./js/Grid.js"></script>
+    <script src="./js/Mockup.js"></script>
     <script src="./js/ImageReloader.js"></script>
     <script src="./js/submitNewTitle.js"></script>
     <script src="./js/TextFader.js"></script>
