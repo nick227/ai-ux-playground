@@ -7,11 +7,13 @@ const keyMap = {
 async function handleTitleClick(promptValue) {
   try {
     document.querySelector('.loading').classList.toggle('hidden');
-    const data = await requestChatGpt(promptValue, 'initial-prompt');
+    const data = await requestChatGpt(promptValue);
     clearAllElementsByClass('stage');
 
     const stageData = findObjectByKeys(data, keyMap.template);
-    renderStage(stageData);
+    console.log('stageData:', stageData);
+    console.log('data:', data);
+    renderStage(data[0]);
 /*
     const descriptionData = findObjectByKeys(data, keyMap.description);
     renderList([descriptionData.text], 'description');
