@@ -2,7 +2,7 @@ function createHtmlElement(options) {
     if(!options){
         return document.createElement('div');
     }
-    const { elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [] } = options;
+    const { elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src } = options;
 
     const el = document.createElement(elementType);
     el.className = className || '';
@@ -14,8 +14,11 @@ function createHtmlElement(options) {
     if (['button'].includes(elementType)) {
         el.textContent = textContent || 'click me';
     }
-    if (elementType === 'img' && !attributes.href) {
+    if (elementType === 'img' && !attributes.href && !src) {
         el.src = 'https://picsum.photos/200';
+    }
+    if (elementType === 'img' && src) {
+        el.src = src;
     }
     if (title) {
         el.title = title;
