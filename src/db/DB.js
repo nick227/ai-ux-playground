@@ -28,10 +28,13 @@ export default class DB {
         if (typeof rows === 'string') {
             try {
                 rows = JSON.parse(rows);
+                //temp fix for now
+                return await this.db.insertAsync(row);
             } catch (e) {
                 throw new Error('Invalid JSON string');
             }
         }
+        /*
         const schema = schemas[this.dbName];
         const isArrayOfStrings = Array.isArray(rows) && rows.every(item => typeof item === 'string');
       
@@ -43,13 +46,12 @@ export default class DB {
           if (!this.validateSchema(row, schema)) {
             throw new Error('Invalid schema for one of the rows');
           }
-          console.log('rows', typeof rows);
-          console.log(rows);  
           return await this.db.insertAsync(row);
         });
       
         const results = await Promise.all(insertPromises);
         return Array.isArray(rows) ? results : results[0];
+        */
       }
       
     
