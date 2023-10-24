@@ -13,7 +13,7 @@ const chatGptControllers = async (req, res) => {
       case "style":
         console.log('Begin special prompt');
         await specialPrompt(req, res);
-        sendSocketMsgToClient('Begin ' + template, req);
+        sendSocketMsgToClient('Begin ' + template + ' prompt', req);
         break;
       default:
         console.log('Begin default prompt');

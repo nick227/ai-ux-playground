@@ -14,6 +14,7 @@ export default class Prompt {
     this.responseObj = null;
     this.templates = null;
     this.functions = null;
+    this.collectionName = null;
     this.function_call = null;
     this.templateType = templateType;
   }
@@ -75,6 +76,7 @@ export default class Prompt {
     this.templates = templateResponse.templates;
     this.functions = templateResponse.functions;
     this.function_call = templateResponse.function_call;
+    this.collectionName = templateResponse.collectionName;
   }
 
   async setFunctions() {
