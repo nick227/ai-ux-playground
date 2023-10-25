@@ -3,6 +3,8 @@ This node server exposes:
  - crud operations on the nedb collections
 - chatgpt/ prompt requests
 - chatgpt/ prompt template requests
+- front-end code for making requests and displaying results
+- front-end code for typeahead, dropdown, popup views
 
 <b>Setup</b>
 
