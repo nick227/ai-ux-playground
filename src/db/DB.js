@@ -25,6 +25,12 @@ export default class DB {
     }
 
     async insert(rows) {
+        if (Array.isArray(rows)) {
+            rows.forEach(row => row.timestamp = new Date());
+        } else {
+            rows.timestamp = new Date();
+        }
+     /*
         if (typeof rows === 'string') {
             try {
                 rows = JSON.parse(rows);
@@ -34,7 +40,8 @@ export default class DB {
                 throw new Error('Invalid JSON string');
             }
         }
-        
+     */
+  
         const schema = schemas[this.dbName];
         const isArrayOfStrings = Array.isArray(rows) && rows.every(item => typeof item === 'string');
       
@@ -43,15 +50,15 @@ export default class DB {
     
         // Validate schema and insert rows
         const insertPromises = normalizedRows.map(async row => {
-          if (!this.validateSchema(row, schema)) {
-            throw new Error('Invalid schema for one of the rows');
-          }
+          //if (!this.validateSchema(row, schema)) {
+            //throw new Error('Invalid schema for one of the rows');
+          //}
           return await this.db.insertAsync(row);
         });
       
         const results = await Promise.all(insertPromises);
         return Array.isArray(rows) ? results : results[0];
-        
+   
       }
       
     
@@ -67,12 +74,13 @@ export default class DB {
     async find(query, options = {}) {
         options.sort = { _id: -1 };
         console.log('query', query);
-        return await this.db.findAsync(query);
+        return await this.db.findAsync(query, options);
     }
 
-    async findOne(query) {
+    async findOne(query, options = {}) {
         try {
-            const row = await this.db.findOneAsync(query);
+            options.sort = { timestamp: -1 }; 
+            const row = await this.db.findOneAsync(query, options);
             return row;
         } catch (err) {
             throw new Error(err);
