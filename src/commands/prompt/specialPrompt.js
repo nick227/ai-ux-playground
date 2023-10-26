@@ -15,7 +15,6 @@ export default async function specialPrompt(req, res) {
 
         const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
         const cleanJson = extractAndSanitizeJSONCommand.execute(prompt.responseObj[0]);
-        console.log('cleanJson', JSON.stringify(cleanJson))
 
         const insertToDBCommand = new InsertToDBCommand();
         insertToDBCommand.execute(cleanJson, prompt.collectionName);

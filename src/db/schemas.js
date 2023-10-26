@@ -125,6 +125,7 @@ export default {
         type: 'string',
         collectionName: 'string',
         responseType: 'string',
+        timestamp: 'string',
         functions: [{
             name: "string",
             description: "string",

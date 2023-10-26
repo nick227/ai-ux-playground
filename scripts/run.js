@@ -1,5 +1,5 @@
 import DB from '../src/db/DB.js';
-const db = new DB('promptTemplates.db');
+const db = new DB('templates.db');
 
 const insertData = {
   "type": "template",
@@ -45,7 +45,7 @@ const insertData = {
 (async () => {
     try {
 
-   
+      ///addTimestampsToOldRows(db);
         //await insertRow(insertData);
         await findAll();
   
@@ -73,4 +73,15 @@ async function removeAll() {
             console.log('Number of documents removed:', numRemoved);
         }
     });
+}
+
+async function addTimestampsToOldRows() {
+  try {
+      const rowsWithoutTimestamp = await db.find({ timestamp: { $exists: false } });
+      for (const row of rowsWithoutTimestamp) {
+          await db.update({ _id: row._id }, { $set: { timestamp: new Date() } });
+      }
+  } catch (err) {
+      throw new Error(err);
+  }
 }
