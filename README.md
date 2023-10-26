@@ -23,3 +23,13 @@ Session secret is any random string, use chatgpt to generate one.
 Finally run npm start
 
 <b>Enjoy!</b>
+
+---------------------------------------------------------------------
+
+<b>Prompt Templates</b>
+
+ - Open scripts/run.js
+ - Write your dynamic prompt using the example
+ - Uncomment the insert command
+ - From the root run <code>node scripts/run.js</code>
+ - Now that template is available at api/chatgpt/:templateName?attribute=value
