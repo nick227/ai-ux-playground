@@ -14,7 +14,7 @@ This node server exposes:
  - Create a .env file in root directory with:
 
 <code>OPENAI_SECRET=**-**********************************************
-OPENAI_MODEL=gpt-4
+OPENAI_MODEL=gpt-3.5-turbo
 OPENAI_MAX_TOKENS=4096
 SESSION_SECRET=************************************************</code>
 
