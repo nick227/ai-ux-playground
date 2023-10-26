@@ -34,7 +34,7 @@ export default class DB {
                 throw new Error('Invalid JSON string');
             }
         }
-        /*
+        
         const schema = schemas[this.dbName];
         const isArrayOfStrings = Array.isArray(rows) && rows.every(item => typeof item === 'string');
       
@@ -51,7 +51,7 @@ export default class DB {
       
         const results = await Promise.all(insertPromises);
         return Array.isArray(rows) ? results : results[0];
-        */
+        
       }
       
     
