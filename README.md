@@ -14,7 +14,7 @@ This node server exposes:
  - Create a .env file in root directory with:
 
 <code>OPENAI_SECRET=**-**********************************************
-OPENAI_MODEL=gpt-4
+OPENAI_MODEL=gpt-3.5-turbo
 OPENAI_MAX_TOKENS=4096
 SESSION_SECRET=************************************************</code>
 
@@ -23,3 +23,13 @@ Session secret is any random string, use chatgpt to generate one.
 Finally run npm start
 
 <b>Enjoy!</b>
+
+---------------------------------------------------------------------
+
+<b>Prompt Templates</b>
+
+ - Open scripts/run.js
+ - Write your dynamic prompt using the example
+ - Uncomment the insert command
+ - From the root run <code>node scripts/run.js</code>
+ - Now that template is available at api/chatgpt/:templateName?attribute=value
