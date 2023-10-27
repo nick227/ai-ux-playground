@@ -5,7 +5,7 @@ startWebSocketHandler();
 
 (async () => {
     try {
-/*
+
         async function renderDataObject(key){
             const data = await api.read(`api/${key}`);
             console.log(key, data);
@@ -16,10 +16,10 @@ startWebSocketHandler();
         const buildPromises = keys.map((key) => {
             return renderDataObject(key);  // Note the return here
         });
-*/
 
-        //await Promise.all(buildPromises);
-        //await new Promise(resolve => setTimeout(resolve, 500));  // Fixed setTimeout
+
+        await Promise.all(buildPromises);
+        await new Promise(resolve => setTimeout(resolve, 500));  // Fixed setTimeout
 
         const template1 = await api.read('api/templates', { limit: 1 });
         console.log('template1',template1);
