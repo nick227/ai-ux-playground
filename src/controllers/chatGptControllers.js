@@ -10,6 +10,7 @@ const chatGptControllers = async (req, res) => {
       case "description":
       case "css":
       case "template":
+      case "font":
       case "style":
         console.log('Begin special prompt');
         await specialPrompt(req, res);
