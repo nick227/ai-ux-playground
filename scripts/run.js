@@ -1,52 +1,38 @@
 import DB from '../src/db/DB.js';
-const db = new DB('templates.db');
+const db = new DB('promptTemplates.db');
 
 const insertData = {
-  "type": "template",
-  "templates": ["Generate a ${description} one-page template."],
-  "collectionName": "templates",
+  "type": "font",
+  "templates": ["Pick the best font for: ${description} "],
+  "collectionName": "fonts",
   "responseType": "object",
   "functions": [
     {
-      "name": "get_template",
-      "description": "Generates a ${description} one-page template. The function will always return 'elementType' and 'css'. Optionally, it may include 'children' for nested elements, 'textContent' for text-based elements, and 'src' for image elements.",
+      "name": "get_font",
+      "description": "Chooses the best font for my page description.",
       "parameters": {
         "type": "object",
         "properties": {
-          "elementType": {
+          "name": {
             "type": "string",
-            "description": "The type of HTML element to include in the template. Always returned."
+            "description": "The name of the font. Always returned."
           },
-          "css": {
+          "description": {
             "type": "string",
-            "description": "The ${style} CSS styling applied to the element. Always returned."
-          },
-          "children": {
-            "type": "array",
-            "items": {"type": "object"},
-            "description": "Nested HTML elements within the parent element. Optional."
-          },
-          "textContent": {
-            "type": "string",
-            "description": "The text content within the HTML element. Optional."
-          },
-          "src": {
-            "type": "string",
-            "description": "The source URL for image elements. Optional."
+            "description": "The description of the font. Always returned."
           }
         },
-        "required": ["elementType", "css"]
+        "required": ["name", "description"]
       }
     }
   ],
-  "function_call": {"name": "get_template"}
+  "function_call": {"name": "get_font"}
 };
 
 (async () => {
     try {
 
-      ///addTimestampsToOldRows(db);
-        //await insertRow(insertData);
+        await insertRow(insertData);
         await findAll();
   
     } catch (err) {
@@ -73,15 +59,4 @@ async function removeAll() {
             console.log('Number of documents removed:', numRemoved);
         }
     });
-}
-
-async function addTimestampsToOldRows() {
-  try {
-      const rowsWithoutTimestamp = await db.find({ timestamp: { $exists: false } });
-      for (const row of rowsWithoutTimestamp) {
-          await db.update({ _id: row._id }, { $set: { timestamp: new Date() } });
-      }
-  } catch (err) {
-      throw new Error(err);
-  }
 }

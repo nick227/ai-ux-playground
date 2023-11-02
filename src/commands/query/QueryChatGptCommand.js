@@ -55,7 +55,9 @@ class CallOpenAICommand extends Command {
                     options.function_call = params.function_call;
                 }
             }
-
+console.log('options')
+console.log(JSON.stringify(options, null, 2));
+console.log('--------------------------------')
 
             const completion = await this.openai.chat.completions.create(options);
 
