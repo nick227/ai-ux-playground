@@ -2,19 +2,21 @@ import Prompt from './Prompt.js';
 import sendSocketMsgToClient from '../../sendSocketMsgToClient.js';
 import { InsertToDBCommand } from '../query/index.js';
 import { ExtractAndSanitizeJSONCommand } from '../build/index.js';
-export default async function specialPrompt(req, res) {
+import { QueryChatGptCommand } from '../query/index.js';
+export default async function templatePrompt(req, res) {
     try {
         const urlParams = req.query;
-        const templateType = typeof req.params?.template === 'string' ? req.params.template : null;
+        const templateType = typeof urlParams?.type === 'string' ? urlParams.type : null;
         const prompt = new Prompt(templateType, urlParams);
+        await prompt.init();
+        console.log('prompt', prompt);
+        const queryChatGptCommand = new QueryChatGptCommand(prompt.templates[0], prompt);
+        queryChatGptCommand.execute();
 
-        console.log('urlParams', urlParams)
-        console.log('templateType', templateType)
-        await prompt.setTemplates();
-        await prompt.queryChatGpt();
 
-        const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
-        const cleanJson = extractAndSanitizeJSONCommand.execute(prompt.responseObj[0]);
+return;
+        //const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
+        //const cleanJson = extractAndSanitizeJSONCommand.execute(prompt.responseObj[0]);
 
         //const insertToDBCommand = new InsertToDBCommand();
         //insertToDBCommand.execute(cleanJson, prompt.collectionName);
@@ -25,6 +27,6 @@ export default async function specialPrompt(req, res) {
         res.send(prompt.responseObj);
 
     } catch (error) {
-        console.error('SpecialPrompt Error:', error);
+        console.error('templatePrompt Error:', error);
     }
 }

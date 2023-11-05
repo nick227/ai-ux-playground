@@ -1,95 +1,56 @@
-import {
-  QueryChatGptCommand,
-  GetPromptTemplateCommand
-} from '../query/index.js';
-
-import { TemplateRenderCommand, ExtractAndSanitizeJSONCommand } from '../build/index.js';
+import { PromptTemplateHelper } from './helpers/index.js';
+import { QueryChatGptCommand } from '../query/index.js';
+import { ExtractAndSanitizeJSONCommand } from '../build/index.js';
 
 export default class Prompt {
   constructor(templateType, params) {
-    this.promptText = typeof params === 'string' ? params : '';
-    this.promptParams = typeof params === 'object' ? params : {};
-    this.response = null;
-    this.responseText = null;
-    this.responseObj = null;
-    this.templates = null;
-    this.functions = null;
-    this.collectionName = null;
-    this.function_call = null;
     this.templateType = templateType;
+    this.params = params;
   }
 
-  async queryPrompt(promptText, params = {}) {
-    const extendedParams = { prompt: promptText, ...params };
-
-    if (this.function_call) {
-      extendedParams.function_call = this.function_call;
-    }
-
-    const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
-    const response = await QueryChatGptCommand.execute(extendedParams);
-    const responseObj = extractAndSanitizeJSONCommand.execute(response.choices[0]?.message?.function_call?.arguments);
-    const responseText = response.choices[0]?.message?.content || '';
-
-    return {
-      response: response,
-      responseObj: responseObj,
-      responseText: responseText
-    };
+  async init() {
+    this.templateHelper = new PromptTemplateHelper(this.templateType, this.params);
+    await this.templateHelper.execute(); 
+    console.log(',,,....,,,', this.templateHelper)
+    this.templates = this.templateHelper.templates;
+    this.params = this.templateHelper.params;
+    this.functions = this.templateHelper.functions;
+    this.function_call = this.templateHelper.function_call;
   }
 
-  async executeSingleQuery(prompt) {
-    const response = await this.queryPrompt(prompt);
-    this.response = response.response;
-    this.responseText = response.responseText;
-    this.responseObj = response.responseObj;
-  }
-
-  async executeMultipleQueries() {
-    const responses = await Promise.all(this.templates.map((template, index) => {
-      const func = this.functions ? this.functions[index] : null;
-      return this.queryPrompt(template, func ? { function: func } : {});
-    }));
-    this.response = responses.map(r => r.response);
-    this.responseObj = responses.map(r => r.responseObj);
-    this.responseText = responses.map(r => r.responseText);
-  }
-
-  async queryChatGpt() {
-    if (this.promptText) {
-      Object.assign(this, await this.executeSingleQuery(this.promptText));
-    } else if (Array.isArray(this.templates)) {
-      await this.executeMultipleQueries();
+  async executeQueries() {
+    try {
+      await this.init();
+      for (const [index, template] of this.templateHelper.templates.entries()) {
+        const func = this.templateHelper.functions[index];
+        const response = await this.queryGPT(template, this.params, func);
+        this.responses.push(response);
+      }
+      return this.responses;
+    } catch (error) {
+      console.error('Error executing queries in Prompt:', error);
+      throw error;
     }
   }
 
-  async setTemplates() {
-    await this.getTemplates();
-    const templateRenderCommand = new TemplateRenderCommand();
-    this.templates = templateRenderCommand.execute(this.promptParams, this.templates);
-    this.setFunctions();
-  }
-
-  async getTemplates() {
-    const getPromptTemplateCommand = new GetPromptTemplateCommand();
-    const templateResponse = await getPromptTemplateCommand.execute(this.templateType);
-    this.templates = templateResponse.templates;
-    this.functions = templateResponse.functions;
-    this.function_call = templateResponse.function_call;
-    this.collectionName = templateResponse.collectionName;
-  }
-
-  async setFunctions() {
-    const templateRenderCommand = new TemplateRenderCommand();
-    for (const func of this.functions) {
-      func.description = templateRenderCommand.execute(this.promptParams, func.description);
-      const keys = Object.keys(func.parameters.properties);
-      if (keys.length === 0) {
-        continue;
+  async queryGPT(promptText, params = {}, function_call = null) {
+    try {
+      const extendedParams = { ...params, function_call };
+      const queryChatGptCommand = new QueryChatGptCommand(promptText, extendedParams);
+      const response = await queryChatGptCommand.execute();
+      if (!response.choices || response.choices.length === 0 || !response.choices[0].message) {
+        throw new Error('GPT service returned no response.');
       }
-      for (const key of keys) {
-        func.parameters.properties[key].description = templateRenderCommand.execute(this.promptParams, func.parameters.properties[key].description);
-      }
+
+      const { message } = response.choices[0];
+      const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
+      const responseObj = extractAndSanitizeJSONCommand.execute(message.function_call?.arguments);
+      const responseText = message.content || '';
+
+      return { response, responseObj, responseText };
+    } catch (error) {
+      console.error('Error querying GPT in Prompt:', error);
+      throw error;
     }
   }
 }

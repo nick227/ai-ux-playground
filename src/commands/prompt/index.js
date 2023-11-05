@@ -1,7 +1,9 @@
-import specialPrompt from './specialPrompt.js';
+import templatePrompt from './templatePrompt.js';
 import defaultPrompt from './defaultPrompt.js';
+import imagePrompt from './imagePrompt.js';
 
 export {
   defaultPrompt,
-  specialPrompt
+  templatePrompt,
+  imagePrompt
 };

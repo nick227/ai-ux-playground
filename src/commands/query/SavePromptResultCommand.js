@@ -1,9 +1,7 @@
 
-import Command from "../../interfaces/Command.js";
+import Command from "../Command.js";
 import { promises as fs } from 'fs';
-import {
-    InsertToDBCommand,
-  } from '../query/index.js';
+import { InsertToDBCommand } from '../query/index.js';
 
 export default class SavePromptResultCommand extends Command {
   async execute(prompt, result) {

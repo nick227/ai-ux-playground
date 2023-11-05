@@ -1,20 +1,22 @@
 import sendSocketMsgToClient from '../sendSocketMsgToClient.js';
 import dotenv from 'dotenv';
 dotenv.config();
-import { defaultPrompt, specialPrompt } from '../commands/prompt/index.js';
+import { defaultPrompt, templatePrompt, imagePrompt } from '../commands/prompt/index.js';
 
 const chatGptControllers = async (req, res) => {
-  const template = typeof req.params?.template === 'string' ? req.params.template : null;
+  const type = typeof req.params?.type === 'string' ? req.params.type : null;
+  console.log('type', type);
   try {
-    switch (template) {
-      case "description":
-      case "css":
-      case "template":
-      case "font":
-      case "style":
-        console.log('Begin special prompt');
-        await specialPrompt(req, res);
-        sendSocketMsgToClient('Begin ' + template + ' prompt', req);
+    switch (type) {
+      case "image":
+        console.log('Begin image prompt');
+        await imagePrompt(req, res);
+        sendSocketMsgToClient('Begin image prompt', req);
+        break;
+      case "prompt-template":
+        console.log('Begin prompt-template prompt');
+        await templatePrompt(req, res);
+        sendSocketMsgToClient('Begin ' + type + ' prompt-template', req);
         break;
       default:
         console.log('Begin default prompt');
