@@ -21,7 +21,7 @@ startWebSocketHandler();
         //await Promise.all(buildPromises);
         //await new Promise(resolve => setTimeout(resolve, 500));  // Fixed setTimeout
 
-        const template1 = await api.read('api/templates', { limit: 1 });
+        const template1 = await api.read('api/templates', { name:"Leave Request Form" });
         console.log('template1',template1);
         renderStage(template1);
 
