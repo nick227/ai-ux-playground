@@ -24,7 +24,6 @@ class TemplateRenderCommand extends Command {
       return params[key] || "";
     });
   }
-  
 }
 
 export default TemplateRenderCommand;
