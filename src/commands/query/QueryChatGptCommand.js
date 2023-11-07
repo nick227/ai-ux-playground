@@ -1,33 +1,78 @@
+import dotenv from 'dotenv';
+import OpenAIAPI from 'openai';
 import Command from '../Command.js';
-import { CallOpenAICommand, AddToQueueCommand } from './helpers/index.js';
+import { SavePromptResultCommand } from './index.js';
 
-export default class QueryChatGptCommand extends Command {
-    constructor(prompt, params = {}) {
-        super();
-        this.prompt = prompt;
-        this.params = params;
-        this.addToQueueCommand = new AddToQueueCommand();
+dotenv.config();
+
+class QueryChatGptCommand extends Command {
+  constructor() {
+    super();
+    const apiKey = process.env.OPENAI_SECRET;
+    if (!apiKey) {
+      throw new Error('OPENAI_SECRET is not set in environment variables.');
+    }
+    this.openai = new OpenAIAPI({ apiKey });
+  }
+
+  async execute(prompt) {
+    if (!prompt) {
+      throw new Error('Prompt is empty.');
+    }
+    const maxTokens = Number(process.env.OPENAI_MAX_TOKENS) || 150;
+    const model = process.env.OPENAI_MODEL;
+
+    const options = {
+      model,
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt.prompt }]
+    };
+    if (prompt.tools) {
+        options.tools = prompt.tools;
+      }
+
+    try {
+      const completion = await this.openai.chat.completions.create(options);
+      const savePromptResult = new SavePromptResultCommand();
+      await savePromptResult.execute(prompt, completion);
+      return completion;
+ 
+    } catch (error) {
+      console.error("Error sending prompt to ChatGPT:", error);
+      throw new Error('Failed to get response from OpenAI.');
+    }
+  }
+
+  async executeImage(prompt) {
+    if (!prompt) {
+      throw new Error('Prompt is empty.');
     }
 
-    build() {
-        const maxTokens = this.params.max_tokens || Number(process.env.OPENAI_MAX_TOKENS) || 150;
-        if (!this.prompt) {
-            throw new Error('Prompt is empty.');
-        }
-        return {
-            model: process.env.OPENAI_MODEL || 'text-davinci-003',
-            prompt: this.prompt,
-            max_tokens: maxTokens,
-            temperature: this.params.temperature || 0.7,
-            ...this.params
-        };
-    }
+    const options = {
+      model:  process.env.DALLE_MODEL,
+      prompt: prompt,
+      n: 1,
+      quality: 'hd',
+      response_format: 'b64_json',
+      size: '1024x1024'
+    };
 
-    async execute() {
-        const options = this.build();
-        return this.addToQueueCommand.enqueue(async () => {
-            const callOpenAICommand = new CallOpenAICommand();
-            return await callOpenAICommand.execute(options);
-        });
+    console.log('...options: ', options);
+
+    try {
+      const completion = await this.openai.images.generate(options);
+      const savePromptResult = new SavePromptResultCommand();
+      await savePromptResult.execute(prompt, completion);
+
+      return completion;
+ 
+    } catch (error) {
+      console.error("Error sending prompt to ChatGPT:", error);
+      throw new Error('Failed to get response from OpenAI.');
     }
+    
+
+  }
 }
+
+export default QueryChatGptCommand;

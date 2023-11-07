@@ -7,24 +7,23 @@ export default async function templatePrompt(req, res) {
     try {
         const urlParams = req.query;
         const templateType = typeof urlParams?.type === 'string' ? urlParams.type : null;
-        const prompt = new Prompt(templateType, urlParams);
+
+        const prompt = new Prompt(null, templateType, urlParams);
         await prompt.init();
-        console.log('prompt', prompt);
-        const queryChatGptCommand = new QueryChatGptCommand(prompt.templates[0], prompt);
-        queryChatGptCommand.execute();
 
+        const queryChatGptCommand = new QueryChatGptCommand();
+        const response = await queryChatGptCommand.execute(prompt);
+   
+        const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
+        const cleanJson = extractAndSanitizeJSONCommand.execute(response);
 
-return;
-        //const extractAndSanitizeJSONCommand = new ExtractAndSanitizeJSONCommand();
-        //const cleanJson = extractAndSanitizeJSONCommand.execute(prompt.responseObj[0]);
-
-        //const insertToDBCommand = new InsertToDBCommand();
-        //insertToDBCommand.execute(cleanJson, prompt.collectionName);
+        const insertToDBCommand = new InsertToDBCommand();
+        insertToDBCommand.execute(cleanJson, prompt.collectionName);
 
         console.log('COMPLETE');
     
-        sendSocketMsgToClient(JSON.stringify(prompt.responseObj), req);
-        res.send(prompt.responseObj);
+        sendSocketMsgToClient(JSON.stringify(response), req);
+        res.send(response);
 
     } catch (error) {
         console.error('templatePrompt Error:', error);
