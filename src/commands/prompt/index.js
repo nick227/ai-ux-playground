@@ -1,9 +1,11 @@
-import templatePrompt from './templatePrompt.js';
-import defaultPrompt from './defaultPrompt.js';
-import imagePrompt from './imagePrompt.js';
+import TemplatePromptCommand from './TemplatePromptCommand.js';
+import DefaultPromptCommand from './DefaultPromptCommand.js';
+import ImagePromptCommand from './ImagePromptCommand.js';
+import Prompt from './Prompt.js';
 
 export {
-  defaultPrompt,
-  templatePrompt,
-  imagePrompt
+  TemplatePromptCommand,
+  DefaultPromptCommand,
+  ImagePromptCommand,
+  Prompt
 };

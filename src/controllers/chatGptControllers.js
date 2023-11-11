@@ -1,27 +1,28 @@
 import sendSocketMsgToClient from '../sendSocketMsgToClient.js';
 import dotenv from 'dotenv';
 dotenv.config();
-import { defaultPrompt, templatePrompt, imagePrompt } from '../commands/prompt/index.js';
+import { TemplatePromptCommand, DefaultPromptCommand, ImagePromptCommand } from '../commands/prompt/index.js';
+import { promptTemplateList } from '../constants.js';
 
 const chatGptControllers = async (req, res) => {
   const type = typeof req.params?.type === 'string' ? req.params.type : null;
-  console.log('type', type);
   try {
-    switch (type) {
-      case "image":
-        console.log('Begin image prompt');
-        await imagePrompt(req, res);
-        sendSocketMsgToClient('Begin image prompt', req);
+    console.log('type:', type);
+    switch (true) {
+      //image route
+      case type === "image":
+        const imagePromptCommand = new ImagePromptCommand(req, res);
+        await imagePromptCommand.execute();
         break;
-      case "prompt-template":
-        console.log('Begin prompt-template prompt');
-        await templatePrompt(req, res);
-        sendSocketMsgToClient('Begin ' + type + ' prompt-template', req);
+      //template route
+      case promptTemplateList.includes(type):
+        const templatePromptCommand = new TemplatePromptCommand(req, res);
+        await templatePromptCommand.execute();
         break;
+      //default route
       default:
-        console.log('Begin default prompt');
-        sendSocketMsgToClient('Begin default prompt', req);
-        await defaultPrompt(req, res);
+        const defaultPromptCommand = new DefaultPromptCommand(req, res);
+        await defaultPromptCommand.execute();
         break;
     }
   } catch (error) {

@@ -1,4 +1,4 @@
-import { PromptTemplateHelper } from './helpers/index.js';
+import { PromptTemplateCommand } from '../build/index.js';
 import Command from '../Command.js';
 
 export default class Prompt extends Command {
@@ -13,11 +13,12 @@ export default class Prompt extends Command {
     if(!this.templateType || !this.params){
       return;
     }
-    this.templateHelper = new PromptTemplateHelper(this.templateType, this.params);
-    await this.templateHelper.execute(); 
+    this.templateTemplate = new PromptTemplateCommand(this.templateType, this.params);
+    await this.templateTemplate.execute(); 
     
     this.prompt = this.templateHelper?.prompt;
     this.tools = this.templateHelper?.tools;
+    this.messages = this.templateHelper?.messages;
     this.tool_choice = this.templateHelper?.tool_choice;
   }
 }

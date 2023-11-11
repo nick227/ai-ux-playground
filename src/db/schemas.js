@@ -1,6 +1,5 @@
 import { elementStatesAndMouseEventsObject, htmlTagAttributesObject, htmlElementTypesEmum } from '../constants.js';
 
-
   const createTemplate = (depth) => {
     if (depth === 0) return null;
     return {

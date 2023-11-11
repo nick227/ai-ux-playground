@@ -1,4 +1,4 @@
-import Command from "../../interfaces/Command.js";
+import Command from "../Command.js";
 import DB from "../../db/DB.js";
 
 export default class GetPromptTemplateCommand extends Command {

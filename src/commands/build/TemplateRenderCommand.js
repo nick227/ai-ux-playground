@@ -1,7 +1,7 @@
-import Command from '../../interfaces/Command.js';
+import Command from '../Command.js';
 
 class TemplateRenderCommand extends Command {
-  execute(params, templates) {
+  execute(templates, params) {
     if (!Array.isArray(templates)) {
       return this.replaceTemplate(params, templates);
     }

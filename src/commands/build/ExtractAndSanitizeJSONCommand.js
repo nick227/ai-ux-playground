@@ -1,4 +1,4 @@
-import Command from "../../interfaces/Command.js";
+import Command from "../Command.js";
 
 export default class ExtractAndSanitizeJSONCommand extends Command {
   execute(input) {
