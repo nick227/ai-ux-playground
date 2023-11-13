@@ -13,10 +13,12 @@ This node server exposes:
  - Clone this repo and run npm i
  - Create a .env file in root directory with:
 
-<code>OPENAI_SECRET=**-**********************************************
+<code>OPENAI_SECRET=sk-************************************************
 OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_MAX_TOKENS=4096
-SESSION_SECRET=************************************************</code>
+OPENAI_MAX_TOKENS=4000
+SESSION_SECRET=9d3c29d46eac24b74698b9f4358e8b2c
+DALLE_MODEL=dall-e-2
+GENERATED_IMAGES_PATH=./generated/images/</code>
 
 Session secret is any random string, use chatgpt to generate one. 
 
