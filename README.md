@@ -2,6 +2,7 @@
 
 This node server exposes: 
  - Generates, executes and saves dynamic ChatGPT prompt responses
+ - Generates, executes and saves dynamic ChatGPT prompt images
  - Front-end demo code
  - CRUD operations on nedb collections
 
@@ -32,9 +33,5 @@ Finally run <code>npm start</code>
 <b>Prompt Templates</b>
 
  - Manually edit /data/database.db
- - Better is open /scripts/run.js
- - Write your dynamic prompt using the example
- - Uncomment the insert command
- - Run <code>node scripts/run.js</code>
- - Prompt template is available at api/chatgpt/:templateName?attribute=value
- - Generic GPT requests at api/chatgpt?prompt=value
+ - Or Insert row using <code>node scripts/run.js</code>
+ - Prompt template is now available at api/chatgpt/:templateName?attribute=value
