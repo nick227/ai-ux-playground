@@ -2,15 +2,12 @@ import Command from "../Command.js";
 import DB from "../../db/DB.js";
 
 export default class InsertToDBCommand extends Command {
-  async execute(result, tableName) {
-    console.log('--------');
-    console.log('Inserting to DB...', tableName);
-    if (!result) {
-      console.log('FAILED');
-      console.log(result);
-      throw new Error('Result is empty!');
+  async execute(data, tableName) {
+    if (!data || !tableName) {
+      console.error("skipping InsertToDBCommand");
+      return;
     }
     const db = new DB(`${tableName}.db`);
-    return await db.insert(result);
+    return await db.insert(data);
   }
 }

@@ -20,15 +20,15 @@ class QueryChatGptCommand extends Command {
       throw new Error('Prompt is empty.');
     }
     const chatGptTextRequest = new ChatGptTextRequest(this.openai);
-    chatGptTextRequest.execute(prompt);
+    return chatGptTextRequest.execute(prompt);
   }
 
   async executeImage(prompt) {
     if (!prompt) {
-      throw new Error('Prompt is empty.');
+      throw new Error('Image Prompt is empty.');
     }
     const chatGptImageRequest = new ChatGptImageRequest(this.openai);
-    chatGptImageRequest.execute(prompt);
+    return chatGptImageRequest.execute(prompt);
   }
 }
 

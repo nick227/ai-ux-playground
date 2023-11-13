@@ -117,7 +117,8 @@ export default {
             }
           },
         prompt: 'string',
-        userId: 'string'
+        userId: 'string',
+        timestamp: 'string',
     },
     'promptTemplates': {
         templates: ['string'],

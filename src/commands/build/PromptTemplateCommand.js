@@ -19,7 +19,7 @@ export default class PromptTemplateCommand extends Command {
       this.renderFunctions(this.tools, this.params);
       this.renderTemplates(this.params);
     } catch (error) {
-      console.error('Helper Error initializing prompt:', error);
+      console.error('Error initializing prompt template:', error);
       throw error;
     }
   }

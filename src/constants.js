@@ -24,15 +24,17 @@ const elementStatesAndMouseEvents = [
   'mouseout', 'mouseenter', 'mouseleave', 'contextmenu', 'drag', 'dragend', 'dragenter', 'dragexit', 
   'dragleave', 'dragover', 'dragstart', 'drop', 'wheel', 'innerText'
 ];
+
 const promptTemplateList = [
   'sections',
   'card',
   'section',
+  'template',
   'intent'
 ];
-const htmlTagAttributes = ['type', 'class', 'style', 'placeholder', 'min', 'max', 'required', 'checked', 'id', 'name', 'value', 'disabled', 'readonly', 'src', 'alt', 'for', 'href', 'target', 'rel', 'method', 'action', 'enctype', 'autocomplete', 'autofocus', 'multiple', 'colspan', 'rowspan', 'width', 'height', 'accept', 'accept-charset', 'accesskey', 'async', 'autocapitalize', 'charset', 'cite', 'cols', 'contenteditable', 'controls', 'coords', 'datetime', 'defer', 'dir', 'download', 'draggable', 'dropzone', 'form', 'headers', 'hidden', 'high', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loop', 'low', 'manifest', 'media', 'muted', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'poster', 'preload', 'reversed', 'role', 'rows', 'sandbox', 'scope', 'scoped', 'shape', 'sizes', 'span', 'spellcheck', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'tabindex', 'title', 'translate', 'usemap', 'wrap', 'innerHTML'];
 
 const arrayToObject = (arr) => Object.fromEntries(arr.map(key => [key, 'string']));
+const htmlTagAttributes = ['type', 'class', 'style', 'placeholder', 'min', 'max', 'required', 'checked', 'id', 'name', 'value', 'disabled', 'readonly', 'src', 'alt', 'for', 'href', 'target', 'rel', 'method', 'action', 'enctype', 'autocomplete', 'autofocus', 'multiple', 'colspan', 'rowspan', 'width', 'height', 'accept', 'accept-charset', 'accesskey', 'async', 'autocapitalize', 'charset', 'cite', 'cols', 'contenteditable', 'controls', 'coords', 'datetime', 'defer', 'dir', 'download', 'draggable', 'dropzone', 'form', 'headers', 'hidden', 'high', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loop', 'low', 'manifest', 'media', 'muted', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'poster', 'preload', 'reversed', 'role', 'rows', 'sandbox', 'scope', 'scoped', 'shape', 'sizes', 'span', 'spellcheck', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'tabindex', 'title', 'translate', 'usemap', 'wrap', 'innerHTML'];
 const elementStatesAndMouseEventsObject = arrayToObject(elementStatesAndMouseEvents);
 const htmlTagAttributesObject = arrayToObject(htmlTagAttributes);
 

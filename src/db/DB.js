@@ -30,7 +30,7 @@ export default class DB {
         } else {
             rows.timestamp = new Date();
         }
-
+     /*
         if (typeof rows === 'string') {
             try {
                 rows = JSON.parse(rows);
@@ -40,15 +40,19 @@ export default class DB {
                 throw new Error('Invalid JSON string');
             }
         }
+     */
   
         const schema = schemas[this.dbName];
         const isArrayOfStrings = Array.isArray(rows) && rows.every(item => typeof item === 'string');
+      
+        // Normalize input to always be an array
         const normalizedRows = isArrayOfStrings ? rows.map(str => ({ value: str })) : Array.isArray(rows) ? rows : [rows];
     
+        // Validate schema and insert rows
         const insertPromises = normalizedRows.map(async row => {
-          if (!this.validateSchema(row, schema)) {
-            throw new Error('Invalid schema for one of the rows');
-          }
+          //if (!this.validateSchema(row, schema)) {
+            //throw new Error('Invalid schema for one of the rows');
+          //}
           return await this.db.insertAsync(row);
         });
       

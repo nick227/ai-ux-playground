@@ -2,23 +2,19 @@ import { PromptTemplateCommand } from '../build/index.js';
 import Command from '../Command.js';
 
 export default class Prompt extends Command {
-  constructor(prompt, templateType=null, params=null) {
+  constructor(prompt, templateType=0, params=[]) {
     super();
     this.prompt = prompt;
-    this.templateType = templateType;
     this.params = params;
+    this.templateType = templateType;
+    this.promptTemplateCommand = new PromptTemplateCommand(this.templateType, this.params);
   }
 
   async init() {
-    if(!this.templateType || !this.params){
-      return;
-    }
-    this.templateTemplate = new PromptTemplateCommand(this.templateType, this.params);
-    await this.templateTemplate.execute(); 
-    
-    this.prompt = this.templateHelper?.prompt;
-    this.tools = this.templateHelper?.tools;
-    this.messages = this.templateHelper?.messages;
-    this.tool_choice = this.templateHelper?.tool_choice;
+    await this.promptTemplateCommand.execute();
+    this.prompt = this.promptTemplateCommand?.prompt;
+    this.tools = this.promptTemplateCommand?.tools;
+    this.messages = this.promptTemplateCommand?.messages;
+    this.tool_choice = this.promptTemplateCommand?.tool_choice;
   }
 }
