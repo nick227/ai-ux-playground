@@ -30,8 +30,10 @@ Finally run npm start
 
 <b>Prompt Templates</b>
 
- - Open scripts/run.js
+ - Manually edit /data/database.db
+ - Better is open /scripts/run.js
  - Write your dynamic prompt using the example
  - Uncomment the insert command
- - From the root run <code>node scripts/run.js</code>
- - Now that template is available at api/chatgpt/:templateName?attribute=value
+ - Run <code>node scripts/run.js</code>
+ - Prompt template is available at api/chatgpt/:templateName?attribute=value
+ - Generic GPT requests at api/chatgpt?prompt=value
