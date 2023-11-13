@@ -1,10 +1,10 @@
 # ai-ux-playground
+
 This node server exposes: 
- - crud operations on the nedb collections
-- chatgpt/ prompt requests
-- chatgpt/ prompt template requests
-- front-end code for making requests and displaying results
-- front-end code for typeahead, dropdown, popup views
+ - Generates, executes and saves dynamic ChatGPT prompt responses
+ - Generates, executes and saves dynamic ChatGPT prompt images
+ - Front-end demo code
+ - CRUD operations on nedb collections
 
 <b>Setup</b>
 
@@ -13,14 +13,18 @@ This node server exposes:
  - Clone this repo and run npm i
  - Create a .env file in root directory with:
 
-<code>OPENAI_SECRET=**-**********************************************
+```
+OPENAI_SECRET=sk-************************************************
 OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_MAX_TOKENS=4096
-SESSION_SECRET=************************************************</code>
+OPENAI_MAX_TOKENS=4000
+SESSION_SECRET=9d3c29d46eac24b74698b9f4358e8b2c
+DALLE_MODEL=dall-e-2
+GENERATED_IMAGES_PATH=./generated/images/
+```
 
 Session secret is any random string, use chatgpt to generate one. 
 
-Finally run npm start
+Finally run <code>npm start</code>
 
 <b>Enjoy!</b>
 
@@ -28,8 +32,6 @@ Finally run npm start
 
 <b>Prompt Templates</b>
 
- - Open scripts/run.js
- - Write your dynamic prompt using the example
- - Uncomment the insert command
- - From the root run <code>node scripts/run.js</code>
- - Now that template is available at api/chatgpt/:templateName?attribute=value
+ - Manually edit /data/database.db
+ - Or Insert row using <code>node scripts/run.js</code>
+ - Prompt template is now available at api/chatgpt/:templateName?attribute=value
