@@ -1,6 +1,6 @@
-
+import dotenv from 'dotenv';
 import routes from './routes/index.js';
-const API_PORT = 4200;
+dotenv.config();
 
 export default function startApiListeners(app) {
 
@@ -12,8 +12,8 @@ export default function startApiListeners(app) {
 
     registerRoutes(routes);
 
-    return app.listen(API_PORT, () => {
+    return app.listen(process.env.API_PORT, () => {
         console.log("\n");
-        console.log(`*  API Server running at http://localhost:${API_PORT}/`);
+        console.log(`*  API Server running at http://localhost:${process.env.API_PORT}/`);
       });
 }

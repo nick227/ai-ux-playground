@@ -24,5 +24,5 @@ export default function startWebSocket(httpServer, app, expressSession) {
     }, 1000);
   });
 
-  console.log('* WebSocket Server attached to http://localhost:4200/');
+  console.log('* WebSocket Server started');
 }

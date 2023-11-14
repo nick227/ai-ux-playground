@@ -50,7 +50,7 @@ function sanitizeJSON(input) {
       console.error("Initial error:", initialError.message);
       console.error("Final error:", finalError.message);
       console.error("Sanitized input:", sanitized);
-      return null;
+      return input;
     }
   }
 }

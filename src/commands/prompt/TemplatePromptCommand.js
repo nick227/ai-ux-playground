@@ -19,17 +19,10 @@ export default class TemplatePromptCommand extends Command {
 
   async execute() {
     try {
-      //prompt
       await this.prompt.init();
-      //query
-      const results = await this.queryChatGptCommand.execute(this.prompt);
-      //validate
-      const response = await this.extractAndSanitizeJSONCommand.execute(results);
-      //save
+      const response = await this.queryChatGptCommand.execute(this.prompt);
       this.insertToDBCommand.execute(response, this.prompt.collectionName);
-      //respond
       this.res.send(response);
-
     } catch (error) {
       console.error('ExecuteTemplatePromptCommand Error:', error);
       this.res.status(500).send('An error occurred while processing your request.');

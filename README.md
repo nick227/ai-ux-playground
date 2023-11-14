@@ -15,11 +15,12 @@ This node server exposes:
 
 ```
 OPENAI_SECRET=sk-************************************************
-OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_MAX_TOKENS=4000
-SESSION_SECRET=9d3c29d46eac24b74698b9f4358e8b2c
+OPENAI_MODEL=gpt-3.5-turbo-16k
+OPENAI_MAX_TOKENS=16000
+SESSION_SECRET=9d3c29d46eac24b74698b9f4358e8b2a
 DALLE_MODEL=dall-e-2
 GENERATED_IMAGES_PATH=./generated/images/
+API_PORT=5200
 ```
 
 Session secret is any random string, use chatgpt to generate one. 

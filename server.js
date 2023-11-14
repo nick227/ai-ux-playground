@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import path from 'path';
 import express from 'express';
 import session from 'express-session';
 import startWebSocket from './startWebSocket.js';

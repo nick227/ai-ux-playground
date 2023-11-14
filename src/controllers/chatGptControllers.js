@@ -1,6 +1,4 @@
 import sendSocketMsgToClient from '../sendSocketMsgToClient.js';
-import dotenv from 'dotenv';
-dotenv.config();
 import { TemplatePromptCommand, DefaultPromptCommand, ImagePromptCommand } from '../commands/prompt/index.js';
 import { promptTemplateList } from '../constants.js';
 

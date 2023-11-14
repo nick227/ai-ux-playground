@@ -2,78 +2,8 @@ import DB from '../src/db/DB.js';
 const db = new DB('promptTemplates.db');
 
 const insertData = {
-  "type": "template",
-  "messages": [
-    {
-      "role": "user",
-      "content": "Create a full-screen section for a ${title} webpage containing an image from https://placehold.co/ using and relevant heading and paragraph text. Include detailed css for the section and each element that always includes positioning, font properties, colors, backgrounds, etc. Use good spacing and symmetry. ${style} style"
-    },
-    {
-      "role": "assistant",
-      "content": "You are a professional web designer, ui/ux engineer and content writer."
-    }
-  ],
-  "tool_choice": "get_template",
-  "tools": [
-    {
-      "type": "function",
-      "function": {
-        "name": "get_template",
-        "description": "create modern stylish full screen website section, creative position, style, etc.",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "css": {
-              "type": "string"
-            },
-            "section": {
-              "type": "object",
-              "properties": {
-                "heading": {
-                  "type": "object",
-                  "properties": {
-                    "text": {
-                      "type": "string",
-                      "description": "${title} ${tone} heading text"
-                    },
-                    "css": {
-                      "type": "string",
-                      "description": "actual css for heading, cohesive style, position, font, color, size, etc. ${style}"
-                    }
-                  }
-                },
-                "paragraph": {
-                  "type": "object",
-                  "properties": {
-                    "text": {
-                      "type": "string",
-                      "description": "${title} ${tone} paragraph text"
-                    },
-                    "css": {
-                      "type": "string",
-                      "description": "actual css for paragraph, cohesive style, position, font, color, size, etc. ${style}"
-                    }
-                  }
-                },
-                "image": {
-                  "type": "object",
-                  "properties": {
-                    "src": {
-                      "type": "string"
-                    },
-                    "css": {
-                      "type": "string",
-                      "description": "actual css for image, cohesive style, position, style, etc."
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  ]
+  "type": "image-pattern",
+  "prompt": "Create an intricate, infinite repeating pattern featuring ${prompt} in various ${style} styles. The ${prompt} is ${style}. The design aimed for seamless tiling in all directions, with elements interlocking to give the impression of infinite repeating continuity against a solid ${style} background."
 };
 
 (async () => {
@@ -140,6 +70,85 @@ async function removeAll() {
                 "image",
                 "csm"
               ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
+##########################################################################################################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+{
+  "type": "template",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Create a full-screen section for a ${title} webpage containing an image from https://placehold.co/ using and relevant heading and paragraph text. Include detailed css for the section and each element that always includes positioning, font properties, colors, backgrounds, etc. Use good spacing and symmetry. ${style} style"
+    },
+    {
+      "role": "assistant",
+      "content": "You are a professional web designer, ui/ux engineer and content writer."
+    }
+  ],
+  "tool_choice": "get_template",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_template",
+        "description": "create modern stylish full screen website section, creative position, style, etc.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "css": {
+              "type": "string"
+            },
+            "section": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "description": "${title} ${tone} heading text"
+                    },
+                    "css": {
+                      "type": "string",
+                      "description": "actual css for heading, cohesive style, position, font, color, size, etc. ${style}"
+                    }
+                  }
+                },
+                "paragraph": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "description": "${title} ${tone} paragraph text"
+                    },
+                    "css": {
+                      "type": "string",
+                      "description": "actual css for paragraph, cohesive style, position, font, color, size, etc. ${style}"
+                    }
+                  }
+                },
+                "image": {
+                  "type": "object",
+                  "properties": {
+                    "src": {
+                      "type": "string"
+                    },
+                    "css": {
+                      "type": "string",
+                      "description": "actual css for image, cohesive style, position, style, etc."
+                    }
+                  }
+                }
+              }
             }
           }
         }

@@ -17,10 +17,8 @@ export default class ImagePromptCommand extends Command {
       const urlParams = this.req.query;
       const templateType = typeof urlParams?.type === "string" ? urlParams.type : null;
 
-      const promptText = urlParams.prompt;
-      const prompt = new Prompt(promptText, templateType, urlParams);
+      const prompt = new Prompt(null, templateType, urlParams);
       await prompt.init();
-
       const queryChatGptCommand = new QueryChatGptCommand();
       const response = await queryChatGptCommand.executeImage(prompt.prompt);
       const b64JsonString = response.data[0].b64_json;
