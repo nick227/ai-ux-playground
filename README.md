@@ -23,8 +23,6 @@ GENERATED_IMAGES_PATH=./generated/images/
 API_PORT=5200
 ```
 
-Session secret is any random string, use chatgpt to generate one. 
-
 Finally run <code>npm start</code>
 
 <b>Enjoy!</b>
