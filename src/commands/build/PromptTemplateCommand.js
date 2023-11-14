@@ -14,6 +14,10 @@ export default class PromptTemplateCommand extends Command {
   }
 
   async execute() {
+    if(!this.templateType) {
+      this.prompt = this.params.prompt;
+      return;
+    }
     try {
       await this.loadTemplates();
       this.renderFunctions(this.tools, this.params);

@@ -3,84 +3,18 @@ const db = new DB('promptTemplates.db');
 
 const insertData = {
   "type": "image-pattern",
-  "prompt": "Create an intricate, infinite repeating pattern featuring ${prompt} in various ${style} styles. The ${prompt} is ${style}. The design aimed for seamless tiling in all directions, with elements interlocking to give the impression of infinite repeating continuity against a solid ${style} background."
+  "prompt": "Create an infinite repeating ${prompt} pattern, ${style} styles. Solid background, clean lines, detailed art, nocrop."
 };
 
-(async () => {
-    try {
-        await insertRow(insertData);
-        await findAll();
-  
-    } catch (err) {
-        console.error(err);
-    }
-})();
-
-async function insertRow(data) {
-    const newRow = await db.insert(data);
-    console.log('Inserted:', newRow);
-}
-
-async function findAll() {
-    const foundRows = await db.find({});
-    console.log('Found:', foundRows.length);
-    console.log(foundRows);
-}
-
-async function removeAll() {
-    db.remove({ type: 'section' }, { multi: true }, function (err, numRemoved) {
-        if (err) {
-            console.error('Error:', err);
-        } else {
-            console.log('Number of documents removed:', numRemoved);
-        }
-    });
-}
-
-
-/* BACK UP INSERTS */
 
 /*
-{
-  "type": "intent",
-  "messages": [
-    {
-      "role": "user",
-      "content": "Read this prompt '${prompt}', if the prompt wants to create an image return 'image', if the prompt wants to create text return 'text', if the prompt wants to modify a webpage return 'csm', if the prompt wants to have a conversation return 'conversation'"
-    },
-    {
-      "role": "system",
-      "content": "You are a prompt interpreter, that can either respond 'image', 'text', 'csm', or 'conversation'"
-    }
-  ],
-  "tools": [
-    {
-      "type": "function",
-      "function": {
-        "name": "get_intent",
-        "description": "gets user intent from prompt",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "intent": {
-              "type": "string",
-              "enum": [
-                "conversation",
-                "text",
-                "image",
-                "csm"
-              ]
-            }
-          }
-        }
-      }
-    }
-  ]
-}
+
+EXAMPLES:
 
 ##########################################################################################################################################
 ##########################################################################################################################################
 ##########################################################################################################################################
+https://platform.openai.com/docs/guides/function-calling
 
 {
   "type": "template",
@@ -157,4 +91,78 @@ async function removeAll() {
   ]
 }
 
+##########################################################################################################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+{
+  "type": "intent",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Read this prompt '${prompt}', if the prompt wants to create an image return 'image', if the prompt wants to create text return 'text', if the prompt wants to modify a webpage return 'csm', if the prompt wants to have a conversation return 'conversation'"
+    },
+    {
+      "role": "system",
+      "content": "You are a prompt interpreter, that can either respond 'image', 'text', 'csm', or 'conversation'"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_intent",
+        "description": "gets user intent from prompt",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "intent": {
+              "type": "string",
+              "enum": [
+                "conversation",
+                "text",
+                "image",
+                "csm"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
 */
+
+
+
+(async () => {
+  try {
+    await insertRow(insertData);
+    await findAll();
+
+  } catch (err) {
+    console.error(err);
+  }
+})();
+
+async function insertRow(data) {
+  const newRow = await db.insert(data);
+  console.log('Inserted:', newRow);
+}
+
+async function findAll() {
+  const foundRows = await db.find({});
+  console.log('Found:', foundRows.length);
+  console.log(foundRows);
+}
+
+async function removeAll() {
+  db.remove({ type: 'section' }, { multi: true }, function (err, numRemoved) {
+    if (err) {
+      console.error('Error:', err);
+    } else {
+      console.log('Number of documents removed:', numRemoved);
+    }
+  });
+}
