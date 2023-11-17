@@ -1,20 +1,27 @@
 import { Prompt } from './index.js';
 import Command from '../Command.js';
+import { QueryChatGptCommand } from '../query/index.js';
+import { InsertToDBCommand } from '../query/index.js';
 
 export default class DefaultPromptCommand extends Command {
   constructor(req, res) {
     super();
     this.req = req;
     this.res = res;
+    this.urlParams = req.query;
+    this.prompt = new Prompt(this.urlParams.prompt);
+    this.queryChatGptCommand = new QueryChatGptCommand();
+    this.insertToDBCommand = new InsertToDBCommand();
   }
 
   async execute() {
     try {
-      if (this.req.query.prompt) {
-        const prompt = new Prompt(null, this.req.query.prompt);
-        await prompt.init();
-        console.log('Standard Prompt Complete');
-        this.res.status(200).json({ response: prompt.responseText });
+      if (this.urlParams.prompt) {
+        await this.prompt.init();
+        console.log(this.prompt);
+        const response = await this.queryChatGptCommand.execute(this.prompt);
+        this.insertToDBCommand.execute(response, this.prompt.collectionName);
+        this.res.send(response);
       } else {
         this.res.status(400).json({ error: 'No prompt provided' });
       }

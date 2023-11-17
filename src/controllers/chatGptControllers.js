@@ -20,6 +20,7 @@ const chatGptControllers = async (req, res) => {
         await templatePromptCommand.execute();
         break;
       //default route
+      case type === "chat":
       default:
         console.log("default route")
         const defaultPromptCommand = new DefaultPromptCommand(req, res);

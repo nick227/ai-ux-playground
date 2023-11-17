@@ -2,8 +2,8 @@ import DB from '../src/db/DB.js';
 const db = new DB('promptTemplates.db');
 
 const insertData = {
-  "type": "image-pattern",
-  "prompt": "Create an infinite repeating ${prompt} pattern, ${style} styles. Solid background, clean lines, detailed art, nocrop."
+  "type": "image-abstract",
+  "prompt": "Create astrange abstract artistic ${prompt} image, ${style} styles. Crazy expressionism artwork, surreal, nocrop."
 };
 
 
