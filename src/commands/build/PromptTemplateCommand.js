@@ -30,6 +30,7 @@ export default class PromptTemplateCommand extends Command {
 
   async loadTemplates() {
     const getPromptTemplateCommand = new GetPromptTemplateCommand();
+    console.log('this.templateType',this.templateType)
     const templateResponse = await getPromptTemplateCommand.execute(this.templateType);
     this.messages = templateResponse.messages;
     this.prompt = templateResponse.prompt;

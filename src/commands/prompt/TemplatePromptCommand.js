@@ -10,7 +10,7 @@ export default class TemplatePromptCommand extends Command {
     this.req = req;
     this.res = res;
     this.urlParams = req.query;
-    this.templateType = this.urlParams?.type || this.req.params?.type || null;
+    this.templateType = this.urlParams?.type;
     this.prompt = new Prompt(null, this.templateType, this.urlParams);
     this.queryChatGptCommand = new QueryChatGptCommand();
     this.insertToDBCommand = new InsertToDBCommand();

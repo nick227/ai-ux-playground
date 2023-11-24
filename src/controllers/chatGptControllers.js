@@ -3,26 +3,25 @@ import { TemplatePromptCommand, DefaultPromptCommand, ImagePromptCommand } from 
 import { promptTemplateList } from '../constants.js';
 
 const chatGptControllers = async (req, res) => {
-  const type = typeof req.params?.type === 'string' ? req.params.type : null;
+  const endpoint = typeof req.params?.endpoint === 'string' ? req.params.endpoint : null;
   try {
-    console.log('type:', type);
     switch (true) {
       //image route
-      case type === "image":
-        console.log("image route")
+      case endpoint === "image":
+        console.log("imagePromptCommand")
         const imagePromptCommand = new ImagePromptCommand(req, res);
         await imagePromptCommand.execute();
         break;
       //template route
-      case promptTemplateList.includes(type):
-        console.log("template route")
+      case endpoint === "template":
+        console.log("templatePromptCommand")
         const templatePromptCommand = new TemplatePromptCommand(req, res);
         await templatePromptCommand.execute();
         break;
       //default route
-      case type === "chat":
+      case endpoint === "chat":
       default:
-        console.log("default route")
+        console.log("defaultPromptCommand")
         const defaultPromptCommand = new DefaultPromptCommand(req, res);
         await defaultPromptCommand.execute();
         break;
