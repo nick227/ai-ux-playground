@@ -18,9 +18,11 @@ export default class DefaultPromptCommand extends Command {
     try {
       if (this.urlParams.prompt) {
         await this.prompt.init();
-        console.log(this.prompt);
-        const response = await this.queryChatGptCommand.execute(this.prompt);
-        this.insertToDBCommand.execute(response, this.prompt.collectionName);
+        const data = await this.queryChatGptCommand.execute(this.prompt);
+        this.insertToDBCommand.execute(data, this.prompt.collectionName);
+        const response = this.formatResponse(data);
+        console.log('SENDING');
+        console.log(response);
         this.res.send(response);
       } else {
         this.res.status(400).json({ error: 'No prompt provided' });
@@ -29,5 +31,11 @@ export default class DefaultPromptCommand extends Command {
       console.error('DefaultPromptCommand Error:', error);
       this.res.status(500).json({ error: 'An error occurred while processing your request.' });
     }
+  }
+  formatResponse(data){
+    return {
+      response: data,
+      questions: []
+    };
   }
 }
