@@ -2,7 +2,7 @@ import { GetPromptTemplateCommand } from '../query/index.js';
 import { TemplateRenderCommand } from './index.js';
 import Command from '../Command.js';
 
-export default class PromptTemplateCommand extends Command {
+export default class RenderTemplatePromptCommand extends Command {
   constructor(templateType, params) {
     super();
     this.templateType = templateType;

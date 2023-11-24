@@ -2,6 +2,7 @@ export default class AddToQueueCommand {
     constructor() {
         this.queue = [];
         this.isProcessing = false;
+        this.results = [];
     }
 
     async enqueue(task) {
@@ -21,6 +22,7 @@ export default class AddToQueueCommand {
             const { task, resolve, reject } = this.queue.shift();
             try {
                 const result = await task();
+                this.results.push(result); // Update the results object with the task response
                 resolve(result);
             } catch (error) {
                 console.error("Error processing queue item:", error);
