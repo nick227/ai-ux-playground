@@ -1,5 +1,5 @@
 import { Prompt } from "./index.js";
-import { QueryChatGptCommand } from "../query/index.js";
+import { QueryChatGptCommand, AddToQueueCommand } from "../query/index.js";
 import { SaveImageCommand } from "../build/index.js";
 import Command from '../Command.js';
 import dotenv from "dotenv";
@@ -10,25 +10,23 @@ export default class ImagePromptCommand extends Command {
     super();
     this.req = req;
     this.res = res;
+    this.num = this.req.query.num;
+    this.addToQueueCommand = new AddToQueueCommand();
+    this.saveImageCommand = new SaveImageCommand();
+    this.prompt = new Prompt(null, this.req.query?.type, this.req.query);
   }
 
   async execute() {
     try {
-      const urlParams = this.req.query;
-      const templateType = typeof urlParams?.type === "string" ? urlParams.type : null;
-
-      const prompt = new Prompt(null, templateType, urlParams);
-      await prompt.init();
-      const queryChatGptCommand = new QueryChatGptCommand();
-      const response = await queryChatGptCommand.executeImage(prompt.prompt);
-      const b64JsonString = response.data[0].b64_json;
-
-      const saveImageCommand = new SaveImageCommand(b64JsonString, prompt.prompt);
-      saveImageCommand.execute();
+      let results = null;
+      if (this.num) {
+        results = await this.executeSequence();
+      } else {
+        results = await this.executeSingle();
+      }
       
-      console.log("COMPLETE");
-
-      this.res.json({ b64JsonString: b64JsonString });
+      this.saveImageCommand.execute(results, this.prompt.prompt);
+      this.res.json({ results: results });
 
     } catch (error) {
       console.error("ImagePromptCommand Error:", error);
@@ -37,5 +35,20 @@ export default class ImagePromptCommand extends Command {
         error: error.message,
       });
     }
+  }
+
+  async executeSingle() {
+    await this.prompt.init();
+    const queryChatGptCommand = new QueryChatGptCommand();
+    const response = await queryChatGptCommand.executeImage(this.prompt.prompt);
+    return response.data[0].b64_json;
+  }
+
+  async executeSequence() {
+    for (let i = 0; i < this.num; i++) {
+      await this.enqueueTasks(this.executeSingle);
+    }
+    await this.addToQueueCommand.processQueue();
+    return this.addToQueueCommand.results;
   }
 }

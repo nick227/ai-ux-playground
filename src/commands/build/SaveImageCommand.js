@@ -4,15 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default class SaveImageCommand extends Command {
-    constructor(base64String, prompt='') {
+    constructor() {
         super();
-        this.prompt = prompt;
-        this.base64String = base64String;
+        this.prompt = null;
+        this.base64String = null;
         this.outputPath = process.env.GENERATED_IMAGES_PATH;
     }
 
-    async execute() {
+    async execute(base64String, prompt='') {
         try {
+            this.prompt = prompt;
+            this.base64String = base64String;
             const base64Data = this.base64String.replace(/^data:image\/\w+;base64,/, '');
             const buffer = Buffer.from(base64Data, 'base64');
             const filePath = this.outputPath + this.createSafeFilename() + '-' + Date.now() + '.png';

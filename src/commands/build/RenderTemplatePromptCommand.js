@@ -1,5 +1,5 @@
 import { GetPromptTemplateCommand } from '../query/index.js';
-import { TemplateRenderCommand } from './index.js';
+import { RenderTemplateCommand } from './index.js';
 import Command from '../Command.js';
 
 export default class RenderTemplatePromptCommand extends Command {
@@ -11,10 +11,12 @@ export default class RenderTemplatePromptCommand extends Command {
     this.tools = null;
     this.messages = null;
     this.collectionName = null;
+    this.getPromptTemplateCommand = new GetPromptTemplateCommand();
+    this.renderTemplateCommand = new RenderTemplateCommand();
   }
 
   async execute() {
-    if(!this.templateType) {
+    if (!this.templateType) {
       this.prompt = this.params.prompt;
       return;
     }
@@ -29,9 +31,7 @@ export default class RenderTemplatePromptCommand extends Command {
   }
 
   async loadTemplates() {
-    const getPromptTemplateCommand = new GetPromptTemplateCommand();
-    console.log('this.templateType',this.templateType)
-    const templateResponse = await getPromptTemplateCommand.execute(this.templateType);
+    const templateResponse = await this.getPromptTemplateCommand.execute(this.templateType);
     this.messages = templateResponse.messages;
     this.prompt = templateResponse.prompt;
     this.tools = templateResponse.tools;
@@ -40,13 +40,12 @@ export default class RenderTemplatePromptCommand extends Command {
   }
 
   renderTemplates(params) {
-    const templateRenderCommand = new TemplateRenderCommand();
-    if(this.prompt){
-      this.prompt = templateRenderCommand.execute(this.prompt, params);
+    if (this.prompt) {
+      this.prompt = this.renderTemplateCommand.execute(this.prompt, params);
     }
-    if(this.messages){
+    if (this.messages) {
       this.messages.forEach(message => {
-        message.content = templateRenderCommand.execute(message.content, params);
+        message.content = this.renderTemplateCommand.execute(message.content, params);
       })
     }
   }
@@ -58,8 +57,7 @@ export default class RenderTemplatePromptCommand extends Command {
       for (const key in data) {
         if (data.hasOwnProperty(key)) {
           if (key === 'description') {
-            const templateRenderCommand = new TemplateRenderCommand();
-            data[key] = templateRenderCommand.execute(data[key], params);
+            data[key] = this.renderTemplateCommand.execute(data[key], params);
           } else {
             this.renderFunctions(data[key], params);
           }

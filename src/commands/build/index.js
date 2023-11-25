@@ -1,12 +1,12 @@
 
 import ExtractAndSanitizeJSONCommand from './ExtractAndSanitizeJSONCommand.js';
-import TemplateRenderCommand from './TemplateRenderCommand.js';
+import RenderTemplateCommand from './RenderTemplateCommand.js';
 import SaveImageCommand from './SaveImageCommand.js';
 import RenderTemplatePromptCommand from './RenderTemplatePromptCommand.js';
 
 export {
   ExtractAndSanitizeJSONCommand,
-  TemplateRenderCommand,
+  RenderTemplateCommand,
   SaveImageCommand,
   RenderTemplatePromptCommand
 };

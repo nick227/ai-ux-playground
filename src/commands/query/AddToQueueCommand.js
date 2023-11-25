@@ -3,6 +3,7 @@ export default class AddToQueueCommand {
         this.queue = [];
         this.isProcessing = false;
         this.results = [];
+        this.delay = 1000;
     }
 
     async enqueue(task) {
@@ -22,12 +23,13 @@ export default class AddToQueueCommand {
             const { task, resolve, reject } = this.queue.shift();
             try {
                 const result = await task();
-                this.results.push(result); // Update the results object with the task response
+                this.results.push(result); 
                 resolve(result);
             } catch (error) {
                 console.error("Error processing queue item:", error);
                 reject(error);
             }
+            await new Promise(resolve => setTimeout(resolve, this.delay));
         }
 
         this.isProcessing = false;

@@ -4,6 +4,7 @@ import GetPromptTemplateCommand from './GetPromptTemplateCommand.js';
 import SavePromptResultCommand from './SavePromptResultCommand.js';
 import ChatGptTextRequest from './ChatGptTextRequest.js';
 import ChatGptImageRequest from './ChatGptImageRequest.js';
+import AddToQueueCommand from './AddToQueueCommand.js';
 
 export {
   QueryChatGptCommand,
@@ -11,5 +12,6 @@ export {
   GetPromptTemplateCommand,
   SavePromptResultCommand,
   ChatGptTextRequest,
-  ChatGptImageRequest
+  ChatGptImageRequest,
+  AddToQueueCommand
 };
