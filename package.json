@@ -11,7 +11,7 @@
   "author": "nrios",
   "license": "ISC",
   "dependencies": {
-    "completions": "^2.9.0",
+    "completions": "^2.9.1",
     "compromise": "^14.10.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
