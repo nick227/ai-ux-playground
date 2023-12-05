@@ -22,7 +22,6 @@ export default class TemplatePromptCommand extends Command {
         this.templateTypes = this.createArray(this.templateTypes);
         this.executeSequence();
       } else {
-        console.log("SINGLE", this.templateTypes)
         await this.prompt.init();
         const response = await this.queryChatGptCommand.execute(this.prompt);
         this.insertToDBCommand.execute(response, this.prompt.collectionName);
