@@ -26,12 +26,13 @@ class ChatGptTextRequest extends Command {
       ...(prompt.tools && { tools: prompt.tools }),
       ...(prompt.tool_choice && { tool_choice: tool_choice })
     };
-    console.log('options::: ', JSON.stringify(options, null, 2))
+    console.log('starting openai request');
     try {
       const completion = await this.openai.chat.completions.create(options);
       const savePromptResult = new this.SavePromptResultCommand();
       await savePromptResult.execute(prompt, completion);
       const response = this.getResponse(completion);
+      console.log('success!');
       return response;
     } catch (error) {
       console.error("Error sending prompt to ChatGPT:", error);
