@@ -33,4 +33,5 @@ Finally run <code>npm start</code>
 
  - Manually edit /data/database.db
  - Or Insert row using <code>node scripts/run.js</code>
- - Prompt template is now available at api/chatgpt/:templateName?attribute=value
+ - Prompt template at api/chatgpt/template?attribute=value&type=templateName
+ - Image Prompt at    api/chatgpt/image?attribute=value&type=templateName
