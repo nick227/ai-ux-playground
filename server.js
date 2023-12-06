@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: `http://localhost:${process.env.API_PORT}`,
   credentials: true,
 };
 app.use(cors(corsOptions));
