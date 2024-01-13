@@ -1,6 +1,6 @@
 function startWebSocketHandler() {
-    const popup = addConsole();
-    setupWebSocket(popup);
+    //const popup = addConsole();
+    setupWebSocket();
 }
 
 function createWebSocketUrl() {
@@ -10,7 +10,7 @@ function createWebSocketUrl() {
   return `${protocol}://${hostname}${port}`;
 }
 
-function setupWebSocket(popup) {
+function setupWebSocket(popup=null) {
     const ws = new WebSocket(createWebSocketUrl());
 
     ws.addEventListener('error', (error) => {
@@ -27,7 +27,7 @@ function setupWebSocket(popup) {
     async function processQueue() {
       if (isProcessing) return;
       isProcessing = true;
-    
+    /*
       while (messageQueue.length > 0) {
         const event = messageQueue.shift();
         const popupBody = popup.document.body.querySelector('section#main');
@@ -44,7 +44,7 @@ function setupWebSocket(popup) {
     
         await new Promise(resolve => setTimeout(resolve, 1111)); // Wait for 3 seconds
       }
-    
+    */
       isProcessing = false;
     }
     

@@ -1,22 +1,207 @@
 body {
-    width: 100%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
     height: 100%;
-    display: flex;
+    line-height: 1.5;
+    margin-top: 60px;
 }
 
 input,
 select,
-textarea {
-    margin: 20px;
+textarea {}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    padding: 3px 0;
+    margin: 0;
 }
 
-h1.main {
-    font-family: 'Rock Salt';
+h1 {
+    font-family: Orbitron;
     color: #111;
-    font-size: 16px;
-    bottom: 5px;
-    right: 5px;
-    position: fixed;
+}
+
+p {
+    font-size: 1.2em;
+    line-height: 1.75;
+    font-family: Roboto;
+}
+
+pre {
+    white-space: pre-wrap;
+    overflow-y: auto;
+}
+
+.chatbot {
+    position: relative;
+    width: 100%;
+    padding-bottom: 60px;
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    resize: vertical;
+    border-bottom:1px solid lightgray;
+}
+
+.chatbot textarea {
+    width: 23%;
+    height: 400px;
+    line-height: 1.5;
+    font-size: 1.2em;
+    background-color: antiquewhite;
+    padding: 20px;
+    margin: 15px auto;
+    border: none;
+    resize: vertical;
+    margin: 0;
+    padding: 20px;
+}
+
+.chatbot button {
+    width: 150px;
+    margin: 10px 0;
+    padding: 0;
+}
+
+.chatbot-output {
+    position: absolute;
+    left: 28%;
+    border: 2.5px solid aquamarine;
+    border-radius: 15px;
+    padding: 20px;
+    width: 70%;
+    height: 400px;
+    overflow-y: auto;
+    resize: vertical;
+    background-color: white;
+}
+
+.chatbot-output>div {
+    margin: 10px 0;
+}
+
+.chatbot-output h6 {
+    text-decoration: underline;
+    padding: 0;
+    text-decoration: uppercase;
+    border-radius: 3px;
+    font-family: Roboto;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 2px 10px 5px 10px;
+    text-align: left;
+}
+
+.chatbot-loading {
+    width: 100%;
+    height: 22px;
+    background-color: lightcyan;
+    text-align: center;
+    padding: 2px 10px 5px 10px;
+
+}
+
+.chatbot-output p {
+    margin-top: -5px;
+    padding-left: 10px;
+    background-color: whitesmoke;
+    font-size: 1em;
+}
+
+.chatbot-output p.you {
+    background-color: transparent;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+form textarea {
+    width: calc(100% - 40px);
+    height: auto;
+    line-height: 1.5;
+    font-size: 1.2em;
+    background: azure;
+    padding: 20px;
+    margin: 15px auto;
+    box-shadow: none;
+    border: 1px solid #ccc;
+}
+
+textarea.error {
+    color: red;
+}
+
+button {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.template-picker {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    height: 40px;
+    font-size: 1.2em;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 15px auto;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.prompt-template {
+    position: relative;
+    padding: 10px 20px;
+    margin: 10px 0 25px 0;
+}
+
+.commands {
+    background-color: aquamarine;
+}
+
+.close {
+    position: absolute;
+    right: 26px;
+    top: 7px;
+    cursor: pointer;
+    width: 75px;
+    height: 33px;
+    border-radius: 5px;
+    z-index: 2332;
+    background-color: darkred;
+    opacity: 0;
+}
+
+
+.prompt-template:hover .close {
+    opacity: 1;
+}
+
+.prompt-template>div {
+    background-color: aliceblue;
+    margin: 5px;
+    padding: 10px 15px;
 }
 
 .stage {
@@ -29,27 +214,19 @@ h1.main {
 
 .wrapper {
     height: 100%;
+    width: 100%;
     overflow-y: auto;
     font-family: Roboto;
-    max-width: 200px;
-}
-
-.wrapper h1,
-.wrapper h2,
-.wrapper h3,
-.wrapper h4,
-.wrapper h5,
-.wrapper h6,
-p {
-    padding: 3px 0;
-    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    animation: simpleFadeIn 1s ease-in-out;
 }
 
 .row {
     display: flex;
 }
 
-.description{
+.description {
     margin-bottom: 20px;
 }
 
@@ -63,22 +240,8 @@ p {
     font-family: Arial, sans-serif;
 }
 
-.wrapper {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    min-width: 150px;
-    width: 20vw;
-    padding: 20px;
-    margin: 20px 20px 0 0;
-    animation: simpleFadeIn 1s ease-in-out;
-}
-
 .elements {
     padding: 2px;
-}
-
-.title {
-    margin-bottom: 10px;
 }
 
 .element-name {
@@ -94,13 +257,14 @@ p {
 .element-name:hover {
     background: lightgray;
 }
+
 .palette .row {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 25px;
 }
 
-.palette .row > div {
+.palette .row>div {
     width: 20%;
     height: 30px;
 }
@@ -120,12 +284,12 @@ p {
     display: none;
 }
 
-  @keyframes simpleFadeIn {
+@keyframes simpleFadeIn {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
-  
+}

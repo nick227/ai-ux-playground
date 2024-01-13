@@ -10,7 +10,7 @@ const fetchImageData = async (filters) => {
   const accessKey = '3juxXSYHxrGF1q5frnXYDzAgk2ONZezL8u7c0JSgGSA';
   const queryString = createQueryString(filters);
   const url = `https://api.unsplash.com/search/photos?client_id=${accessKey}&${queryString}`;
-  console.log("url",url);
+
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

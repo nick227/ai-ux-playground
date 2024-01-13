@@ -26,29 +26,7 @@ function addConsole() {
                 <style>${styles}</style>
               </head>
               <body>
-              <textarea id="prompt" placeholder="type prompt here - press enter to submit"></textarea>
               <section id="main"></section>
-              <script>
-                const textarea = document.getElementById("prompt");
-              
-                textarea.addEventListener("keydown", function(event) {
-                  if (event.key === "Enter") {
-                    if (event.shiftKey) {
-                      return;
-                    }
-                    event.preventDefault();
-                    askChatGpt(this.value);
-                    this.value = "";
-                  }
-                });
-              function askChatGpt(promptValue) {
-                if(promptValue.length < 5){
-                    alert("Please enter a prompt longer than 5 characters");
-                }else{
-                    window.opener.handleTitleClick(promptValue)
-                }
-              }              
-              </script>
               </body>
             </html>
           `);

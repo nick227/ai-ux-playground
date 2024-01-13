@@ -4,7 +4,6 @@ import DB from "../../db/DB.js";
 export default class InsertToDBCommand extends Command {
   async execute(data, tableName) {
     if (!data || !tableName) {
-      console.error("skipping InsertToDBCommand");
       return;
     }
     const db = new DB(`${tableName}.db`);

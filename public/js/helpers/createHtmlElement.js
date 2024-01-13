@@ -1,13 +1,16 @@
+let currentNodeId = 0;
 function createHtmlElement(options) {
     if(!options){
         return document.createElement('div');
     }
-    const { elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src } = options;
+    const { elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src, htmlContent } = options;
 
     const el = document.createElement(elementType);
     el.className = className || '';
     el.textContent = textContent || '';
-
+    if (htmlContent) {
+        el.innerHTML = htmlContent;
+    }
     if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'header'].includes(elementType)) {
         el.textContent = textContent || 'Lorem Ipsum';
     }
@@ -34,6 +37,7 @@ function createHtmlElement(options) {
         const childElement = createHtmlElement(childOptions);
         el.appendChild(childElement);
     });
+    el.setAttribute('data-node-id', currentNodeId++);
     return el;
 }
 

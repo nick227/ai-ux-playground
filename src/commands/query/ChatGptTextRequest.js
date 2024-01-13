@@ -5,8 +5,9 @@ import { SavePromptResultCommand } from './index.js';
 dotenv.config();
 
 class ChatGptTextRequest extends Command {
-  constructor(openaiInstance) {
+  constructor(openaiInstance, req=null) {
     super();
+    this.req = req;
     this.openai = openaiInstance;
     this.maxTokens = Number(process.env.OPENAI_MAX_TOKENS) || 150;
     this.model = process.env.OPENAI_MODEL;
@@ -26,15 +27,17 @@ class ChatGptTextRequest extends Command {
       ...(prompt.tools && { tools: prompt.tools }),
       ...(prompt.tool_choice && { tool_choice: tool_choice })
     };
+    console.log("\n");
     console.log("#################");
     console.log('start openai request');
+    console.log(options)
     try {
       const completion = await this.openai.chat.completions.create(options);
       const savePromptResult = new this.SavePromptResultCommand();
-      await savePromptResult.execute(prompt, completion);
+      console.log(completion.usage);
+      await savePromptResult.execute(completion, null, this.req.session.id);
       const response = this.getResponse(completion);
       console.log('success!');
-      console.log("\n");
       return response;
     } catch (error) {
       console.error("Error sending prompt to ChatGPT:", error);

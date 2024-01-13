@@ -2,8 +2,9 @@ import { RenderTemplatePromptCommand } from '../build/index.js';
 import Command from '../Command.js';
 
 export default class Prompt extends Command {
-  constructor(prompt, templateType=null, params=[]) {
+  constructor(prompt, templateType = null, params = []) {
     super();
+    this.messages = [];
     this.prompt = prompt;
     this.params = params;
     this.templateType = templateType;

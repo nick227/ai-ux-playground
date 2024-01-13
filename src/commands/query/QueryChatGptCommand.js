@@ -6,20 +6,21 @@ import { ChatGptTextRequest, ChatGptImageRequest } from './index.js';
 dotenv.config();
 
 class QueryChatGptCommand extends Command {
-  constructor() {
+  constructor(req=null) {
     super();
     const apiKey = process.env.OPENAI_SECRET;
     if (!apiKey) {
       throw new Error('OPENAI_SECRET is not set in environment variables.');
     }
     this.openai = new OpenAIAPI({ apiKey });
+    this.req = req;
   }
 
   async execute(prompt) {
     if (!prompt) {
       throw new Error('Prompt is empty.');
     }
-    const chatGptTextRequest = new ChatGptTextRequest(this.openai);
+    const chatGptTextRequest = new ChatGptTextRequest(this.openai, this.req);
     return chatGptTextRequest.execute(prompt);
   }
 

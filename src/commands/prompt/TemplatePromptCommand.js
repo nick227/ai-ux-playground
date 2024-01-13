@@ -24,9 +24,7 @@ export default class TemplatePromptCommand extends Command {
       } else {
         await this.prompt.init();
         const response = await this.queryChatGptCommand.execute(this.prompt);
-        this.insertToDBCommand.execute(response, this.prompt.collectionName);
         this.res.send(response);
-
       }
     } catch (error) {
       console.error('ExecuteTemplatePromptCommand Error:', error);
@@ -41,12 +39,9 @@ export default class TemplatePromptCommand extends Command {
         await this.prompt.init();
         return await this.queryChatGptCommand.execute(this.prompt);
       });
-
       await this.enqueueTasks(tasks);
       await this.addToQueueCommand.processQueue();
       const response = this.addToQueueCommand.results;
-
-      await this.insertToDBCommand.execute(response, this.prompt.collectionName);
       this.res.send(response);
     } catch (error) {
       console.error('Error in executeSequence:', error);

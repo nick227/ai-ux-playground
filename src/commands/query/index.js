@@ -5,7 +5,7 @@ import SavePromptResultCommand from './SavePromptResultCommand.js';
 import ChatGptTextRequest from './ChatGptTextRequest.js';
 import ChatGptImageRequest from './ChatGptImageRequest.js';
 import AddToQueueCommand from './AddToQueueCommand.js';
-
+import GetChatHistoryCommand from './GetChatHistoryCommand.js';
 export {
   QueryChatGptCommand,
   InsertToDBCommand,
@@ -13,5 +13,6 @@ export {
   SavePromptResultCommand,
   ChatGptTextRequest,
   ChatGptImageRequest,
-  AddToQueueCommand
+  AddToQueueCommand,
+  GetChatHistoryCommand
 };
