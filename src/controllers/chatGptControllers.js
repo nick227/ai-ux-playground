@@ -8,20 +8,17 @@ const chatGptControllers = async (req, res) => {
     switch (true) {
       //image route
       case endpoint === "image":
-        console.log("imagePromptCommand")
         const imagePromptCommand = new ImagePromptCommand(req, res);
         await imagePromptCommand.execute();
         break;
       //template route
       case endpoint === "template":
-        console.log("templatePromptCommand")
         const templatePromptCommand = new TemplatePromptCommand(req, res);
         await templatePromptCommand.execute();
         break;
       //default route
       case endpoint === "chat":
       default:
-        console.log("defaultPromptCommand")
         const defaultPromptCommand = new DefaultPromptCommand(req, res);
         await defaultPromptCommand.execute();
         break;

@@ -2,8 +2,35 @@ import DB from '../src/db/DB.js';
 const db = new DB('promptTemplates.db');
 
 const insertData = {
-  "type": "image-abstract",
-  "prompt": "Create astrange abstract artistic ${prompt} image, ${style} styles. Crazy expressionism artwork, surreal, nocrop."
+  "type": "header",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Return a good header title for a ${fieldName} field, write in ${style} style"
+    },
+    {
+      "role": "assistant",
+      "content": "You are a professional content writer."
+    }
+  ],
+  "tool_choice": "get_header",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_header",
+        "description": "Create a header for my field ${fieldName}",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "headerText": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  ]
 };
 
 
@@ -17,24 +44,24 @@ EXAMPLES:
 https://platform.openai.com/docs/guides/function-calling
 
 {
-  "type": "template",
+  "type": "header",
   "messages": [
     {
       "role": "user",
-      "content": "Create a full-screen section for a ${title} webpage containing an image from https://placehold.co/ using and relevant heading and paragraph text. Include detailed css for the section and each element that always includes positioning, font properties, colors, backgrounds, etc. Use good spacing and symmetry. ${style} style"
+      "content": "Return a good header title for a ${fieldName} field, write in ${style} style"
     },
     {
       "role": "assistant",
-      "content": "You are a professional web designer, ui/ux engineer and content writer."
+      "content": "You are a professional content writer."
     }
   ],
-  "tool_choice": "get_template",
+  "tool_choice": "get_header",
   "tools": [
     {
       "type": "function",
       "function": {
-        "name": "get_template",
-        "description": "create modern stylish full screen website section, creative position, style, etc.",
+        "name": "get_header",
+        "description": "Create a header for my field",
         "parameters": {
           "type": "object",
           "properties": {
