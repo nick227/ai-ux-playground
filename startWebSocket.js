@@ -1,13 +1,16 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const WebSocket = require('ws');
+import { RenderSnapshotCommand } from './src/commands/build/index.js';
 
 export default function startWebSocket(httpServer, app, expressSession) {
   const wss = new WebSocket.Server({ server: httpServer });
+  const renderSnapshotCommand = new RenderSnapshotCommand();
   app.set('wss', wss);
   wss.on('connection', (ws, req) => {
     expressSession(req, {}, () => {
       ws.id = req.session.id;
+      renderSnapshotCommand.execute(req.session.id);
     });
 
     ws.on('message', (message) => {
@@ -18,7 +21,6 @@ export default function startWebSocket(httpServer, app, expressSession) {
       console.error('WebSocket Error:', error);
     });
 
-    // Try sending the message after a delay to ensure the client is ready
     setTimeout(() => {
       ws.send('Hello from server');
     }, 1000);

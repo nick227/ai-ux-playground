@@ -1,6 +1,6 @@
 function startWebSocketHandler() {
-    const popup = addConsole();
-    setupWebSocket(popup);
+  const popup = addConsole();
+  setupWebSocket(popup);
 }
 
 function createWebSocketUrl() {
@@ -10,48 +10,49 @@ function createWebSocketUrl() {
   return `${protocol}://${hostname}${port}`;
 }
 
-function setupWebSocket(popup) {
-    const ws = new WebSocket(createWebSocketUrl());
+function setupWebSocket(popup = null) {
+  const ws = new WebSocket(createWebSocketUrl());
 
-    ws.addEventListener('error', (error) => {
-        console.error('WebSocket Error:', error);
-    });
+  ws.addEventListener('error', (error) => {
+    console.error('WebSocket Error:', error);
+  });
 
-    ws.addEventListener('open', () => {
-        ws.send('Hello from client');
-    });
+  ws.addEventListener('open', () => {
+    ws.send('Hello from client');
+  });
 
-    let messageQueue = [];
-    let isProcessing = false;
-    
-    async function processQueue() {
-      if (isProcessing) return;
-      isProcessing = true;
-    
+  let messageQueue = [];
+  let isProcessing = false;
+
+  async function processQueue() {
+    if (isProcessing) return;
+    isProcessing = true;
+    if (popup) {
       while (messageQueue.length > 0) {
         const event = messageQueue.shift();
         const popupBody = popup.document.body.querySelector('section#main');
-        const newElement = popup.document.createElement('p');
-        console.log('event.data', event.data);
-        newElement.innerHTML = event.data;
-        //newElement.className = /error/i.test(event.data) ? 'error' : '';
-    
+        const newElement = popup.document.createElement('div');
+        newElement.className = 'message';
+        const pre = popup.document.createElement('pre');
+        pre.textContent = event.data;
+        newElement.appendChild(pre);
+
         if (popupBody.firstChild) {
           popupBody.insertBefore(newElement, popupBody.firstChild);
         } else {
           popupBody.appendChild(newElement);
         }
-    
-        await new Promise(resolve => setTimeout(resolve, 1111)); // Wait for 3 seconds
+
+        await new Promise(resolve => setTimeout(resolve, 1111)); 
       }
-    
-      isProcessing = false;
     }
-    
-    ws.addEventListener('message', async (event) => {
-      messageQueue.push(event);
-      processQueue();
-    });
+    isProcessing = false;
+  }
+
+  ws.addEventListener('message', async (event) => {
+    messageQueue.push(event);
+    processQueue();
+  });
 }
 
 function jsonToUlLi(str) {
@@ -65,9 +66,9 @@ function jsonToUlLi(str) {
 
   try {
     const jsonObj = JSON.parse(objStr);
-    
+
     let html = '<ul>';
-  
+
     for (const [key, value] of Object.entries(jsonObj)) {
       html += `<li>${key}: `;
       if (Array.isArray(value)) {
@@ -81,7 +82,7 @@ function jsonToUlLi(str) {
       }
       html += '</li>';
     }
-  
+
     html += '</ul>';
     return `${prefix}: ${html}`;
   } catch (e) {

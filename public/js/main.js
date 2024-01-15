@@ -1,29 +1,27 @@
 
-  
 
 startWebSocketHandler();
 
 (async () => {
     try {
-
-        async function renderDataObject(key){
+        async function renderDataObject(key) {
             const data = await api.read(`api/${key}`);
-            console.log(key, data);
             renderList(data, key);
         }
-    
-        const keys = ['palettes', 'fieldLists', 'elements', 'forms', 'descriptions'];
+
+        setupChatBot();
+        setupPromptTemplateForm();
+        
+        const keys = ['promptTemplates'];
         const buildPromises = keys.map((key) => {
-            return renderDataObject(key);  // Note the return here
+            return renderDataObject(key);
         });
 
-
         await Promise.all(buildPromises);
-        await new Promise(resolve => setTimeout(resolve, 500));  // Fixed setTimeout
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        const template1 = await api.read('api/templates', { name:"Leave Request Form" });
-        console.log('template1',template1);
-        renderStage(template1);
+        //const template = await api.read('api/templates', { name:"Leave Request Form" });
+        //renderStage(template);
 
         document.querySelector('.loading').classList.toggle('hidden');
     } catch (error) {

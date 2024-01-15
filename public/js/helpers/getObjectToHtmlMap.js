@@ -1,5 +1,23 @@
 getObjectToHtmlMap = (item, key) => {
     const map = {
+        get promptTemplates() {
+            let children = [];
+            if (item.type) {
+                children.push({
+                    elementType: 'h2',
+                    textContent: item.type
+                });
+            }
+            children.push({
+                elementType: 'div',
+                htmlContent: `<pre>${JSON.stringify(item, null, 2)}</pre>`
+            });
+            return {
+                elementType: 'div',
+                children: children,
+                className: 'prompt-template'
+            };
+        },
         get forms() {
             return {
                 elementType: 'div',

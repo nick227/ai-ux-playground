@@ -11,6 +11,9 @@
   "author": "nrios",
   "license": "ISC",
   "dependencies": {
+    "@langchain/openai": "^0.0.11",
+    "async": "^3.2.5",
+    "cheerio": "^1.0.0-rc.12",
     "completions": "^2.9.0",
     "compromise": "^14.10.0",
     "cors": "^2.8.5",
@@ -22,9 +25,11 @@
     "module-alias": "^2.2.3",
     "mongoose": "^7.6.1",
     "nedb": "^1.8.0",
+    "nlp": "^0.0.0",
     "openai": "^4.11.1",
     "sqlite3": "^5.1.6",
     "util": "^0.12.5",
+    "vectra": "^0.5.5",
     "ws": "^8.14.2"
   },
   "_moduleAliases": {

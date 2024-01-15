@@ -1,6 +1,5 @@
 import sendSocketMsgToClient from '../sendSocketMsgToClient.js';
 import { TemplatePromptCommand, DefaultPromptCommand, ImagePromptCommand } from '../commands/prompt/index.js';
-import { promptTemplateList } from '../constants.js';
 
 const chatGptControllers = async (req, res) => {
   const endpoint = typeof req.params?.endpoint === 'string' ? req.params.endpoint : null;

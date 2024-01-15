@@ -2,12 +2,7 @@ async function handleElementNameClick(elementName) {
       
     try {
         clearAllElementsByClass('stage');
-        console.log('elementName:', elementName);
-        const cssObjects = await api.read('api/styles', { element: elementName });/*
-        if (!Array.isArray(cssObjects)) {
-            console.error('Invalid cssObjects:', cssObjects);
-            return;
-        }*/
+        const cssObjects = await api.read('api/styles', { element: elementName });
 
         console.log('cssObjects:', cssObjects);
 
@@ -27,9 +22,6 @@ async function handleElementNameClick(elementName) {
             className: 'outer-section',
             children: childrenArray
         };
-
-
-        console.log('options:', options);
 
         renderStage(options);
 

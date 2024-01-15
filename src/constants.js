@@ -1,4 +1,4 @@
-const collectionNames = ['styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates', 'descriptions', 'fields', 'chatGptTransactions', 'fieldLists'];
+const collectionNames = ['chatHistory', 'pageHistory', 'styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates', 'descriptions', 'fields', 'chatGptTransactions', 'fieldLists'];
 const methods = ['get', 'post', 'put', 'delete'];
 
 const htmlElementTypesEmum = [
@@ -15,22 +15,14 @@ const htmlElementTypesEmum = [
 ];
 
 const elementStatesAndMouseEvents = [
-  'default', 'active', 'hover', 'focus', 'invalid', 'valid', 'optional', 'disabled', 'checked', 
-  'visited', 'target', 'enabled', 'read-only', 'read-write', 'required', 'indeterminate', 'in-range', 
-  'out-of-range', 'lang', 'not', 'nth-child', 'nth-last-child', 'nth-of-type', 'nth-last-of-type', 
-  'first-child', 'last-child', 'first-of-type', 'last-of-type', 'only-child', 'only-of-type', 'root', 
-  'empty', 'link', 'any-link', 'local-link', 'scope', 'current', 'past', 'future', 'dir', 'fullscreen', 
-  'placeholder-shown', 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 
-  'mouseout', 'mouseenter', 'mouseleave', 'contextmenu', 'drag', 'dragend', 'dragenter', 'dragexit', 
+  'default', 'active', 'hover', 'focus', 'invalid', 'valid', 'optional', 'disabled', 'checked',
+  'visited', 'target', 'enabled', 'read-only', 'read-write', 'required', 'indeterminate', 'in-range',
+  'out-of-range', 'lang', 'not', 'nth-child', 'nth-last-child', 'nth-of-type', 'nth-last-of-type',
+  'first-child', 'last-child', 'first-of-type', 'last-of-type', 'only-child', 'only-of-type', 'root',
+  'empty', 'link', 'any-link', 'local-link', 'scope', 'current', 'past', 'future', 'dir', 'fullscreen',
+  'placeholder-shown', 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover',
+  'mouseout', 'mouseenter', 'mouseleave', 'contextmenu', 'drag', 'dragend', 'dragenter', 'dragexit',
   'dragleave', 'dragover', 'dragstart', 'drop', 'wheel', 'innerText'
-];
-
-const promptTemplateList = [
-  'sections',
-  'card',
-  'section',
-  'template',
-  'intent'
 ];
 
 const arrayToObject = (arr) => Object.fromEntries(arr.map(key => [key, 'string']));
@@ -44,6 +36,5 @@ export {
   htmlElementTypesEmum,
   collectionNames,
   methods,
-  promptTemplateList,
   arrayToObject
 };

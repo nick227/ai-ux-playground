@@ -2,36 +2,17 @@ import DB from '../src/db/DB.js';
 const db = new DB('promptTemplates.db');
 
 const insertData = {
-  "type": "header",
-  "messages": [
-    {
-      "role": "user",
-      "content": "Return a good header title for a ${fieldName} field, write in ${style} style"
-    },
-    {
-      "role": "assistant",
-      "content": "You are a professional content writer."
-    }
-  ],
-  "tool_choice": "get_header",
-  "tools": [
-    {
-      "type": "function",
-      "function": {
-        "name": "get_header",
-        "description": "Create a header for my field ${fieldName}",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "headerText": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    }
-  ]
 };
+
+(async () => {
+  try {
+    ///await insertRow(insertData);
+    await findAll();
+
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 
 /*
@@ -159,19 +140,67 @@ https://platform.openai.com/docs/guides/function-calling
   ]
 }
 
+##########################################################################################################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+
+{
+  "type": "sections-from-title",
+  "tool_choice": "get_sections",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Generate an array of six nested section objects for ${section-title} a ${form-title} form. Each array element is a section object. Each section object has \"${section-title}\" as the heading, and a unique introduction paragraph at least 20 words about \"${section-title}\", and a relevant image url from https://source.unsplash.com/random/?term,term, and unique field suggestions. You must return the results in my defined structured schema."
+    },
+    {
+      "role": "system",
+      "content": "You are a professional web content writer and document expert, you have been tasked with creating an array of six \"${section-title}\" sections for a ${title} form. Get images from https://source.unsplash.com/random/?term,term where term is a search term. You must return the results in my defined structured schema."
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_sections",
+        "description": "Creates realistic examples sections, fields, images and text for the ${section-title} section of a ${title} form",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string",
+                    "const": "${section-title}"
+                  },
+                  "paragraph": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
 */
 
 
-
-(async () => {
-  try {
-    await insertRow(insertData);
-    await findAll();
-
-  } catch (err) {
-    console.error(err);
-  }
-})();
 
 async function insertRow(data) {
   const newRow = await db.insert(data);
