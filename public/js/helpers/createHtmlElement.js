@@ -3,7 +3,16 @@ function createHtmlElement(options) {
     if(!options){
         return document.createElement('div');
     }
-    const { elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src, htmlContent } = options;
+    let elementType, className, css, cssStates, textContent, title, attributes, children, src, htmlContent;
+
+    if (typeof options === 'string') {
+        elementType = options;
+        className = css = textContent = title = src = htmlContent = null;
+        cssStates = attributes = {};
+        children = [];
+    } else {
+        ({ elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src, htmlContent } = options);
+    }
 
     const el = document.createElement(elementType);
     el.className = className || '';
@@ -30,14 +39,15 @@ function createHtmlElement(options) {
     setAttributes(el, attributes);
     setStyle(el, css);
     addListeners(el, cssStates, attributes, css);
-    handleSpecialElements(el, elementType, attributes);
+    //handleSpecialElements(el, elementType, attributes);
 
     // Recursively append children
     children.forEach(childOptions => {
         const childElement = createHtmlElement(childOptions);
         el.appendChild(childElement);
     });
-    el.setAttribute('data-node-id', currentNodeId++);
+    el.setAttribute('data-node-id', currentNodeId);
+    currentNodeId++;
     return el;
 }
 

@@ -1,6 +1,6 @@
 import Command from '../Command.js';
 import fs from 'fs';
-import nlp from 'compromise';
+import nlp from 'compromise/one';
 import cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -9,21 +9,25 @@ import { InsertToDBCommand } from '../query/index.js';
 class RenderSnapshotCommand extends Command {
     execute(sessionId) {
         this.sessionId = sessionId;
-        const filePath = this.getFilePath();
-        const html = this.getFileContent(filePath);
-        const $ = this.parseHtml(html);
-        const elements = this.extractElements($);
-        const abbreviatedElements = this.minimizeContent(elements);
-        this.saveToDatabase(abbreviatedElements);
+        const filePathHtml = this.getFileContent('../../../snapshot/test.html');
+        const filePathCss = this.getFileContent('../../../snapshot/test.css');
+        this.saveToDatabase(filePathHtml, filePathCss);
     }
 
-    getFilePath() {
+    saveToDatabase(html, css) {
+        const insertToDBCommand = new InsertToDBCommand();
+        const data = {
+            html: html,
+            css: css,
+            sessionId: this.sessionId
+        }
+        insertToDBCommand.execute(data, 'snapshots');
+    }
+
+    getFileContent(path) {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = dirname(__filename);
-        return join(__dirname, '../../embeddings/test.html');
-    }
-
-    getFileContent(filePath) {
+        const filePath = join(__dirname, path);
         return fs.readFileSync(filePath, 'utf8');
     }
 
@@ -31,30 +35,31 @@ class RenderSnapshotCommand extends Command {
         return cheerio.load(html);
     }
 
-    minimizeContent(elements) {
+    minimizeContent(data) {
+        const elements = data[0];
         return elements.map(element => {
             const doc = nlp(element.content);
-            const tokens = doc.terms().out('freq'); // Get the frequency of each token
-            let mostFrequentToken = '';
-            if (tokens.length > 0) {
-                mostFrequentToken = tokens[0].normal; // Get the most frequent token
-            }
+            let tokens = doc.json();
+            let mostFrequentToken = this.getMostFrequentToken(tokens);
             return {
                 ...element,
-                content: mostFrequentToken
+                content: JSON.stringify(mostFrequentToken)
             };
         });
     }
 
-    saveToDatabase(elements) {
-        const insertToDBCommand = new InsertToDBCommand();
-        let jsonString = JSON.stringify(elements);
-        jsonString = jsonString.replace(/\\"/g, '"');
-        const data = {
-            document: jsonString,
-            sessionId: this.sessionId
-        }
-        insertToDBCommand.execute(data, 'snapshots');
+    getMostFrequentToken(tokens) {
+        let frequencyMap = {};
+        tokens.forEach(token => {
+            if (!frequencyMap[token]) {
+                frequencyMap[token] = 0;
+            }
+            frequencyMap[token]++;
+        });
+    
+        let mostFrequentToken = Object.keys(frequencyMap).reduce((a, b) => frequencyMap[a] > frequencyMap[b] ? a : b);
+    
+        return mostFrequentToken;
     }
 
 extractElements($) {

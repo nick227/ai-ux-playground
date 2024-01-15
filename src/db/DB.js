@@ -107,6 +107,20 @@ export default class DB {
 
     }
 
+    upsert() {
+        return new Promise((resolve, reject) => {
+            this.queue.push(callback => {
+                this._upsert(query, updateDoc).then(resolve).catch(reject).finally(callback);
+            });
+        });
+    }
+
+    async _upsert(query, updateDoc) {
+        const updateAsync = util.promisify(this.db.update.bind(this.db));
+        const result = await updateAsync(query, updateDoc, { upsert: true });
+        return result;
+    }
+
     update(query, update) {
         //attempting to prevent file locks
         return new Promise((resolve, reject) => {

@@ -1,15 +1,16 @@
-setupPromptTemplateForm();
+
 
 function setupPromptTemplateForm() {
-    const title = document.createElement('h1');
-    const desc = document.createElement('p');
-    const form = document.createElement('form');
-    const textarea = document.createElement('textarea');
+    const title = createHtmlElement('h1');
+    const desc = createHtmlElement('p');
+    const form = createHtmlElement('form');
+    const textarea = createHtmlElement({ elementType: 'textarea'});
+    const submit = createHtmlElement('button');
     textarea.placeholder = 'Enter prompt template';
-    const submit = document.createElement('button');
     submit.textContent = 'Submit';
     title.textContent = 'Create prompt template';
-    desc.innerHTML = 'Templates require <b>type</b> property and either <b>messages</b> or <b>prompt</b> property.<BR>Use syntax <b>${}</b> to reference url parameters in your values.<BR>Define <b>tool_choice</b> and <b>tools</b> to control the chatgpt response format. <BR><small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
+    desc.innerHTML = 'Templates require type property and either messages or prompt property. Use syntax ${} to reference url parameters in your values. Set data_sources as array to side load data. Use sequence to begin sequence. Current data_sources: chatHistory, snapshots, documentation Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
+    desc.className = 'description';
     title.className = 'title';
     submit.type = 'submit';
     form.appendChild(title);
@@ -17,7 +18,7 @@ function setupPromptTemplateForm() {
     form.appendChild(textarea);
     form.appendChild(submit);
     form.addEventListener('submit', handleFormSubmit);
-    textarea.addEventListener('input', setupTextAreaHeight);
+    textarea.addEventListener('input', () => setupTextAreaHeight(textarea));
     textarea.addEventListener('keydown', fixTabPress);
     document.body.prepend(form);
 }
@@ -34,23 +35,23 @@ async function handleFormSubmit(event) {
             alert(`Success: ${response.type} prompt template created!`);
             addToList(response, 'promptTemplates');
             textarea.value = '';
-            setupTextAreaHeight();
+            setupTextAreaHeight(textarea);
         } catch (error) {
             console.error('An error occurred:', error);
         }
     }
 }
 
-function setupTextAreaHeight() {
-    this.style.height = 'auto';
+function setupTextAreaHeight(textarea) {
+    textarea.style.height = 'auto';
     let maxHeight = window.innerHeight || document.documentElement.clientHeight;
-    let newHeight = Math.min(this.scrollHeight, maxHeight);
-    this.style.height = newHeight + 'px';
-    const data = this.value;
+    let newHeight = Math.min(textarea.scrollHeight, maxHeight);
+    textarea.style.height = newHeight + 'px';
+    const data = textarea.value;
     if (isValidJson(data)) {
-        this.classList.remove('error');
+        textarea.classList.remove('error');
     } else {
-        this.classList.add('error');
+        textarea.classList.add('error');
     }
 }
 
@@ -73,7 +74,7 @@ const validate = data => {
     }
     const parsedData = JSON.parse(data);
     const { type, messages, prompt, tool_choice, tools, _id, timestamp } = parsedData;
-    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools'];
+    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence'];
     const actualKeys = Object.keys(parsedData);
     const extraKeys = actualKeys.filter(key => !expectedKeys.includes(key));
 

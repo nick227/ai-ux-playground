@@ -8,6 +8,9 @@ startWebSocketHandler();
             const data = await api.read(`api/${key}`);
             renderList(data, key);
         }
+
+        setupChatBot();
+        setupPromptTemplateForm();
         
         const keys = ['promptTemplates'];
         const buildPromises = keys.map((key) => {

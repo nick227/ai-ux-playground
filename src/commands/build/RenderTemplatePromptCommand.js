@@ -10,6 +10,8 @@ export default class RenderTemplatePromptCommand extends Command {
     this.prompt = null;
     this.tools = null;
     this.messages = null;
+    this.sequence = null;
+    this.data_sources = null;
     this.collectionName = null;
     this.getPromptTemplateCommand = new GetPromptTemplateCommand();
     this.renderTemplateCommand = new RenderTemplateCommand();
@@ -37,6 +39,12 @@ export default class RenderTemplatePromptCommand extends Command {
     this.tools = templateResponse.tools;
     this.tool_choice = templateResponse.tool_choice;
     this.collectionName = templateResponse.collectionName;
+    this.data_sources = templateResponse.data_sources;
+    this.sequence = templateResponse.sequence;
+    if (this.messages) {
+      //user messages should be last
+      this.messages.sort((a, b) => (a.role === 'user') ? 1 : ((b.role === 'user') ? -1 : 0));
+    }
   }
 
   renderTemplates(params) {

@@ -11,7 +11,6 @@ export default function startWebSocket(httpServer, app, expressSession) {
     expressSession(req, {}, () => {
       ws.id = req.session.id;
       renderSnapshotCommand.execute(req.session.id);
-      console.log('ol')
     });
 
     ws.on('message', (message) => {

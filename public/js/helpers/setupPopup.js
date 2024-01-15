@@ -9,7 +9,12 @@ function addOpener(popup) {
 }
 function addConsole() {
 
-  const popup = window.open("", "AI Console Window", "width=600,height=400");
+  const width = 600;
+  const height = 600;
+  const left = screen.width - width;
+  const top = screen.height - height;
+  const popup = window.open("", "AI Console Window", `width=${width},height=${height},left=${left},top=${top}`);
+  
   if (!popup) {
     alert("Please allow popups to use the console window.");
     return;
@@ -35,25 +40,21 @@ function addConsole() {
 
 const styles = `
 body {
-  background-color: #1E1E1E !important;
-  color: #A9B7C6;
+  background-color: #1E1E1E;
+  color: white;
   font-family: 'Courier New', Courier, monospace;
   margin: 0;
   padding: 20px;
   overflow: auto;
 }
-p {
-  margin: 0;
-  padding: 0;
+.message {
+  margin: 10px 0;
+  padding: 10px 0;
   line-height: 1.5;
   font-size: 16px;
+  border-bottom: 1px solid #A9B7C6;
 }
-p::before {
-  content: "•";
-  margin-right: 10px;
-  display: inline-block;
-}
-p.error {
+.message.error {
     color: red;
 }
 textarea#prompt {
@@ -71,16 +72,14 @@ textarea#prompt {
 textarea#prompt:focus {
   outline: 1px solid dodgerblue;
 }
-section#main > p {
+section#main > .message {
   animation: slideFade 0.5s ease-out forwards;
   opacity: 0;
   max-height: 0;
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: 2px solid gray;
-  }
-  section#main > p:first-child {
-      color: white;
+  color: white;
   }
   @keyframes slideFade {
   0% {

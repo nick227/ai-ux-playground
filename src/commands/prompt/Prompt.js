@@ -9,6 +9,8 @@ export default class Prompt extends Command {
     this.params = params;
     this.templateType = templateType;
     this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params);
+    this.data_sources = null;
+    this.sequence = null;
   }
 
   async init() {
@@ -17,5 +19,7 @@ export default class Prompt extends Command {
     this.tools = this.renderTemplatePromptCommand?.tools;
     this.messages = this.renderTemplatePromptCommand?.messages;
     this.tool_choice = this.renderTemplatePromptCommand?.tool_choice;
+    this.data_sources = this.renderTemplatePromptCommand?.data_sources;
+    this.sequence = this.renderTemplatePromptCommand?.sequence;
   }
 }

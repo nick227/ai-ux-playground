@@ -1,18 +1,19 @@
-setupChatBot();
+
 
 function createElementFromConfig(config) {
-    const element = document.createElement(config.type);
+    const element = createHtmlElement(config.type);
     element.className = config.className;
     if (config.textContent) element.textContent = config.textContent;
     if (config.type === 'input') element.type = config.inputType;
     if (config.placeholder) element.placeholder = config.placeholder;
     if (config.event) element.addEventListener(config.event.type, config.event.handler);
     if (config.options && config.type === 'select') {
+        let defaultOptionValue = getDefaultOptionValue();
         for (let optionValue of config.options) {
             const optionElement = document.createElement('option');
             optionElement.value = optionValue;
             optionElement.textContent = optionValue;
-            if (optionValue === 'main') {
+            if (optionValue === defaultOptionValue) {
                 optionElement.selected = true;
             }
             element.appendChild(optionElement);
@@ -20,6 +21,14 @@ function createElementFromConfig(config) {
     }
 
     return element;
+}
+
+function getDefaultOptionValue() {
+    return localStorage.getItem('defaultOptionValue') || 'main';
+}
+
+function setDefaultOptionValue(value) {
+    localStorage.setItem('defaultOptionValue', value);
 }
 
 let isChatBotSetup = false;
@@ -33,7 +42,8 @@ async function setupChatBot() {
     const chatbotConfig = [
         {
             type: 'h1',
-            textContent: 'Chatbot'
+            textContent: 'Chatbot',
+            className: 'chatbot-title',
         },
         {
             type: 'div',
@@ -50,6 +60,16 @@ async function setupChatBot() {
                     }
                 },
                 {
+                    type: 'div',
+                    className: 'chatbot-output'
+                }
+            ]
+        }, 
+        {
+            type: 'div',
+            className: 'chatbot-controls',
+            children: [
+                {
                     type: 'button',
                     className: 'chatbot-submit',
                     inputType: 'submit',
@@ -58,15 +78,14 @@ async function setupChatBot() {
                         type: 'click',
                         handler: handleChatbotSubmit
                     }
-                },
-                {
-                    type: 'div',
-                    className: 'chatbot-output'
-                },
-                {
+                }, {
                     type: 'select',
-                    className: 'template-picker',
-                    options: promptTemplatesTypes
+                    className: 'chatbot-picker',
+                    options: promptTemplatesTypes,
+                    event: {
+                        type: 'change',
+                        handler: e => setDefaultOptionValue(e.target.value)
+                    }
                 }
             ]
         }
@@ -98,7 +117,7 @@ async function setupChatBot() {
     }
 
     function getTemplateTypeValue() {
-        return document.querySelector('.template-picker').value;
+        return document.querySelector('.chatbot-picker').value;
     }
 
     function getPromptFromTextarea(textarea) {
@@ -115,7 +134,7 @@ async function setupChatBot() {
     }
 
     async function displayChatbotResponse(data) {
-        const response = data.sections ? JSON.stringify(data.sections) : data.response;
+        const response = data && data.sections ? JSON.stringify(data.sections) : (data.response ? data.response : data);
         addToOutput(response, 'ChatGpt');
         saveMessageToLocalStorage(JSON.stringify(response), 'ChatGpt');
 
@@ -131,7 +150,7 @@ async function setupChatBot() {
             loading.remove();
             return;
         } else {
-            const loading = document.createElement('div');
+            const loading = createHtmlElement('div');
             loading.className = 'chatbot-loading';
             loading.textContent = 'Thinking...';
             prependElementToOutput(loading);
@@ -148,11 +167,11 @@ async function setupChatBot() {
     }
 
     function createMessageElement(text, sender) {
-        const div = document.createElement('div');
+        const div = createHtmlElement('div');
         div.className = 'chatbot-output-message';
-        const h6 = document.createElement('h6');
+        const h6 = createHtmlElement('h6');
         h6.className = sender.toLowerCase();
-        const p = document.createElement('p');
+        const p = createHtmlElement('p');
         p.className = sender.toLowerCase();
         p.textContent = text;
         h6.textContent = sender;
