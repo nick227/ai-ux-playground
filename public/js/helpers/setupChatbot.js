@@ -6,6 +6,7 @@ function createElementFromConfig(config) {
     if (config.textContent) element.textContent = config.textContent;
     if (config.type === 'input') element.type = config.inputType;
     if (config.placeholder) element.placeholder = config.placeholder;
+    if (config.id) element.id = config.id;
     if (config.event) element.addEventListener(config.event.type, config.event.handler);
     if (config.options && config.type === 'select') {
         let defaultOptionValue = getDefaultOptionValue();
@@ -50,46 +51,96 @@ async function setupChatBot() {
             className: 'chatbot',
             children: [
                 {
-                    type: 'textarea',
-                    className: 'chatbot-textarea',
-                    inputType: 'textarea',
-                    placeholder: 'Talk to me',
-                    event: {
-                        type: 'keydown',
-                        handler: handleChatbotInput
-                    }
+                    type: 'div',
+                    className: 'chatbot-input',
+                    children: [
+                        {
+                            type: 'textarea',
+                            className: 'chatbot-textarea',
+                            inputType: 'textarea',
+                            placeholder: 'Talk to me',
+                            event: {
+                                type: 'keydown',
+                                handler: handleChatbotInput
+                            }
+                        },
+                        {
+                            type: 'div',
+                            className: 'chatbot-controls',
+                            children: [
+                                {
+                                    type: 'select',
+                                    className: 'chatbot-picker',
+                                    options: promptTemplatesTypes,
+                                    event: {
+                                        type: 'change',
+                                        handler: e => setDefaultOptionValue(e.target.value)
+                                    }
+                                }, {
+                                    type: 'button',
+                                    className: 'chatbot-submit',
+                                    inputType: 'submit',
+                                    textContent: 'go',
+                                    event: {
+                                        type: 'click',
+                                        handler: handleChatbotSubmit
+                                    }
+                                }]
+                        }, {
+                            type: 'div',
+                            className: 'chatbot-uploader',
+                            children: [{
+                                type: 'input',
+                                inputType: 'file',
+                                id: 'data-source-file',
+                            }, {
+                                type: 'a',
+                                className: 'chatbot-upload',
+                                textContent: 'upload',
+                                event: {
+                                    type: 'click',
+                                    handler: handleUploadDataSource
+                                }
+                            }]
+                        }
+                    ]
                 },
                 {
                     type: 'div',
                     className: 'chatbot-output'
                 }
             ]
-        }, 
-        {
-            type: 'div',
-            className: 'chatbot-controls',
-            children: [
-                {
-                    type: 'button',
-                    className: 'chatbot-submit',
-                    inputType: 'submit',
-                    textContent: 'go',
-                    event: {
-                        type: 'click',
-                        handler: handleChatbotSubmit
-                    }
-                }, {
-                    type: 'select',
-                    className: 'chatbot-picker',
-                    options: promptTemplatesTypes,
-                    event: {
-                        type: 'change',
-                        handler: e => setDefaultOptionValue(e.target.value)
-                    }
-                }
-            ]
         }
     ];
+
+    async function handleUploadDataSource() {
+        let fileInput = document.querySelector('#data-source-file');
+        let file = fileInput.files[0];
+        if(!file){
+            alert("Please choose a file to upload!");
+            return;
+        }
+        let promptValue = prompt("Please enter the name for the data source");
+
+        let reader = new FileReader();
+
+        reader.onload = async function (e) {
+            let contents = e.target.result;
+
+            let data = {
+                name: promptValue,
+                content: contents
+            };
+
+            if(promptValue && contents){
+                await api.create('/api/dataSources', data);
+                fileInput.value = '';
+                alert(`Added ${promptValue} to data sources!`);
+            }
+        }
+
+        reader.readAsText(file);
+    }
 
     function handleChatbotInput(e) {
         if (e.key === 'Enter' && document.activeElement === e.target) {
@@ -107,6 +158,7 @@ async function setupChatBot() {
 
         toggleLoading();
         const data = await requestChatGpt(prompt, templateTypeValue);
+        console.log(data);
         toggleLoading();
 
         displayChatbotResponse(data);
@@ -134,7 +186,8 @@ async function setupChatBot() {
     }
 
     async function displayChatbotResponse(data) {
-        const response = data && data.sections ? JSON.stringify(data.sections) : (data.response ? data.response : data);
+        let response = typeof data === 'object' ? Object.values(data)[0] : data;
+        response = typeof response === 'object' ? JSON.stringify(response) : response;
         addToOutput(response, 'ChatGpt');
         saveMessageToLocalStorage(JSON.stringify(response), 'ChatGpt');
 
@@ -167,17 +220,37 @@ async function setupChatBot() {
     }
 
     function createMessageElement(text, sender) {
-        const div = createHtmlElement('div');
-        div.className = 'chatbot-output-message';
+        const container = createHtmlElement('div');
+        const inner = createHtmlElement('div');
+        container.className = 'chatbot-output-message';
+        container.classList.add(sender.toLowerCase());
+
+        const avatarContainer = createHtmlElement('div');
+        avatarContainer.className = 'chatbot-avatar-container';
         const h6 = createHtmlElement('h6');
+        const avatar = createHtmlElement('img');
+        avatar.className = 'chatbot-avatar';
+        const avatarMap = {
+            'you': '/images/monster.gif',
+            'commands': '/images/computer.png',
+            'chatgpt': '/images/lucy.png'
+        };
+        avatar.src = avatarMap[sender.toLowerCase()];
+        h6.textContent = sender.toLowerCase() === 'chatgpt' ? 'Lucy' : sender.toLowerCase() === 'commands' ? 'commands' : sender.toLowerCase();
+        avatarContainer.appendChild(avatar);
+
+        const messageText = createHtmlElement('p');
+        messageText.className = sender.toLowerCase();
         h6.className = sender.toLowerCase();
-        const p = createHtmlElement('p');
-        p.className = sender.toLowerCase();
-        p.textContent = text;
-        h6.textContent = sender;
-        div.appendChild(h6);
-        div.appendChild(p);
-        return div;
+        messageText.textContent = text;
+        if (sender.toLowerCase() !== 'you') {
+            container.appendChild(avatarContainer);
+
+        }
+        inner.appendChild(messageText);
+        inner.appendChild(h6);
+        container.appendChild(inner);
+        return container;
     }
 
     function prependElementToOutput(element) {
@@ -194,8 +267,11 @@ async function setupChatBot() {
 
     function loadMessages() {
         const messages = JSON.parse(localStorage.getItem('messages')) || [];
-        const lastMessages = messages.slice(-10); 
+        const lastMessages = messages.slice(-10);
         lastMessages.forEach(message => addToOutput(message.text, message.sender));
+        if (this.prompt.messages.length > 10) {
+            this.prompt.messages = this.prompt.messages.slice(0, 10);
+        }
     }
 
     function createElements(configs) {

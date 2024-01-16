@@ -17,6 +17,7 @@ class ChatGptTextRequest extends Command {
   }
 
   async execute(prompt) {
+    sendSocketMsgToClient("Prompt Template: " + prompt.templateType, this.req);
     const messages = prompt.messages || [{ role: 'user', content: prompt.prompt }];
     const tool_choice = {
       "type": "function",
@@ -29,7 +30,7 @@ class ChatGptTextRequest extends Command {
       ...(prompt.tools && { tools: prompt.tools }),
       ...(prompt.tool_choice && { tool_choice: tool_choice })
     };
-    //openai maxtokens is only completion tokens, not input tokens
+    
     const totalChars = JSON.stringify(options).length;
     const estimatedInputTokens = Math.ceil(totalChars / 3.75);
     let newMaxToken = this.maxTokens - estimatedInputTokens;

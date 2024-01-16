@@ -1,15 +1,13 @@
-
-
 function setupPromptTemplateForm() {
     const title = createHtmlElement('h1');
     const desc = createHtmlElement('p');
     const form = createHtmlElement('form');
-    const textarea = createHtmlElement({ elementType: 'textarea'});
+    const textarea = createHtmlElement({ elementType: 'textarea' });
     const submit = createHtmlElement('button');
     textarea.placeholder = 'Enter prompt template';
     submit.textContent = 'Submit';
     title.textContent = 'Create prompt template';
-    desc.innerHTML = 'Templates require type property and either messages or prompt property. Use syntax ${} to reference url parameters in your values. Set data_sources as array to side load data. Use sequence to begin sequence. Current data_sources: chatHistory, snapshots, documentation Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
+    desc.innerHTML = 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Current data_sources: chatHistory, snapshots, documentation. Set sequence true to initiate a sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
     desc.className = 'description';
     title.className = 'title';
     submit.type = 'submit';
@@ -73,7 +71,7 @@ const validate = data => {
         return false;
     }
     const parsedData = JSON.parse(data);
-    const { type, messages, prompt, tool_choice, tools, _id, timestamp } = parsedData;
+    const { type, messages, prompt, tool_choice, tools, _id, timestamp, data_sources } = parsedData;
     const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence'];
     const actualKeys = Object.keys(parsedData);
     const extraKeys = actualKeys.filter(key => !expectedKeys.includes(key));
@@ -106,6 +104,10 @@ const validate = data => {
         }
         if (!toolFunction) {
             alert('Tools does not contain an object with type: function');
+            return false;
+        }
+        if (data_sources && !Array.isArray(data_sources)) {
+            alert('Data sources must be an array');
             return false;
         }
         if (toolFunction.function?.name !== tool_choice) {

@@ -9,6 +9,7 @@ import GetChatHistoryCommand from './GetChatHistoryCommand.js';
 import GetPageHistoryCommand from './GetPageHistoryCommand.js';
 import SaveToChatHistoryCommand from './SaveToChatHistoryCommand.js';
 import GetDocumentationCommand from './GetDocumentationCommand.js';
+import GetDataSourceCommand from './GetDataSourceCommand.js';
 export {
   QueryChatGptCommand,
   InsertToDBCommand,
@@ -20,5 +21,6 @@ export {
   GetChatHistoryCommand,
   GetPageHistoryCommand,
   GetDocumentationCommand,
-  SaveToChatHistoryCommand
+  SaveToChatHistoryCommand,
+  GetDataSourceCommand
 };

@@ -1,4 +1,5 @@
-const collectionNames = ['chatHistory', 'pageHistory', 'styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates', 'descriptions', 'fields', 'chatGptTransactions', 'fieldLists'];
+const collectionNames = ['dataSources', 'chatHistory', 'pageHistory', 'styles', 'elements', 'layouts', 'themes', 'palettes', 'forms', 'templates', 'promptTemplates', 'descriptions', 'fields', 'chatGptTransactions', 'fieldLists'];
+
 const methods = ['get', 'post', 'put', 'delete'];
 
 const htmlElementTypesEmum = [

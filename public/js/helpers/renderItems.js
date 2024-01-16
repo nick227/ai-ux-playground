@@ -3,8 +3,10 @@ function createListItem(item, key) {
   const options = getObjectToHtmlMap(item, key);
   const html = createHtmlElement(options);
   html.dataset.id = item._id;
-  const closeBtn = createCloseButton(html);
-  html.insertBefore(closeBtn, html.firstChild);
+  const deleteBtn = createDeleteButton(html, item);
+  html.insertBefore(deleteBtn, html.firstChild);
+  const copyBtn = createCopyButton(html);
+  html.insertBefore(copyBtn, html.firstChild);
   return html;
 }
 
@@ -23,19 +25,33 @@ function addToList(item, key) {
   list.insertBefore(html, list.firstChild);
 }
 
-function createCloseButton(html) {
-  const closeBtn = createHtmlElement({ elementType: 'button', className: 'close', textContent: 'delete' });
-  closeBtn.addEventListener('click', async () => {
-    handleDeleteButton(html);
+function createDeleteButton(html, item) {
+  const deleteBtn = createHtmlElement({ elementType: 'button', className: 'delete', textContent: 'delete' });
+  deleteBtn.addEventListener('click', async () => {
+    handleDeleteButton(html, item);
   });
-  return closeBtn;
+  return deleteBtn;
 }
 
-async function handleDeleteButton(html) {
-  const confirmDelete = window.confirm("Delete Template?");
+function createCopyButton(html) {
+  const copyBtn = createHtmlElement({ elementType: 'button', className: 'copy', textContent: 'copy' });
+  copyBtn.addEventListener('click', async () => {
+    handleAddToClipboardButton(html);
+  });
+  return copyBtn;
+}
+
+function handleAddToClipboardButton(html) {
+  const pre = html.querySelector('pre');
+  console.log(pre.textContent)
+  navigator.clipboard.writeText(pre.textContent);
+}
+
+async function handleDeleteButton(html, item) {
+  const confirmDelete = window.confirm(`Delete template: ${item.type}?`);
   if (confirmDelete) {
     const id = html.dataset.id;
-    const confirmDelete2 = window.confirm("We have no backups it will be gone forever. Are you sure?");
+    const confirmDelete2 = window.confirm("There is no backup. This will be gone forever. Are you sure?");
     if (confirmDelete2) {
       await api.delete('api/promptTemplates', { _id: id });
       html.remove();

@@ -1,6 +1,6 @@
 import { Prompt } from './index.js';
 import Command from '../Command.js';
-import { QueryChatGptCommand, InsertToDBCommand, GetChatHistoryCommand, GetPageHistoryCommand, GetDocumentationCommand, SaveToChatHistoryCommand } from '../query/index.js';
+import * as QueryCommands from '../query/index.js';
 
 export default class DefaultPromptCommand extends Command {
   constructor(req, res) {
@@ -9,12 +9,13 @@ export default class DefaultPromptCommand extends Command {
     this.res = res;
     this.urlParams = req.query;
     this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "main", { prompt: this.urlParams.prompt });
-    this.queryChatGptCommand = new QueryChatGptCommand(this.req);
-    this.insertToDBCommand = new InsertToDBCommand();
-    this.getChatHistoryCommand = new GetChatHistoryCommand();
-    this.saveToChatHistoryCommand = new SaveToChatHistoryCommand();
-    this.getPageHistoryCommand = new GetPageHistoryCommand();
-    this.getDocumentationCommand = new GetDocumentationCommand();
+    this.queryChatGptCommand = new QueryCommands.QueryChatGptCommand(this.req);
+    this.insertToDBCommand = new QueryCommands.InsertToDBCommand();
+    this.getChatHistoryCommand = new QueryCommands.GetChatHistoryCommand();
+    this.saveToChatHistoryCommand = new QueryCommands.SaveToChatHistoryCommand();
+    this.getPageHistoryCommand = new QueryCommands.GetPageHistoryCommand();
+    this.getDocumentationCommand = new QueryCommands.GetDocumentationCommand();
+    this.getDataSourceCommand = new QueryCommands.GetDataSourceCommand();
     this.results = [];
   }
 
@@ -50,6 +51,7 @@ export default class DefaultPromptCommand extends Command {
   }
 
   async loadMessages() {
+    const staticDataSources = ['chatHistory', 'snapshots', 'documentation'];
 
     if (this.prompt.data_sources && this.prompt.data_sources.includes('chatHistory')) {
       const chatHistory = await this.getChatHistoryCommand.execute(this.req.session.id);
@@ -63,15 +65,28 @@ export default class DefaultPromptCommand extends Command {
 
     if (this.prompt.data_sources && this.prompt.data_sources.includes('documentation')) {
       const documentation = await this.getDocumentationCommand.execute();
-      this.prompt.messages.unshift(documentation);
+      this.prompt.messages.unshift(...documentation);
+    }
+
+    if (this.prompt.data_sources && Array.isArray(this.prompt.data_sources)) {
+      for (let datasource of this.prompt.data_sources) {
+        if (!staticDataSources.includes(datasource)) {
+          const dynamicData = await this.getDataSourceCommand.execute(datasource);
+          this.updateMessages(dynamicData);
+        }
+      }
+    }
+  }
+
+  updateMessages(data) {
+    if (Array.isArray(data)) {
+      this.prompt.messages.unshift(...data);
     }
   }
 
   async handleSequence() {
-    console.log("Sequence detected.");
     this.prompt.sequence = false;
     const intent = JSON.parse(this.results).intent;
-    console.log(intent);
     if (intent) {
       this.prompt = new Prompt(this.prompt, intent, { prompt: this.prompt.prompt });
       await this.prompt.init();

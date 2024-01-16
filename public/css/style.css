@@ -6,11 +6,14 @@ body {
     line-height: 1.5;
     margin-top: 60px;
     font-family: Roboto;
+    background: whitesmoke;
 }
 
 input,
 select,
-textarea {}
+textarea {
+    background: white;
+}
 
 h1,
 h2,
@@ -44,39 +47,63 @@ pre {
     display: flex;
     justify-content: space-between;
     resize: vertical;
+    padding-bottom: 120px;
+    margin-bottom: 120px;
+    border-bottom: 1px solid lightgray;
 }
 
-.chatbot textarea {
-    width: 25%;
+.chatbot-input {
+    width: 45%;
     height: 400px;
+
+}
+
+.chatbot-textarea {
+    width: 95%;
+    min-height: 440px;
     line-height: 1.5;
-    font-size: 1.2em;
-    background-color: antiquewhite;
-    padding: 20px;
+    font-size: 1.52em;
+    padding: 2.5%;
     border: none;
     resize: vertical;
-    padding: 20px;
     opacity: 0;
     animation: fadeIn 2s cubic-bezier(0.075, 0.82, 0.165, 1);
     animation-fill-mode: forwards;
 }
 
-.chatbot textarea:focus {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+.chatbot-textarea:focus {
+    border: none;
+    outline: none;
+}
 
+.chatbot-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.chatbot-controls button {
+    width: 150px;
+    padding: 0;
+}
+
+.chatbot-picker {
+    height: 40px;
+    font-size: 1.2em;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .chatbot-output {
-    padding: 0px 10px;
-    width: 69%;
-    height: 440px;
+    padding: 10px;
+    width: 50%;
+    height: 490px;
     overflow-y: auto;
     resize: vertical;
-    background-color: white;
-}
-
-.chatbot-output>div {
-    margin: 10px 0;
+    padding-right: 30px;
 }
 
 .chatbot-output h6 {
@@ -85,59 +112,93 @@ pre {
     font-weight: 900;
     letter-spacing: 1px;
     text-align: left;
-    padding: 2px 2px 0 2px;
-    text-decoration: underline;
 }
 
 .chatbot-output p {
-    padding: 0;
     font-size: 1em;
-    padding: 6px 2px;
+    padding: 20px;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
 }
 
-.chatbot-output p.commands, .chatbot-output h6.commands {
+.chatbot-output p.commands,
+.chatbot-output h6.commands {
     background-color: transparent;
 }
 
-.chatbot-output p.chatgpt, .chatbot-output h6.chatgpt {
+.chatbot-output p.chatgpt {
     background-color: aquamarine;
+    min-width: 100px;
 }
 
-.chatbot-output p.you, .chatbot-output h6.you {
+.chatbot-output p.you {
     background-color: lightyellow;
+    padding-bottom: 40px;
 }
 
-.chatbot-controls{
+.chatbot-output h6.you {
+    text-align: right;
+}
+.chatbot-output p.you {
+    min-width: 200px;
+}
+
+.chatbot-output-message {
     display: flex;
-    justify-content: space-between;
-    padding-bottom: 60px;
-    margin-bottom: 60px;
-    border-bottom:1px solid lightgray;
-    width: 100%;
+    animation: fadeIn 1s;
+    animation-fill-mode: forwards;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
-.chatbot-controls button {
-    width: 150px;
-    margin: 10px 0;
-    padding: 0;
+.chatbot-output-message.you > div {
+    flex-grow: 0.8;
 }
 
-.chatbot-picker {
+.chatbot-output-message.you {
+    flex-direction: row-reverse;
+}
+
+.chatbot-avatar-container {
+    width: 40px;
+    height: 50px;
+  display: flex;
+  align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.chatbot-avatar {
+    width: 40px;
     height: 40px;
-    margin: 10px 0;
-    font-size: 1.2em;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.chatbot-uploader {
+    margin-top: 10px;
+}
+
+.chatbot-uploader input {
+  width: 202px;
+  margin-right: 10px;
+}
+
+.chatbot-uploader a {
+    text-decoration: underline;
     cursor: pointer;
 }
 
 .chatbot-loading {
-    width: 100%;
-    height: 22px;
-    background-color: lightcyan;
+    width: 50%;
+    height: 20px;
     text-align: center;
     padding: 2px 10px 5px 10px;
+    position: absolute;
+    top: -40px;
+    animation: text-pulse 4s infinite;
+
 }
 
 form {
@@ -158,11 +219,14 @@ form textarea {
     height: auto;
     line-height: 1.5;
     font-size: 1.2em;
-    background: azure;
     padding: 20px;
     margin: 15px auto;
     box-shadow: none;
     border: 1px solid #ccc;
+}
+
+form button {
+    width: 100%;
 }
 
 textarea.error {
@@ -170,9 +234,7 @@ textarea.error {
 }
 
 button {
-    width: 100%;
     height: 40px;
-    margin: 10px 0;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -180,17 +242,31 @@ button {
     cursor: pointer;
 }
 
-.close {
+button:active {
+    background-color: #3e8e41;
+}
+
+.copy,
+.delete {
     position: absolute;
-    right: 26px;
     top: 7px;
     cursor: pointer;
     width: 75px;
     height: 33px;
     border-radius: 5px;
     z-index: 2332;
-    background-color: darkred;
     opacity: 0;
+
+}
+
+.delete {
+    right: 26px;
+    background-color: darkred;
+}
+
+.copy {
+    right: 106px;
+    background-color: gray;
 }
 
 .prompt-template {
@@ -199,7 +275,8 @@ button {
     margin: 10px 0 25px 0;
 }
 
-.prompt-template:hover .close {
+.prompt-template:hover .delete,
+.prompt-template:hover .copy {
     opacity: 1;
 }
 
@@ -291,5 +368,19 @@ button {
 
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes text-pulse {
+    0% {
+        color: darkgray;
+    }
+
+    50% {
+        color: lightcyan;
+    }
+
+    100% {
+        color: darkgray;
     }
 }

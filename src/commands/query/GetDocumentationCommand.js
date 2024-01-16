@@ -4,9 +4,9 @@ const documentation = `Digital Harbor is a leader in document security and form 
 
 export default class GetDocumentationCommand extends Command {
     async execute() {
-        return {
+        return [{
             role: 'assistant',
             content: documentation
-        };
+        }];
     }
 }
