@@ -6,13 +6,16 @@ body {
     line-height: 1.5;
     margin-top: 60px;
     font-family: Roboto;
-    background: whitesmoke;
+    background: white;
+    padding-bottom: 120px;
 }
 
 input,
 select,
 textarea {
-    background: white;
+    background: whitesmoke;
+    border: none;
+    box-shadow: none;
 }
 
 h1,
@@ -44,6 +47,8 @@ pre {
 .chatbot {
     position: relative;
     width: 100%;
+    height: auto;
+    min-height: 50vh;
     display: flex;
     justify-content: space-between;
     resize: vertical;
@@ -100,7 +105,7 @@ pre {
 .chatbot-output {
     padding: 10px;
     width: 50%;
-    height: 490px;
+    height: 620px;
     overflow-y: auto;
     resize: vertical;
     padding-right: 30px;
@@ -116,10 +121,13 @@ pre {
 
 .chatbot-output p {
     font-size: 1em;
-    padding: 20px;
+    padding: 10px 10px 20px 10px;
     align-items: center;
-    display: flex;
     border-radius: 10px;
+}
+
+.chatbot-output p.chatgpt img {
+    max-width: 50%;
 }
 
 .chatbot-output p.commands,
@@ -162,7 +170,7 @@ pre {
 
 .chatbot-avatar-container {
     width: 40px;
-    height: 50px;
+    height: 62px;
   display: flex;
   align-items: center;
     justify-content: center;
@@ -199,6 +207,12 @@ pre {
     top: -40px;
     animation: text-pulse 4s infinite;
 
+}
+
+.chatbot-data-source-container {
+    background: #fefefe;
+    padding: 5px;
+    border-radius: 10px;
 }
 
 form {
@@ -297,6 +311,15 @@ button:active {
     height: 100%;
     width: 100%;
     overflow-y: auto;
+}
+
+.wrapper.promptTemplates {
+    content: "";
+    min-height: 50vh;
+}
+
+.wrapper.promptTemplates input {
+    margin: 0 20px;
 }
 
 .row {

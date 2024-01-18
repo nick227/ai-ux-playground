@@ -1,8 +1,8 @@
-
 function createListItem(item, key) {
   const options = getObjectToHtmlMap(item, key);
   const html = createHtmlElement(options);
   html.dataset.id = item._id;
+  html.classList.add('item');
   const deleteBtn = createDeleteButton(html, item);
   html.insertBefore(deleteBtn, html.firstChild);
   const copyBtn = createCopyButton(html);
@@ -10,8 +10,41 @@ function createListItem(item, key) {
   return html;
 }
 
+function createInputField() {
+    const inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.placeholder = 'Filter items...';
+    return inputField;
+}
+
+function filterListItems(inputField, listWrapper) {
+  const filter = inputField.value.toUpperCase();
+  const items = listWrapper.querySelectorAll('.item'); // adjust the selector to match your list items
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    //const txtValue = item.textContent || item.innerText;
+    const txtValue = item.querySelector('h2').textContent;
+    if (txtValue.toUpperCase().startsWith(filter)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  }
+}
+
+function renderListItem(listWrapper, itemText) {
+    const li = document.createElement('li');
+    li.textContent = itemText;
+    listWrapper.appendChild(li);
+}
+
 function renderList(list, key) {
   const wrapper = createHtmlElement({ elementType: 'section', className: `${key} wrapper` });
+  const inputField = createInputField();
+  inputField.onkeyup = function() {
+      filterListItems(inputField, wrapper);
+  };
+  wrapper.insertBefore(inputField, wrapper.firstChild);
   list.forEach((item) => {
     const html = createListItem(item, key);
     wrapper.appendChild(html);

@@ -1,5 +1,3 @@
-
-
 function createElementFromConfig(config) {
     const element = createHtmlElement(config.type);
     element.className = config.className;
@@ -101,6 +99,14 @@ async function setupChatBot() {
                                     type: 'click',
                                     handler: handleUploadDataSource
                                 }
+                            }, {
+                                type: 'div',
+                                className: 'chatbot-data-source-container',
+                                children: [{
+                                    type: 'div',
+                                    className: 'chatbot-data-source-list'
+                                }
+                                ]
                             }]
                         }
                     ]
@@ -116,12 +122,25 @@ async function setupChatBot() {
     async function handleUploadDataSource() {
         let fileInput = document.querySelector('#data-source-file');
         let file = fileInput.files[0];
-        if(!file){
+        if (!file) {
             alert("Please choose a file to upload!");
             return;
         }
-        let promptValue = prompt("Please enter the name for the data source");
+        let defaultName = file.name;
+        let promptValue = prompt("Please name the data source", defaultName);
 
+        if (promptValue && file) {
+            let formData = new FormData();
+            formData.append('file', file);
+            formData.append('name', promptValue);
+            await api.upload('/api/dataSources', formData);
+            fileInput.value = '';
+            alert(`Added ${promptValue} to data sources!`);
+            loadDataSources();
+        }
+    }
+
+    function saveFileContents(file) {
         let reader = new FileReader();
 
         reader.onload = async function (e) {
@@ -132,10 +151,11 @@ async function setupChatBot() {
                 content: contents
             };
 
-            if(promptValue && contents){
+            if (promptValue && contents) {
                 await api.create('/api/dataSources', data);
                 fileInput.value = '';
                 alert(`Added ${promptValue} to data sources!`);
+                loadDataSources();
             }
         }
 
@@ -158,10 +178,20 @@ async function setupChatBot() {
 
         toggleLoading();
         const data = await requestChatGpt(prompt, templateTypeValue);
-        console.log(data);
-        toggleLoading();
-
-        displayChatbotResponse(data);
+        if (data.commands && Array.from(data.commands)) {
+            executeCommands(data.commands);
+        }
+        if (typeof data === 'object' && data.data && data.data[0].b64_json) {
+            console.log('image detected')
+            let img = document.createElement('img');
+            img.src = 'data:image/png;base64,' + data.data[0].b64_json;
+            addToOutput(img, 'ChatGpt');
+            saveMessageToLocalStorage('[ai-image]', 'ChatGpt');
+        } else {
+            console.log('data ', data)
+            displayChatbotResponse(data);
+            toggleLoading();
+        }
     }
 
     function getChatbotTextarea() {
@@ -186,10 +216,12 @@ async function setupChatBot() {
     }
 
     async function displayChatbotResponse(data) {
-        let response = typeof data === 'object' ? Object.values(data)[0] : data;
+        let response = data.response || data.html;
         response = typeof response === 'object' ? JSON.stringify(response) : response;
-        addToOutput(response, 'ChatGpt');
-        saveMessageToLocalStorage(JSON.stringify(response), 'ChatGpt');
+        if (response) {
+            addToOutput(response, 'ChatGpt');
+            saveMessageToLocalStorage(JSON.stringify(response), 'ChatGpt');
+        }
 
         if (data.commands && data.commands.length > 0) {
             saveMessageToLocalStorage(JSON.stringify(data.commands), 'Commands');
@@ -214,12 +246,12 @@ async function setupChatBot() {
         localStorage.removeItem('messages');
     }
 
-    function addToOutput(text, sender) {
-        const messageElement = createMessageElement(text, sender);
+    function addToOutput(html, sender) {
+        const messageElement = createMessageElement(html, sender);
         prependElementToOutput(messageElement);
     }
 
-    function createMessageElement(text, sender) {
+    function createMessageElement(html, sender) {
         const container = createHtmlElement('div');
         const inner = createHtmlElement('div');
         container.className = 'chatbot-output-message';
@@ -242,7 +274,14 @@ async function setupChatBot() {
         const messageText = createHtmlElement('p');
         messageText.className = sender.toLowerCase();
         h6.className = sender.toLowerCase();
-        messageText.textContent = text;
+
+        if (html instanceof HTMLImageElement) {
+            messageText.appendChild(html);
+        } else {
+            html = processText(html);
+            messageText.innerHTML = html;
+        }
+
         if (sender.toLowerCase() !== 'you') {
             container.appendChild(avatarContainer);
 
@@ -251,6 +290,19 @@ async function setupChatBot() {
         inner.appendChild(h6);
         container.appendChild(inner);
         return container;
+    }
+
+    function processText(text) {
+        let regex = /```(\w+)([\s\S]+?)```/g;
+        let match = regex.exec(text);
+        while (match) {
+            let language = match[1];
+            let code = match[2];
+            text = text.replace(match[0], `<code class="language-${language}">${code}</code>`);
+            match = regex.exec(text);
+        }
+        return text;
+
     }
 
     function prependElementToOutput(element) {
@@ -269,9 +321,6 @@ async function setupChatBot() {
         const messages = JSON.parse(localStorage.getItem('messages')) || [];
         const lastMessages = messages.slice(-10);
         lastMessages.forEach(message => addToOutput(message.text, message.sender));
-        if (this.prompt.messages.length > 10) {
-            this.prompt.messages = this.prompt.messages.slice(0, 10);
-        }
     }
 
     function createElements(configs) {
@@ -285,7 +334,28 @@ async function setupChatBot() {
         });
     }
 
+    async function loadDataSources() {
+        const dataSourceList = document.querySelector('.chatbot-data-source-list');
+        dataSourceList.innerHTML = '';
+        addDataSource(dataSourceList, 3, { name: 'documentation' }, 0);
+        addDataSource(dataSourceList, 3, { name: 'snapshots' }, 0);
+        addDataSource(dataSourceList, 3, { name: 'chatHistory' }, 0);
+        const dataSources = await api.read('api/dataSources', { projection: JSON.stringify({ name: 1 }) });
+        dataSources.forEach((dataSource, index) => {
+            addDataSource(dataSourceList, dataSources.length, dataSource, index);
+        });
+
+    }
+
+    function addDataSource(dataSourceList, dataSourcesLen, dataSource, index) {
+        const dataSourceElement = createHtmlElement('span');
+        dataSourceElement.style.fontSize = '0.8rem';
+        dataSourceElement.textContent = dataSource.name + (index < dataSourcesLen - 1 ? ', ' : '');
+        dataSourceList.appendChild(dataSourceElement);
+    }
+
     const chatbotElements = createElements(chatbotConfig);
     document.body.prepend(...chatbotElements);
     loadMessages();
+    await loadDataSources();
 }

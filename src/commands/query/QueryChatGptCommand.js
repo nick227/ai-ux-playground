@@ -8,9 +8,9 @@ dotenv.config();
 class QueryChatGptCommand extends Command {
   constructor(req=null) {
     super();
-    const apiKey = process.env.OPENAI_SECRET;
+    const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      throw new Error('OPENAI_SECRET is not set in environment variables.');
+      throw new Error('OPENAI_API_KEY is not set in environment variables.');
     }
     this.openai = new OpenAIAPI({ apiKey });
     this.req = req;

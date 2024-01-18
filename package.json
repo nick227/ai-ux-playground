@@ -22,14 +22,17 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "langchain": "^0.0.165",
+    "llamaindex": "^0.0.46",
     "module-alias": "^2.2.3",
     "mongoose": "^7.6.1",
+    "multer": "^1.4.5-lts.1",
     "nedb": "^1.8.0",
     "nlp": "^0.0.0",
     "openai": "^4.11.1",
+    "pdf-parse": "^1.1.1",
+    "pdf2json": "^3.0.5",
     "sqlite3": "^5.1.6",
     "util": "^0.12.5",
-    "vectra": "^0.5.5",
     "ws": "^8.14.2"
   },
   "_moduleAliases": {

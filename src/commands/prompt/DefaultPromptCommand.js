@@ -15,7 +15,7 @@ export default class DefaultPromptCommand extends Command {
     this.saveToChatHistoryCommand = new QueryCommands.SaveToChatHistoryCommand();
     this.getPageHistoryCommand = new QueryCommands.GetPageHistoryCommand();
     this.getDocumentationCommand = new QueryCommands.GetDocumentationCommand();
-    this.getDataSourceCommand = new QueryCommands.GetDataSourceCommand();
+    this.getDataSourceCommand = new QueryCommands.GetDataSourceCommand(req, res);
     this.results = [];
   }
 
@@ -34,7 +34,10 @@ export default class DefaultPromptCommand extends Command {
         await this.handleSequence();
       }
 
-      await this.saveHistory();
+      if (this.prompt.templateType !== 'ai_image_request') {
+        await this.saveHistory();
+      }
+
       this.res.send(this.results);
     } catch (error) {
       console.error(error);
@@ -47,7 +50,19 @@ export default class DefaultPromptCommand extends Command {
   }
 
   async loadResults() {
-    this.results = await this.queryChatGptCommand.execute(this.prompt);
+    console.log(this.prompt.templateType, this.prompt.use_embedding, this.urlParams)
+    if (this.prompt.templateType === 'ai_image_request') {
+      this.results = await this.queryChatGptCommand.executeImage(this.prompt.prompt);
+      return;
+    } 
+    if (!this.prompt.use_embedding) {
+      this.results = await this.queryChatGptCommand.execute(this.prompt);
+      return;
+    }
+    if (this.prompt.use_embedding) {
+      console.log('this.prompt.use_embedding', this.prompt.use_embedding);
+      return;
+    }
   }
 
   async loadMessages() {

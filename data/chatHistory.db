@@ -1,26 +1,20 @@
-{"role":"assistant","content":"{\n  \"anagram\": \"jamonhey\"\n}","sessionId":"26UXyz2B_1I9tgmKeqRKDJOShQnaEIB0","timestamp":{"$$date":1705386833644},"_id":"2YItYaKRIQarIKnW"}
-{"role":"assistant","content":"{\n  \"anagram\": \"hello blue cat\"\n}","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385057190},"_id":"7qReDeOYvRUvFnFI"}
-{"role":"user","content":"get","sessionId":"X-pTqvp838SBLNe4war9HQ4n-VtZWhZv","timestamp":{"$$date":1705383028765},"_id":"8UnxixwJetP7qcdw"}
-{"role":"assistant","content":"{\n  \"anagram\": \"heywhatisup\"\n}","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385161428},"_id":"ER3jdynf5P3QZkF1"}
-{"role":"user","content":"what is the deal","sessionId":"kGLzH8e4EwsAkhYjSQz6emv5tpoUqap8","timestamp":{"$$date":1705384731545},"_id":"GOEpxf8FJHjOJNNz"}
-{"role":"assistant","content":"{\n  \"anagram\": \"yeh\"\n}","sessionId":"-OQJ3RN8Effnlw5uQxCnnHLtV8NL3iPL","timestamp":{"$$date":1705382887833},"_id":"GiHO8EbswATlAz7w"}
-{"role":"user","content":"jamon hey","sessionId":"26UXyz2B_1I9tgmKeqRKDJOShQnaEIB0","timestamp":{"$$date":1705386833644},"_id":"Gx8DQiu1g31CNWPb"}
-{"role":"user","content":"hello blue cat","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385057190},"_id":"N9xXhBUM36yvH62T"}
-{"role":"user","content":"hey what is up","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385036710},"_id":"NWgDlQXaODHXOaCl"}
-{"role":"user","content":"yo","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385859469},"_id":"QoRWi4LYxaImpfq8"}
-{"role":"user","content":"hello isisek f","sessionId":"kGLzH8e4EwsAkhYjSQz6emv5tpoUqap8","timestamp":{"$$date":1705384715221},"_id":"RcWDBfBYiwstR3Yz"}
-{"role":"assistant","content":"{\n  \"anagram\": \"dsaaehtle\"\n}","sessionId":"kGLzH8e4EwsAkhYjSQz6emv5tpoUqap8","timestamp":{"$$date":1705384731545},"_id":"ZeAxByXMFHniOT6w"}
-{"role":"assistant","content":"{\n  \"anagram\": \"hello isisek f\"\n}","sessionId":"kGLzH8e4EwsAkhYjSQz6emv5tpoUqap8","timestamp":{"$$date":1705384715221},"_id":"bS01DB2LzkuM3yC4"}
-{"role":"assistant","content":"{\n  \"anagram\": \"yo\"\n}","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385859469},"_id":"dhKCr3ribQac7cHV"}
-{"role":"assistant","content":"{\n  \"anagram\": \"heywhatisup\"\n}","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385036710},"_id":"gcfeohNHQ66r39zX"}
-{"role":"user","content":"fwefwef","sessionId":"AHJg0IkF3vgADWRgjv9ZEPmBPpm3ANV3","timestamp":{"$$date":1705383265655},"_id":"irRfAfxqz4Q1rgMu"}
-{"role":"assistant","content":"{\n  \"anagram\": \"asdf\"\n}","sessionId":"nFdx41SX-qyaDSXePmCLpP0j8hgclbUb","timestamp":{"$$date":1705383171261},"_id":"kDF2Vrc77md6l5zG"}
-{"role":"assistant","content":"{\n  \"anagram\": \"gte\"\n}","sessionId":"X-pTqvp838SBLNe4war9HQ4n-VtZWhZv","timestamp":{"$$date":1705383028765},"_id":"pAokFzuHjMCHTbpu"}
-{"role":"assistant","content":"{\n  \"anagram\": \"fwefwef\"\n}","sessionId":"AHJg0IkF3vgADWRgjv9ZEPmBPpm3ANV3","timestamp":{"$$date":1705383265655},"_id":"qLy4dNvqcRHvheBs"}
-{"role":"user","content":"asdf","sessionId":"nFdx41SX-qyaDSXePmCLpP0j8hgclbUb","timestamp":{"$$date":1705383171261},"_id":"rliL5QmIVHPgTZKy"}
-{"role":"user","content":"hey","sessionId":"-OQJ3RN8Effnlw5uQxCnnHLtV8NL3iPL","timestamp":{"$$date":1705382887833},"_id":"uOC3b0i09qhRF2ay"}
-{"role":"user","content":"hey what is up","sessionId":"rmTRfnPIj4FszxygNn2asJxroqJ0BpNC","timestamp":{"$$date":1705385161428},"_id":"whpqPXb9Ku8NFun2"}
-{"role":"user","content":"what is up","sessionId":"oq0ADmad97Wwmt-x2fZJyOLjxUwnxsch","timestamp":{"$$date":1705387161518},"_id":"MIVd0xcmLagFUBvp"}
-{"role":"assistant","content":"{\n  \"response\": \"Hey there! How can I assist you today?\"\n}","sessionId":"oq0ADmad97Wwmt-x2fZJyOLjxUwnxsch","timestamp":{"$$date":1705387161518},"_id":"lkgYht97FzjKDEVI"}
-{"role":"user","content":"list all the background colors in my current page","sessionId":"oq0ADmad97Wwmt-x2fZJyOLjxUwnxsch","timestamp":{"$$date":1705387203023},"_id":"QCxqFCNFsIQGh7SJ"}
-{"role":"assistant","content":"{\n  \"response\": \"Sure! Let me check the background colors on your current page.\",\n  \"commands\": [\n    {\n      \"command\": \"style\",\n      \"value\": \"background-color\",\n      \"targetNodeId\": \"67\"\n    }\n  ]\n}","sessionId":"oq0ADmad97Wwmt-x2fZJyOLjxUwnxsch","timestamp":{"$$date":1705387203023},"_id":"DtIiDEGeyXfAaRoJ"}
+{"role":"assistant","content":"{\n  \"commands\": [\n    {\n      \"command\": \"style\",\n      \"value\": \"background-color: pink\",\n      \"targetNodeId\": \"body\"\n    }\n  ]\n}","sessionId":"vkFNRtVazn0d3wqoxZZsKO5lF9NG4iLN","timestamp":{"$$date":1705459604243},"_id":"3SxkFgtnOXbCNG5W"}
+{"role":"assistant","content":"{}","sessionId":"vk5qn5QahIPzHowFpkm10Uf20mcD7AIZ","timestamp":{"$$date":1705541169556},"_id":"5EAyttRJET0CAO9D"}
+{"role":"user","content":"asdf","sessionId":"yqveI-LzLfxMJuQHt5hmtkjjaI-5kIX5","timestamp":{"$$date":1705541548291},"_id":"5V3orvgSvICRV56g"}
+{"role":"assistant","content":"{}","sessionId":"yqveI-LzLfxMJuQHt5hmtkjjaI-5kIX5","timestamp":{"$$date":1705541548291},"_id":"5i3qw4z6NMkAhFSB"}
+{"role":"user","content":"few","sessionId":"ENLOzpxHMUTeqrvEZAhL5W8ZXe6cP8G5","timestamp":{"$$date":1705542602560},"_id":"E0aCkfzLaUlr55Wm"}
+{"role":"user","content":"fea","sessionId":"c4BSEPt8W1okWic7ftacdgg7hBz8XG0i","timestamp":{"$$date":1705541819822},"_id":"PR9L3iYeiNViFVNO"}
+{"role":"assistant","content":"{}","sessionId":"9jtrgj4EI-nwb2WjyupwsLdcCxAZ5YgR","timestamp":{"$$date":1705541499188},"_id":"QL28T4BT5SaoG8Of"}
+{"role":"assistant","content":"{\n  \"commands\": [\n    {\n      \"command\": \"style\",\n      \"value\": \"background-color: red;\",\n      \"targetNodeId\": \"87\"\n    }\n  ]\n}","sessionId":"vkFNRtVazn0d3wqoxZZsKO5lF9NG4iLN","timestamp":{"$$date":1705458667933},"_id":"RnvgAWl2mB6YeYc1"}
+{"role":"user","content":"wer","sessionId":"vk5qn5QahIPzHowFpkm10Uf20mcD7AIZ","timestamp":{"$$date":1705541169556},"_id":"T1Ma4dMM8OiMA23i"}
+{"role":"assistant","content":null,"sessionId":"ENLOzpxHMUTeqrvEZAhL5W8ZXe6cP8G5","timestamp":{"$$date":1705542602560},"_id":"XkKIriUkiH2lNfaL"}
+{"role":"assistant","content":null,"sessionId":"c4BSEPt8W1okWic7ftacdgg7hBz8XG0i","timestamp":{"$$date":1705541819822},"_id":"ZFRHAhKhaCnPAG3k"}
+{"role":"assistant","content":"{}","sessionId":"d6iBXfkH1uYtDSAIxSN6mon_DAdkKo2C","timestamp":{"$$date":1705541000060},"_id":"bM4NBIH5uy7LKHvx"}
+{"role":"user","content":"make my button with node-id 87 background red","sessionId":"vkFNRtVazn0d3wqoxZZsKO5lF9NG4iLN","timestamp":{"$$date":1705458667933},"_id":"fclYcpTrSfQL6qa3"}
+{"role":"user","content":"fsd","sessionId":"d6iBXfkH1uYtDSAIxSN6mon_DAdkKo2C","timestamp":{"$$date":1705541000060},"_id":"gDnJHwJVXakmJly4"}
+{"role":"user","content":"zz","sessionId":"9jtrgj4EI-nwb2WjyupwsLdcCxAZ5YgR","timestamp":{"$$date":1705541499188},"_id":"iZJM6SEdQxeptdUv"}
+{"role":"assistant","content":"{}","sessionId":"ZjTzYvjsMb2JW7eFRwsELmaAqmdRcOF-","timestamp":{"$$date":1705527397760},"_id":"nbd6j3bkAQ0WtqB8"}
+{"role":"user","content":"make the background of my current page body pink","sessionId":"vkFNRtVazn0d3wqoxZZsKO5lF9NG4iLN","timestamp":{"$$date":1705459604243},"_id":"oG2LDFe7SdQstD9J"}
+{"role":"user","content":"gey","sessionId":"ZjTzYvjsMb2JW7eFRwsELmaAqmdRcOF-","timestamp":{"$$date":1705527397760},"_id":"oz6CCZycpjaZGBqn"}
+{"role":"user","content":"tw","sessionId":"WnHsWDrqNOl2Y3sAxivceTefvDXjYpXo","timestamp":{"$$date":1705542682137},"_id":"o93qBig6tb9SAwJi"}
+{"role":"assistant","content":null,"sessionId":"WnHsWDrqNOl2Y3sAxivceTefvDXjYpXo","timestamp":{"$$date":1705542682137},"_id":"3pyk5EF4EjhKAKC9"}

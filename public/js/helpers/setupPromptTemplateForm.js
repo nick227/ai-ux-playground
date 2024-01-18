@@ -7,7 +7,7 @@ function setupPromptTemplateForm() {
     textarea.placeholder = 'Enter prompt template';
     submit.textContent = 'Submit';
     title.textContent = 'Create prompt template';
-    desc.innerHTML = 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Current data_sources: chatHistory, snapshots, documentation. Set sequence true to initiate a sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
+    desc.innerHTML = 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
     desc.className = 'description';
     title.className = 'title';
     submit.type = 'submit';
@@ -72,7 +72,7 @@ const validate = data => {
     }
     const parsedData = JSON.parse(data);
     const { type, messages, prompt, tool_choice, tools, _id, timestamp, data_sources } = parsedData;
-    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence'];
+    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence', 'use_embedding'];
     const actualKeys = Object.keys(parsedData);
     const extraKeys = actualKeys.filter(key => !expectedKeys.includes(key));
 

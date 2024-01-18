@@ -3,7 +3,7 @@ function getBodyHtmlWithInlineStyles() {
     Array.from(bodyClone.getElementsByTagName('script')).forEach(
         script => script.parentNode.removeChild(script)
     );
-    removeTextContent(bodyClone);
+    //removeTextContent(bodyClone);
     return bodyClone.outerHTML.replace(/\s+/g, ' ');
 }
 

@@ -4,7 +4,7 @@ import util from 'util';
 import path from 'path';
 import validateSchema from './validateSchema.js';
 import schemas from './schemas.js';
-import async from 'async'; 
+import async from 'async';
 
 const DB_PATH = path.join(process.cwd(), './data/');
 let instances = {};
@@ -46,6 +46,12 @@ export default class DB {
     async _find(query) {
         let sort = { timestamp: -1 };
         let limit = null;
+        let projection = {};
+
+        if (query.projection) {
+            projection = JSON.parse(query.projection) || {};
+            delete query.projection;
+        }
 
         if (query.sort) {
             sort = query.sort;
@@ -53,11 +59,11 @@ export default class DB {
         }
 
         if (query.limit) {
-           limit = query.limit;
-           delete query.limit;
+            limit = query.limit;
+            delete query.limit;
         }
 
-        let cursor = this.db.find(query);
+        let cursor = this.db.find(query, projection);
 
         if (sort) {
             cursor = cursor.sort(sort);

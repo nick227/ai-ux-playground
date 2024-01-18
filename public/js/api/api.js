@@ -13,8 +13,17 @@ const api = {
   async read(route, queryParams = {}) {
     const queryString = new URLSearchParams(queryParams).toString();
     const url = `${route}?${queryString}`;
+    console.log(url)
     const response = await fetch(url, {
       method: 'GET',
+    });
+    return await response.json();
+  },
+
+  async upload(route, data) {
+    const response = await fetch(route, {
+      method: 'POST',
+      body: data,
     });
     return await response.json();
   },

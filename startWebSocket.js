@@ -10,7 +10,7 @@ export default function startWebSocket(httpServer, app, expressSession) {
   wss.on('connection', (ws, req) => {
     expressSession(req, {}, () => {
       ws.id = req.session.id;
-      renderSnapshotCommand.execute(req.session.id);
+      //renderSnapshotCommand.execute(req.session.id);
     });
 
     ws.on('message', (message) => {

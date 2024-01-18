@@ -21,7 +21,7 @@ function createHtmlElement(options) {
         el.innerHTML = htmlContent;
     }
     if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'header'].includes(elementType)) {
-        el.textContent = textContent || 'Lorem Ipsum';
+        el.textContent = textContent;
     }
     if (['button'].includes(elementType)) {
         el.textContent = textContent || 'click me';
