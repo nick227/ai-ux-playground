@@ -1,26 +1,27 @@
 import { Prompt } from './index.js';
 import Command from '../Command.js';
 import * as QueryCommands from '../query/index.js';
+import sendSocketMsgToClient from '../../sendSocketMsgToClient.js';
 
 export default class DefaultPromptCommand extends Command {
   constructor(req, res) {
     super();
     this.req = req;
     this.res = res;
-    this.urlParams = req.query;
+    this.urlParams = req.body || req.query;
     this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "main", { prompt: this.urlParams.prompt });
     this.queryChatGptCommand = new QueryCommands.QueryChatGptCommand(this.req);
     this.insertToDBCommand = new QueryCommands.InsertToDBCommand();
     this.getChatHistoryCommand = new QueryCommands.GetChatHistoryCommand();
     this.saveToChatHistoryCommand = new QueryCommands.SaveToChatHistoryCommand();
     this.getPageHistoryCommand = new QueryCommands.GetPageHistoryCommand();
-    this.getDocumentationCommand = new QueryCommands.GetDocumentationCommand();
-    this.getDataSourceCommand = new QueryCommands.GetDataSourceCommand(req, res);
+    this.getDataSourceCommand = new QueryCommands.GetDataSourceCommand(this.urlParams.prompt);
     this.results = [];
   }
 
   async execute() {
     try {
+      console.log("start default", this.urlParams)
       if (!this.urlParams.prompt) {
         this.res.status(400).json({ error: 'No prompt provided.' });
         return;
@@ -37,10 +38,12 @@ export default class DefaultPromptCommand extends Command {
       if (this.prompt.templateType !== 'ai_image_request') {
         await this.saveHistory();
       }
+      sendSocketMsgToClient(JSON.stringify(this.results, null, 2), this.req);
 
       this.res.send(this.results);
     } catch (error) {
       console.error(error);
+      sendSocketMsgToClient(JSON.stringify(error, null, 2), this.req);
       this.res.status(500).json({ error: 'An error occurred while processing your request.' });
     }
   }
@@ -50,7 +53,6 @@ export default class DefaultPromptCommand extends Command {
   }
 
   async loadResults() {
-    console.log(this.prompt.templateType, this.prompt.use_embedding, this.urlParams)
     if (this.prompt.templateType === 'ai_image_request') {
       this.results = await this.queryChatGptCommand.executeImage(this.prompt.prompt);
       return;
@@ -76,11 +78,6 @@ export default class DefaultPromptCommand extends Command {
     if (this.prompt.data_sources && this.prompt.data_sources.includes('snapshots')) {
       const snapshots = await this.getPageHistoryCommand.execute(this.req.session.id);
       this.prompt.messages.unshift(...snapshots);
-    }
-
-    if (this.prompt.data_sources && this.prompt.data_sources.includes('documentation')) {
-      const documentation = await this.getDocumentationCommand.execute();
-      this.prompt.messages.unshift(...documentation);
     }
 
     if (this.prompt.data_sources && Array.isArray(this.prompt.data_sources)) {

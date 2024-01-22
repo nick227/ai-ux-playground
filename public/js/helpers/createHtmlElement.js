@@ -24,7 +24,7 @@ function createHtmlElement(options) {
         el.textContent = textContent;
     }
     if (['button'].includes(elementType)) {
-        el.textContent = textContent || 'click me';
+        el.textContent = textContent || '';
     }
     if (elementType === 'img' && !attributes.href && !src) {
         el.src = 'https://picsum.photos/200';

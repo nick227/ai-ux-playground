@@ -19,7 +19,7 @@ function createInputField() {
 
 function filterListItems(inputField, listWrapper) {
   const filter = inputField.value.toUpperCase();
-  const items = listWrapper.querySelectorAll('.item'); // adjust the selector to match your list items
+  const items = listWrapper.querySelectorAll('.item'); 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     //const txtValue = item.textContent || item.innerText;
@@ -38,7 +38,7 @@ function renderListItem(listWrapper, itemText) {
     listWrapper.appendChild(li);
 }
 
-function renderList(list, key) {
+function renderList(list, key, target) {
   const wrapper = createHtmlElement({ elementType: 'section', className: `${key} wrapper` });
   const inputField = createInputField();
   inputField.onkeyup = function() {
@@ -49,7 +49,7 @@ function renderList(list, key) {
     const html = createListItem(item, key);
     wrapper.appendChild(html);
   });
-  document.body.appendChild(wrapper);
+  target.appendChild(wrapper);
 }
 
 function addToList(item, key) {
@@ -116,4 +116,49 @@ function renderStage(stageData) {
 function prependToStage(html) {
   const stage = document.querySelector('.stage');
   stage.prepend(html);
+}
+
+
+
+function createElements(configs) {
+  return configs.map(config => {
+      const element = createElementFromConfig(config);
+      if (config.children) {
+          const children = createElements(config.children);
+          children.forEach(child => element.appendChild(child));
+      }
+      return element;
+  });
+}
+
+function createElementFromConfig(config) {
+  const element = createHtmlElement(config.type);
+  element.className = config.className;
+  if (config.textContent) element.textContent = config.textContent;
+  if (config.type === 'input') element.type = config.inputType;
+  if (config.placeholder) element.placeholder = config.placeholder;
+  if (config.id) element.id = config.id;
+  if (Array.isArray(config.event)) {
+      config.event.forEach(event => element.addEventListener(event.type, event.handler));
+  } else if (config.event) {
+      element.addEventListener(config.event.type, config.event.handler);
+  }
+  if (config.options && config.type === 'select') {
+      let defaultOptionValue = getDefaultOptionValue();
+      for (let optionValue of config.options) {
+          const optionElement = document.createElement('option');
+          optionElement.value = optionValue;
+          optionElement.textContent = optionValue;
+          if (optionValue === defaultOptionValue) {
+              optionElement.selected = true;
+          }
+          element.appendChild(optionElement);
+      }
+  }
+
+  function getDefaultOptionValue() {
+      return localStorage.getItem('defaultOptionValue') || 'main';
+  }
+
+  return element;
 }

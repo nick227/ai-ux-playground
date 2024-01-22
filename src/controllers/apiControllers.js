@@ -22,23 +22,17 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 function uploadHandler(operation, req, res, db) {
-  console.log("1")
   return new Promise((resolve, reject) => {
     if (operation === 'post' && req.path === '/api/dataSources') {
-      console.log("2")
       upload.single('file')(req, res, async function (err) {
         if (err) {
-          console.log("3", err.message)
           res.status(500).json({ error: err.message });
           resolve(true);
         } else if (!req.file) {
-          console.log("4")
           res.status(400).json({ error: 'No file was uploaded.' });
           resolve(true);
         } else {
-          console.log("5")
           const filename = req.filename;
-          console.log(filename)
           await db.insert({ name: req.body.name, path: filename });
           res.status(200).json({ message: 'File uploaded successfully' });
           resolve(true);
@@ -84,9 +78,6 @@ const execute = async (operation, req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  } else {
-    console.log('true');
-  
   }
 };
 

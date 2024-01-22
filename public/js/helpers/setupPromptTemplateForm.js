@@ -1,5 +1,5 @@
-function setupPromptTemplateForm() {
-    const title = createHtmlElement('h1');
+async function setupPromptTemplateForm() {
+    const title = createHtmlElement('h2');
     const desc = createHtmlElement('p');
     const form = createHtmlElement('form');
     const textarea = createHtmlElement({ elementType: 'textarea' });
@@ -18,7 +18,9 @@ function setupPromptTemplateForm() {
     form.addEventListener('submit', handleFormSubmit);
     textarea.addEventListener('input', () => setupTextAreaHeight(textarea));
     textarea.addEventListener('keydown', fixTabPress);
-    document.body.prepend(form);
+    const target = document.querySelector('#templates');
+    target.prepend(form);
+    addScrollToTopButton();
 }
 
 async function handleFormSubmit(event) {
@@ -34,9 +36,20 @@ async function handleFormSubmit(event) {
             addToList(response, 'promptTemplates');
             textarea.value = '';
             setupTextAreaHeight(textarea);
+            addToChatbotPicker(response.type);
         } catch (error) {
             console.error('An error occurred:', error);
         }
+    }
+}
+
+function addToChatbotPicker(type) {
+    const select = document.querySelector('.chatbot-picker');
+    const option = createHtmlElement('option');
+    option.value = type;
+    option.textContent = type;
+    if (!select.querySelector(`option[value="${type}"]`)) {
+        select.insertBefore(option, select.firstChild);
     }
 }
 
@@ -63,6 +76,14 @@ function fixTabPress(e) {
         this.selectionStart =
             this.selectionEnd = start + 2;
     }
+}
+
+function addScrollToTopButton() {
+    const button = createHtmlElement('button');
+    button.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    button.className = 'scroll-top';
+    button.addEventListener('click', () => window.scrollTo(0, 0));
+    document.body.appendChild(button);
 }
 
 const validate = data => {
@@ -96,6 +117,11 @@ const validate = data => {
         return false;
     }
 
+    if (data_sources && !Array.isArray(data_sources)) {
+        alert('Data sources must be an array');
+        return false;
+    }
+
     if (typeof tool_choice === 'string') {
         const toolFunction = tools?.find(tool => tool.type === 'function');
         if (!Array.isArray(tools)) {
@@ -104,10 +130,6 @@ const validate = data => {
         }
         if (!toolFunction) {
             alert('Tools does not contain an object with type: function');
-            return false;
-        }
-        if (data_sources && !Array.isArray(data_sources)) {
-            alert('Data sources must be an array');
             return false;
         }
         if (toolFunction.function?.name !== tool_choice) {

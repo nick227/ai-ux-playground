@@ -1,13 +1,18 @@
+:root {
+    --border-radius: 5px;
+}
+
 body {
-    width: 50%;
+    width: 40%;
     margin-left: auto;
     margin-right: auto;
     height: 100%;
     line-height: 1.5;
     margin-top: 60px;
     font-family: Roboto;
-    background: white;
     padding-bottom: 120px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 input,
@@ -16,6 +21,15 @@ textarea {
     background: whitesmoke;
     border: none;
     box-shadow: none;
+    border-radius: var(--border-radius);
+    height: auto;
+    transition: height 0.5s ease-in-out;
+}
+
+textarea:focus {
+    border: none;
+    outline: 1px solid dodgerblue;
+    outline-offset: -1px;
 }
 
 h1,
@@ -30,7 +44,7 @@ p {
 }
 
 h1 {
-    font-family: Orbitron;
+    font-family: Oswald;
     color: #111;
 }
 
@@ -39,33 +53,119 @@ p {
     line-height: 1.5;
 }
 
+button {
+    height: 40px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.21s ease-in-out;
+}
+
+button:active {
+    background-color: #3e8e41;
+    outline: 1px solid white;
+    outline-offset: -1.5px;
+}
+
+code button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: gray;
+}
+
+#workbench {
+    width: 100%;
+    min-width: 640px;
+    max-height: 100%;
+}
+
+#templates {
+    min-width: 640px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chatbot-controls button {
+    width: 150px;
+    padding: 0;
+}
+
+form button {
+    width: 100%;
+}
+
 pre {
     white-space: pre-wrap;
     overflow-y: auto;
+}
+
+code {
+    background-color: #101010;
+    color: white;
+    padding: 6px 20px;
+    border-radius: var(--border-radius);
+    display: block;
+    line-height: 2;
+    position: relative;
+}
+
+.current-page {
+    background-color: #ccc;
+    content: "";
+    width: 100%;
+    min-height: 350px;
 }
 
 .chatbot {
     position: relative;
     width: 100%;
     height: auto;
-    min-height: 50vh;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     resize: vertical;
-    padding-bottom: 120px;
-    margin-bottom: 120px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
     border-bottom: 1px solid lightgray;
 }
 
 .chatbot-input {
-    width: 45%;
-    height: 400px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
 
+.chatbot-output {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 75vh;
+    resize: vertical;
+    margin-top: 60px;
+    padding: 0;
+}
+
+.chatbot-clear {
+    cursor: pointer;
+    width: 66px;
+    height: 33px;
+    border-radius: var(--border-radius);
+    z-index: 2332;
+    background: gray;
+    opacity: 0;
+    float: right;
+}
+
+.chatbot-output:hover .chatbot-clear {
+    opacity: 1;
 }
 
 .chatbot-textarea {
     width: 95%;
-    min-height: 440px;
     line-height: 1.5;
     font-size: 1.52em;
     padding: 2.5%;
@@ -74,11 +174,7 @@ pre {
     opacity: 0;
     animation: fadeIn 2s cubic-bezier(0.075, 0.82, 0.165, 1);
     animation-fill-mode: forwards;
-}
-
-.chatbot-textarea:focus {
-    border: none;
-    outline: none;
+    padding-bottom: 25px;
 }
 
 .chatbot-controls {
@@ -86,11 +182,6 @@ pre {
     justify-content: space-between;
     width: 100%;
     margin-top: 20px;
-}
-
-.chatbot-controls button {
-    width: 150px;
-    padding: 0;
 }
 
 .chatbot-picker {
@@ -102,18 +193,25 @@ pre {
     cursor: pointer;
 }
 
-.chatbot-output {
-    padding: 10px;
-    width: 50%;
-    height: 620px;
-    overflow-y: auto;
-    resize: vertical;
-    padding-right: 30px;
+.chatbot-download-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
+    width: 33px;
+    height: 33px;
+    border-radius: var(--border-radius);
+    z-index: 2332;
+    opacity: 0;
+    background: gray;
+}
+
+.chatbot-output p:hover .chatbot-download-button {
+    opacity: 1;
 }
 
 .chatbot-output h6 {
     text-decoration: uppercase;
-    border-radius: 3px;
     font-weight: 900;
     letter-spacing: 1px;
     text-align: left;
@@ -121,13 +219,14 @@ pre {
 
 .chatbot-output p {
     font-size: 1em;
-    padding: 10px 10px 20px 10px;
+    padding: 15px 25px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
+    position: relative;
 }
 
 .chatbot-output p.chatgpt img {
-    max-width: 50%;
+    max-width: 90%;
 }
 
 .chatbot-output p.commands,
@@ -135,19 +234,23 @@ pre {
     background-color: transparent;
 }
 
+.chatbot-output-message>div:nth-child(2) {
+    flex-grow: 1;
+}
+
 .chatbot-output p.chatgpt {
     background-color: aquamarine;
-    min-width: 100px;
+    width: 92%
 }
 
 .chatbot-output p.you {
     background-color: lightyellow;
-    padding-bottom: 40px;
 }
 
 .chatbot-output h6.you {
     text-align: right;
 }
+
 .chatbot-output p.you {
     min-width: 200px;
 }
@@ -160,8 +263,9 @@ pre {
     margin-bottom: 10px;
 }
 
-.chatbot-output-message.you > div {
-    flex-grow: 0.8;
+.chatbot-output-message.you>div {
+    flex-grow: 0.85;
+    margin-right: 20px;
 }
 
 .chatbot-output-message.you {
@@ -171,8 +275,8 @@ pre {
 .chatbot-avatar-container {
     width: 40px;
     height: 62px;
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
     justify-content: center;
     margin-right: 10px;
 }
@@ -189,22 +293,29 @@ pre {
 }
 
 .chatbot-uploader input {
-  width: 202px;
-  margin-right: 10px;
+    width: 202px;
+    margin-right: 10px;
 }
 
 .chatbot-uploader a {
     text-decoration: underline;
     cursor: pointer;
+    background-color: whitesmoke;
+}
+
+.chatbot-uploader a:hover {
+    background-color: aqua;
+}
+
+a.chatbot-upload {
+    padding: 1px 3px;
+    border-radius: 2px;
 }
 
 .chatbot-loading {
-    width: 50%;
-    height: 20px;
+    width: 100%;
     text-align: center;
     padding: 2px 10px 5px 10px;
-    position: absolute;
-    top: -40px;
     animation: text-pulse 4s infinite;
 
 }
@@ -212,7 +323,7 @@ pre {
 .chatbot-data-source-container {
     background: #fefefe;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 form {
@@ -230,7 +341,6 @@ form {
 
 form textarea {
     width: calc(100% - 40px);
-    height: auto;
     line-height: 1.5;
     font-size: 1.2em;
     padding: 20px;
@@ -239,25 +349,8 @@ form textarea {
     border: 1px solid #ccc;
 }
 
-form button {
-    width: 100%;
-}
-
 textarea.error {
     color: red;
-}
-
-button {
-    height: 40px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:active {
-    background-color: #3e8e41;
 }
 
 .copy,
@@ -267,7 +360,7 @@ button:active {
     cursor: pointer;
     width: 75px;
     height: 33px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     z-index: 2332;
     opacity: 0;
 
@@ -406,4 +499,12 @@ button:active {
     100% {
         color: darkgray;
     }
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
 }

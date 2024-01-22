@@ -128,7 +128,6 @@ export default class DB {
     }
 
     update(query, update) {
-        //attempting to prevent file locks
         return new Promise((resolve, reject) => {
             this.queue.push(callback => {
                 this._update(query, update).then(resolve).catch(reject).finally(callback);
@@ -163,10 +162,14 @@ export default class DB {
         }
     }
 
-
     async remove(query) {
         try {
-            const numRemoved = await this.db.removeAsync(query, {});
+            console.log('Removing:', query);
+            let numRemoved = 0;
+            let doc;
+            while ((doc = await this.db.findOneAsync(query)) != null) {
+                numRemoved += await this.db.removeAsync({ _id: doc._id }, {});
+            }
             return numRemoved;
         } catch (err) {
             throw new Error(err);
