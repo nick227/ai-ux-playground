@@ -164,7 +164,6 @@ export default class DB {
 
     async remove(query) {
         try {
-            console.log('Removing:', query);
             let numRemoved = 0;
             let doc;
             while ((doc = await this.db.findOneAsync(query)) != null) {

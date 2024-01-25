@@ -1,6 +1,7 @@
 import fs from "fs/promises";
-import Command from "../Command.js";
-import DB from "../../db/DB.js";
+import Command from "../../Command.js";
+import DB from "../../../db/DB.js";
+import { QueryDocumentCommand } from "../index.js";
 
 export default class GetDataSourceCommand extends Command {
     constructor(prompt) {
@@ -12,13 +13,27 @@ export default class GetDataSourceCommand extends Command {
         this.extension = null;
         this.filePath = null;
         this.role = 'system';
+        this.results = null;
     }
-    async execute(name) {
-        await this.load(name);
+    async execute(filename) {
+        await this.load(filename);
+        await this.pdfExecute();
+        await this.fileExecute();
+
+        return this.formatResults(results);
+    }
+
+    async fileExecute() {
         if (this.extension !== 'pdf') {
             const fileData = await fs.readFile(this.filePath);
-            let results = this.formatResults(fileData.toString());
-            return results;
+            this.results = this.formatResults(fileData.toString());
+        }
+    }
+
+    async pdfExecute() {
+        if (this.extension === 'pdf') {
+            const queryDocumentCommand = new QueryDocumentCommand(this.filePath);
+            this.results = queryDocumentCommand.execute();
         }
     }
 

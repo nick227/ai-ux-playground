@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Document, VectorStoreIndex } from "llamaindex";
-import Command from '../Command.js';
+import Command from '../../Command.js';
 
 //import pdfParse from 'pdf-parse';
 
@@ -15,29 +15,6 @@ export default class QueryDocumentCommand extends Command {
         super();
         const dir = './public/uploads';
         this.filePath = path.join(dir, fileName);
-    }
-
-
-    async readPDFFile() {
-      const pdfBuffer = await fs.readFile(this.filePath);
-      //const data = await pdfParse(pdfBuffer);
-      //return data.text;
-    }
-
-    createDocument(text) {
-        return new Document({ text });
-    }
-
-    async createIndex(document) {
-        return await VectorStoreIndex.fromDocuments([document]);
-    }
-
-    createQueryEngine(index) {
-        return index.asQueryEngine();
-    }
-
-    async executeQuery(queryEngine, prompt) {
-        return await queryEngine.query(prompt);
     }
 
     async execute(prompt) {
@@ -55,7 +32,42 @@ export default class QueryDocumentCommand extends Command {
         const response = await this.executeQuery(queryEngine, prompt);
         console.log('response.toString()', response.toString())
         console.log('-----')
-        return response.toString();*/
+        return response.toString();
+        */
+    }
+
+    async readPDFFile() {
+        return new Promise((resolve, reject) => {
+            let extractedText = [];
+
+            new PdfReader().parseFileItems(this.filePath, (err, item) => {
+                if (err) {
+                    console.error("error:", err);
+                    reject(err);
+                } else if (!item) {
+                    console.warn("end of file");
+                    resolve(extractedText.join(' '));
+                } else if (item.text) {
+                    extractedText.push(item.text);
+                }
+            });
+        });
+    }
+
+    createDocument(text) {
+        return new Document({ text });
+    }
+
+    async createIndex(document) {
+        return await VectorStoreIndex.fromDocuments([document]);
+    }
+
+    createQueryEngine(index) {
+        return index.asQueryEngine();
+    }
+
+    async executeQuery(queryEngine, prompt) {
+        return await queryEngine.query(prompt);
     }
 
     async test(prompt) {

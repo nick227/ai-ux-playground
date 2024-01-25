@@ -1,5 +1,5 @@
-import Command from "../Command.js";
-import DB from "../../db/DB.js";
+import Command from "../../Command.js";
+import DB from "../../../db/DB.js";
 
 export default class GetPageHistoryCommand extends Command {
     async execute(sessionId) {

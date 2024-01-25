@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import Command from '../Command.js';
-import { SavePromptResultCommand } from './index.js';
-import sendSocketMsgToClient from '../../sendSocketMsgToClient.js';
+import Command from '../../Command.js';
+import { SavePromptResultCommand } from '../index.js';
+import sendSocketMsgToClient from '../../../sendSocketMsgToClient.js';
 
 
 dotenv.config();

@@ -1,34 +1,26 @@
 //{"command":"style","value":"background-color: blue","targetNodeId":"69"}
+//{"command":"append","value":"<div>hello</div>","targetNodeId":"20"}
+//{"command":"remove","value":null,"targetNodeId":"20"}
+//{"command":"publish","value":null,"targetNodeId":null}
+//{"command":"edit","value":{src:'https://source.unsplash.com/random'},"targetNodeId":5}
 
 function executeCommands(commands) {
     commands.forEach(command => {
         switch (command.command) {
-            case 'add':
-                add(command.value, command.targetNodeId);
+            case 'append':
+                append(command.value, command.targetNodeId);
+                break;
+            case 'prepend':
+                prepend(command.value, command.targetNodeId);
                 break;
             case 'remove':
                 remove(command.value, command.targetNodeId);
                 break;
-            case 'move':
-                move(command.value, command.targetNodeId);
-                break;
-            case 'copy':
-                copy(command.value, command.targetNodeId);
-                break;
-            case 'undo':
-                undo(command.value, command.targetNodeId);
-                break;
-            case 'redo':
-                redo(command.value, command.targetNodeId);
-                break;
-            case 'select':
-                select(command.value, command.targetNodeId);
+            case 'insert':
+                insert(command.value, command.targetNodeId);
                 break;
             case 'style':
                 style(command.value, command.targetNodeId);
-                break;
-            case 'insert':
-                insert(command.value, command.targetNodeId);
                 break;
             case 'edit':
                 edit(command.value, command.targetNodeId);
@@ -40,6 +32,23 @@ function executeCommands(commands) {
                 console.error(`Unknown command: ${command.command}`);
         }
     });
+}
+
+function edit(value, targetNodeId) {
+    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    let parsedValue;
+    try {
+        parsedValue = JSON.parse(value);
+    } catch (e) {
+        parsedValue = value;
+    }
+    if (typeof parsedValue === 'object') {
+        Object.keys(parsedValue).forEach(key => {
+            targetElement[key] = parsedValue[key];
+        });
+    } else {
+        targetElement.innerHTML = parsedValue;
+    }
 }
 
 function style(value, targetNodeId) {
@@ -56,42 +65,42 @@ function style(value, targetNodeId) {
     }, {});
 }
 
-function add(value, targetNodeId) {
-    // Implement add command
+function append(value, targetNodeId) {
+    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    if (!targetElement) {
+        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        return;
+    }
+    targetElement.innerHTML += value;
 }
 
-function remove(value, targetNodeId) {
-    // Implement remove command
+function remove(_, targetNodeId) {
+    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    if (!targetElement) {
+        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        return;
+    }
+    targetElement.parentNode.removeChild(targetElement);
 }
 
-function move(value, targetNodeId) {
-    // Implement move command
-}
-
-function copy(value, targetNodeId) {
-    // Implement copy command
-}
-
-function undo(value, targetNodeId) {
-    // Implement undo command
-}
-
-function redo(value, targetNodeId) {
-    // Implement redo command
-}
-
-function select(value, targetNodeId) {
-    // Implement select command
+function prepend(value, targetNodeId) {
+    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    if (!targetElement) {
+        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        return;
+    }
+    targetElement.innerHTML = value + targetElement.innerHTML;
 }
 
 function insert(value, targetNodeId) {
-    // Implement insert command
+    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    if (!targetElement) {
+        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        return;
+    }
+    targetElement.outerHTML = value;
 }
 
-function edit(value, targetNodeId) {
-    // Implement edit command
-}
-
-function publish(value, targetNodeId) {
-    // Implement publish command
+function publish(_, __) {
+    alert('published!')
 }

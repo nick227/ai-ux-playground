@@ -17,7 +17,6 @@ export default function startWebSocket(httpServer, app, expressSession) {
     ws.on('message', (message) => {
       if(message.toString() === 'clearHistory'){
         const clearChatHistoryCommand = new ClearChatHistoryCommand();
-        console.log('clearing', req.session.id);
         clearChatHistoryCommand.execute(req.session.id);
         ws.send('Clear chat history');
       }

@@ -11,8 +11,6 @@ async function handleTitleClick(promptValue) {
     clearAllElementsByClass('stage');
 
     const stageData = findObjectByKeys(data, keyMap.template);
-    console.log('stageData:', stageData);
-    console.log('data:', data);
     renderStage(data[0]);
 /*
     const descriptionData = findObjectByKeys(data, keyMap.description);

@@ -1,6 +1,5 @@
-
-import Command from "../Command.js";
-import { InsertToDBCommand } from '../query/index.js';
+import Command from "../../Command.js";
+import { InsertToDBCommand } from '../index.js';
 
 export default class SaveToChatHistoryCommand extends Command {
   constructor(req, res) {

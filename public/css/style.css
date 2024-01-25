@@ -133,6 +133,11 @@ code {
     border-bottom: 1px solid lightgray;
 }
 
+.chatbot-submit{
+    width: 100px;
+    float: right;
+}
+
 .chatbot-input {
     width: 100%;
     height: auto;
@@ -180,6 +185,7 @@ code {
 .chatbot-controls {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
     margin-top: 20px;
 }

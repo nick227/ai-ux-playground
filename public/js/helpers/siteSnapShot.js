@@ -1,10 +1,21 @@
-function getBodyHtmlWithInlineStyles() {
-    const bodyClone = document.body.cloneNode(true);
+function getBodyHtmlWithInlineStyles(bodyClone) {
+    
     Array.from(bodyClone.getElementsByTagName('script')).forEach(
         script => script.parentNode.removeChild(script)
     );
+    removeComments(bodyClone);
     removeTextContent(bodyClone);
     return bodyClone.outerHTML.replace(/\s+/g, ' ');
+}
+
+function removeComments(element) {
+    Array.from(element.childNodes).forEach(child => {
+        if (child.nodeType === Node.COMMENT_NODE) {
+            element.removeChild(child);
+        } else {
+            removeComments(child);
+        }
+    });
 }
 
 function removeTextContent(element) {
@@ -13,29 +24,14 @@ function removeTextContent(element) {
         element.removeAttribute('data-id');
         Object.keys(element).forEach(key => {
             if (typeof element[key] === 'string' && key !== 'data-node-id') {
-                element.removeAttribute[key];
+                element.removeAttribute(key);
             }
         });
     }
     if (element.nodeType === Node.TEXT_NODE) {
-        element.nodeValue = '';
+        element.nodeValue = element.nodeValue.split(' ').slice(0, 3).join(' ');
     } else {
         Array.from(element.childNodes).forEach(child => removeTextContent(child));
-    }
-}
-
-
-function removeTextContentd(element) {
-    if (element.children.length === 0) {
-        element.textContent = '';
-        //truncate all element properties to 10 characters
-        Object.keys(element).forEach(key => {
-            if (typeof element[key] === 'string') {
-                element[key] = element[key].substring(0, 10);
-            }
-        });
-    } else {
-        Array.from(element.children).forEach(child => removeTextContent(child));
     }
 }
 
@@ -64,9 +60,10 @@ function getCombinedStyles() {
 
 window.onload = () => {
     setTimeout(() => {
-    const bodyClone = getBodyHtmlWithInlineStyles();
-    //const combinedStyles = getCombinedStyles();
+    const website = document.body.cloneNode(true);
+    const bodyClone = getBodyHtmlWithInlineStyles(website);
+    const combinedStyles = getCombinedStyles();
     console.log(bodyClone);
-//    console.log(combinedStyles);
+    console.log(combinedStyles);
     }, 2000);
 };

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import OpenAIAPI from 'openai';
-import Command from '../Command.js';
-import { ChatGptTextRequest, ChatGptImageRequest } from './index.js';
+import Command from '../../Command.js';
+import { ChatGptTextRequest, ChatGptImageRequest } from '../index.js';
 
 dotenv.config();
 

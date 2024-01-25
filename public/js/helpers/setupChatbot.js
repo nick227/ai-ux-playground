@@ -2,8 +2,12 @@ let isDragging = false;
 
 let isChatBotSetup = false;
 
+const clearLocalStorage = false;
+
 async function setupChatBot() {
-    //deleteAllMessages();
+    if (clearLocalStorage) {
+        deleteAllMessages();
+    }
     const promptTemplates = await api.read(`api/promptTemplates`);
     const promptTemplatesTypes = promptTemplates.map(template => template.type);
     if (isChatBotSetup) return;
@@ -14,60 +18,16 @@ async function setupChatBot() {
         children: [
             {
                 type: 'div',
-                className: 'chatbot-input',
+                className: 'chatbot-controls',
                 children: [
                     {
-                        type: 'h2',
-                        textContent: 'Chatbot',
-                        className: 'chatbot-title',
-                    },
-                    {
-                        type: 'textarea',
-                        className: 'chatbot-textarea',
-                        inputType: 'textarea',
-                        placeholder: 'Talk to me',
-                        event: [{
-                            type: 'input',
-                            handler: handleChatbotInput,
-                        }, {
-                            type: 'keydown',
-                            handler: handleChatbotKeyDown,
-                        }, {
-                            type: 'drop',
-                            handler: handleDrop,
-                        }, {
-                            type: 'dragleave',
-                            handler: handleDragLeave,
-                        }, {
-                            type: 'dragover',
-                            handler: handleDragOver,
-                        }, {
-                            type: 'mousedown',
-                            handler: handleMouseDown,
-                        }]
-                    },
-                    {
-                        type: 'div',
-                        className: 'chatbot-controls',
-                        children: [
-                            {
-                                type: 'select',
-                                className: 'chatbot-picker',
-                                options: promptTemplatesTypes,
-                                event: {
-                                    type: 'change',
-                                    handler: e => setCurrentDataSourceValue(e.target.value)
-                                }
-                            }, {
-                                type: 'button',
-                                className: 'chatbot-submit',
-                                inputType: 'submit',
-                                textContent: 'go',
-                                event: {
-                                    type: 'click',
-                                    handler: handleChatbotSubmit
-                                }
-                            }]
+                        type: 'select',
+                        className: 'chatbot-picker',
+                        options: promptTemplatesTypes,
+                        event: {
+                            type: 'change',
+                            handler: e => setCurrentDataSourceValue(e.target.value)
+                        }
                     }, {
                         type: 'div',
                         className: 'chatbot-uploader',
@@ -92,6 +52,45 @@ async function setupChatBot() {
                             }
                             ]
                         }]
+                    }]
+            },
+            {
+                type: 'div',
+                className: 'chatbot-input',
+                children: [
+                    {
+                        type: 'textarea',
+                        className: 'chatbot-textarea',
+                        inputType: 'textarea',
+                        placeholder: 'Talk to me',
+                        event: [{
+                            type: 'input',
+                            handler: handleChatbotInput,
+                        }, {
+                            type: 'keydown',
+                            handler: handleChatbotKeyDown,
+                        }, {
+                            type: 'drop',
+                            handler: handleDrop,
+                        }, {
+                            type: 'dragleave',
+                            handler: handleDragLeave,
+                        }, {
+                            type: 'dragover',
+                            handler: handleDragOver,
+                        }, {
+                            type: 'mousedown',
+                            handler: handleMouseDown,
+                        }]
+                    },{
+                        type: 'button',
+                        className: 'chatbot-submit',
+                        inputType: 'submit',
+                        textContent: 'go',
+                        event: {
+                            type: 'click',
+                            handler: handleChatbotSubmit
+                        }
                     }
                 ]
             },
@@ -114,7 +113,7 @@ async function setupChatBot() {
 
     function handleChatbotClear(e) {
         const confirm = window.confirm('Are you sure you want to clear the chat history?');
-        if(!confirm){
+        if (!confirm) {
             return;
         }
         if (ws.readyState === WebSocket.OPEN) {
@@ -278,28 +277,6 @@ async function setupChatBot() {
         }
     }
 
-    function saveFileContents(file) {
-        let reader = new FileReader();
-
-        reader.onload = async function (e) {
-            let contents = e.target.result;
-
-            let data = {
-                name: promptValue,
-                content: contents
-            };
-
-            if (promptValue && contents) {
-                await api.create('/api/dataSources', data);
-                fileInput.value = '';
-                alert(`Added ${promptValue} to data sources!`);
-                loadDataSources();
-            }
-        }
-
-        reader.readAsText(file);
-    }
-
     function toggleLoading() {
         const loading = document.querySelector('.chatbot-loading');
         if (loading) {
@@ -450,6 +427,9 @@ async function setupChatBot() {
 
     async function loadDataSources() {
         const dataSourceList = document.querySelector('.chatbot-data-source-list');
+        if (!dataSourceList || dataSourceList.length === 0) {
+            return;
+        }
         dataSourceList.innerHTML = '';
         addDataSource(dataSourceList, 3, { name: 'snapshots', path: 'uploads/snapshots/page.html' }, 0);
         addDataSource(dataSourceList, 3, { name: 'chatHistory', path: 'api/chatHistory' }, 0);

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import Command from '../Command.js';
-import { SavePromptResultCommand } from './index.js';
+import Command from '../../Command.js';
+import { SavePromptResultCommand } from '../index.js';
 
 dotenv.config();
 

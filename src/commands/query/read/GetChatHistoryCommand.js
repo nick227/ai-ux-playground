@@ -1,12 +1,12 @@
-import Command from "../Command.js";
-import DB from "../../db/DB.js";
+import Command from "../../Command.js";
+import DB from "../../../db/DB.js";
 
 export default class GetChatHistoryCommand extends Command {
     async execute(sessionId, limit = 4) {
         const db = new DB('chatHistory.db');
-        const results = await db.find({ sessionId:sessionId, limit: limit });
+        const query = { sessionId:sessionId, limit: limit };
+        const results = await db.find(query);
         return this.formatResults(results);
-
     }
     formatResults(results) {
         return results

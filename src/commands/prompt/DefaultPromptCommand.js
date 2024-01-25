@@ -2,6 +2,7 @@ import { Prompt } from './index.js';
 import Command from '../Command.js';
 import * as QueryCommands from '../query/index.js';
 import sendSocketMsgToClient from '../../sendSocketMsgToClient.js';
+import { PdfReader } from "pdfreader";
 
 export default class DefaultPromptCommand extends Command {
   constructor(req, res) {
@@ -21,7 +22,6 @@ export default class DefaultPromptCommand extends Command {
 
   async execute() {
     try {
-      console.log("start default", this.urlParams)
       if (!this.urlParams.prompt) {
         this.res.status(400).json({ error: 'No prompt provided.' });
         return;
@@ -29,7 +29,7 @@ export default class DefaultPromptCommand extends Command {
 
       await this.initPrompt();
       await this.loadMessages();
-      await this.loadResults();
+      //await this.loadResults();
 
       if (this.prompt.sequence) {
         await this.handleSequence();
@@ -69,7 +69,7 @@ export default class DefaultPromptCommand extends Command {
 
   async loadMessages() {
     const staticDataSources = ['chatHistory', 'snapshots', 'documentation'];
-
+console.log(this.prompt.data_sources)
     if (this.prompt.data_sources && this.prompt.data_sources.includes('chatHistory')) {
       const chatHistory = await this.getChatHistoryCommand.execute(this.req.session.id);
       this.prompt.messages.unshift(...chatHistory);

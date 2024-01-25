@@ -209,8 +209,7 @@ class Dropdown {
   }
 
   clickRelated(event) {
-    console.log(event);
-    if (event.target && event.target.textContent) { // Check if event.target exists and has textContent
+    if (event.target && event.target.textContent) {
       this.userText.textContent = event.target.textContent;
       this.clear();
       this.update();

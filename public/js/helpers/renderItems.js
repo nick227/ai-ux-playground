@@ -76,7 +76,6 @@ function createCopyButton(html) {
 
 function handleAddToClipboardButton(html) {
   const pre = html.querySelector('pre');
-  console.log(pre.textContent)
   navigator.clipboard.writeText(pre.textContent);
 }
 
