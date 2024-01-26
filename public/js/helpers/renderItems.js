@@ -22,7 +22,6 @@ function filterListItems(inputField, listWrapper) {
   const items = listWrapper.querySelectorAll('.item'); 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    //const txtValue = item.textContent || item.innerText;
     const txtValue = item.querySelector('h2').textContent;
     if (txtValue.toUpperCase().startsWith(filter)) {
       item.style.display = "";

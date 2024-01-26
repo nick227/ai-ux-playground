@@ -2,7 +2,6 @@ import { Prompt } from './index.js';
 import Command from '../Command.js';
 import * as QueryCommands from '../query/index.js';
 import sendSocketMsgToClient from '../../sendSocketMsgToClient.js';
-import { PdfReader } from "pdfreader";
 
 export default class DefaultPromptCommand extends Command {
   constructor(req, res) {
@@ -29,7 +28,7 @@ export default class DefaultPromptCommand extends Command {
 
       await this.initPrompt();
       await this.loadMessages();
-      //await this.loadResults();
+      await this.loadResults();
 
       if (this.prompt.sequence) {
         await this.handleSequence();
@@ -39,7 +38,7 @@ export default class DefaultPromptCommand extends Command {
         await this.saveHistory();
       }
       sendSocketMsgToClient(JSON.stringify(this.results, null, 2), this.req);
-
+console.log('sending', typeof this.results, this.results);
       this.res.send(this.results);
     } catch (error) {
       console.error(error);
@@ -69,7 +68,7 @@ export default class DefaultPromptCommand extends Command {
 
   async loadMessages() {
     const staticDataSources = ['chatHistory', 'snapshots', 'documentation'];
-console.log(this.prompt.data_sources)
+    console.log('this.prompt.data_sources', this.prompt.data_sources)
     if (this.prompt.data_sources && this.prompt.data_sources.includes('chatHistory')) {
       const chatHistory = await this.getChatHistoryCommand.execute(this.req.session.id);
       this.prompt.messages.unshift(...chatHistory);
@@ -84,6 +83,9 @@ console.log(this.prompt.data_sources)
       for (let datasource of this.prompt.data_sources) {
         if (!staticDataSources.includes(datasource)) {
           const dynamicData = await this.getDataSourceCommand.execute(datasource);
+          console.log('!!! datasource', datasource)
+          console.log('!! dynamicData', dynamicData)
+          console.log('---')
           this.updateMessages(dynamicData);
         }
       }
