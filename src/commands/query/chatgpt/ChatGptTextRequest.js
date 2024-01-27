@@ -40,8 +40,13 @@ class ChatGptTextRequest extends Command {
     console.log("\n");
     console.log("#################");
     console.log('start openai request');
+<<<<<<< HEAD
+    console.log(messages);
+    console.log('requesting...');
+=======
     console.log(JSON.stringify(options, null, 2));
     sendSocketMsgToClient(JSON.stringify(options, null, 2), this.req);
+>>>>>>> 571c41d62351d88d70b944118487f52ac60b26d2
     try {
       const completion = await this.openai.chat.completions.create(options);
       console.log(completion.choices);
@@ -51,9 +56,13 @@ class ChatGptTextRequest extends Command {
       sendSocketMsgToClient(JSON.stringify(completion, null, 2), this.req);
       const results = this.getResponse(completion);
       console.log('success!');
+<<<<<<< HEAD
+      return response;
+=======
       //console.log(results);
       console.log("#################");
       return results;
+>>>>>>> 571c41d62351d88d70b944118487f52ac60b26d2
     } catch (error) {
       sendSocketMsgToClient("Error sending prompt to ChatGPT: " + error, this.req);
       console.error("Error sending prompt to ChatGPT:", error);
