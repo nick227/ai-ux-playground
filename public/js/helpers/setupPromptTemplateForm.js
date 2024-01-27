@@ -1,15 +1,13 @@
-
-
-function setupPromptTemplateForm() {
-    const title = createHtmlElement('h1');
+async function setupPromptTemplateForm() {
+    const title = createHtmlElement('h2');
     const desc = createHtmlElement('p');
     const form = createHtmlElement('form');
-    const textarea = createHtmlElement({ elementType: 'textarea'});
+    const textarea = createHtmlElement({ elementType: 'textarea' });
     const submit = createHtmlElement('button');
     textarea.placeholder = 'Enter prompt template';
     submit.textContent = 'Submit';
     title.textContent = 'Create prompt template';
-    desc.innerHTML = 'Templates require type property and either messages or prompt property. Use syntax ${} to reference url parameters in your values. Set data_sources as array to side load data. Use sequence to begin sequence. Current data_sources: chatHistory, snapshots, documentation Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
+    desc.innerHTML = 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
     desc.className = 'description';
     title.className = 'title';
     submit.type = 'submit';
@@ -20,7 +18,9 @@ function setupPromptTemplateForm() {
     form.addEventListener('submit', handleFormSubmit);
     textarea.addEventListener('input', () => setupTextAreaHeight(textarea));
     textarea.addEventListener('keydown', fixTabPress);
-    document.body.prepend(form);
+    const target = document.querySelector('#templates');
+    target.prepend(form);
+    addScrollToTopButton();
 }
 
 async function handleFormSubmit(event) {
@@ -36,9 +36,20 @@ async function handleFormSubmit(event) {
             addToList(response, 'promptTemplates');
             textarea.value = '';
             setupTextAreaHeight(textarea);
+            addToChatbotPicker(response.type);
         } catch (error) {
             console.error('An error occurred:', error);
         }
+    }
+}
+
+function addToChatbotPicker(type) {
+    const select = document.querySelector('.chatbot-picker');
+    const option = createHtmlElement('option');
+    option.value = type;
+    option.textContent = type;
+    if (!select.querySelector(`option[value="${type}"]`)) {
+        select.insertBefore(option, select.firstChild);
     }
 }
 
@@ -67,14 +78,22 @@ function fixTabPress(e) {
     }
 }
 
+function addScrollToTopButton() {
+    const button = createHtmlElement('button');
+    button.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    button.className = 'scroll-top';
+    button.addEventListener('click', () => window.scrollTo(0, 0));
+    document.body.appendChild(button);
+}
+
 const validate = data => {
     if (!data || !isValidJson(data)) {
         alert('Data is not valid JSON');
         return false;
     }
     const parsedData = JSON.parse(data);
-    const { type, messages, prompt, tool_choice, tools, _id, timestamp } = parsedData;
-    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence'];
+    const { type, messages, prompt, tool_choice, tools, _id, timestamp, data_sources } = parsedData;
+    const expectedKeys = ['type', 'messages', 'prompt', 'tool_choice', 'tools', 'data_sources', 'sequence', 'use_embedding'];
     const actualKeys = Object.keys(parsedData);
     const extraKeys = actualKeys.filter(key => !expectedKeys.includes(key));
 
@@ -95,6 +114,11 @@ const validate = data => {
 
     if (!Array.isArray(messages) && typeof prompt !== 'string') {
         alert('Messages is not an array or prompt is not a string');
+        return false;
+    }
+
+    if (data_sources && !Array.isArray(data_sources)) {
+        alert('Data sources must be an array');
         return false;
     }
 

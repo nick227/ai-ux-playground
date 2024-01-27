@@ -3,9 +3,6 @@ async function handleElementNameClick(elementName) {
     try {
         clearAllElementsByClass('stage');
         const cssObjects = await api.read('api/styles', { element: elementName });
-
-        console.log('cssObjects:', cssObjects);
-
         const childrenArray = Array.from({ length: cssObjects.length }, (_, count) => {
             const obj = cssObjects[count];
 

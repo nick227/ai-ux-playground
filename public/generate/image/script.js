@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (selectedType) {
       url += `&type=${encodeURIComponent(selectedType)}`;
     }
-    console.log("url", url);
     return fetch(url)
       .then(handleResponse)
       .then((data) => {

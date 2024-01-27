@@ -54,7 +54,6 @@ export default class TemplatePromptCommand extends Command {
       return new Promise((resolve, reject) => {
         this.addToQueueCommand.enqueue(task)
           .then((result) => {
-            console.log("Task completed:", result);
             resolve(result);
           })
           .catch((error) => {

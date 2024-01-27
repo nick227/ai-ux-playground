@@ -1,3 +1,4 @@
+let ws = null;
 function startWebSocketHandler() {
   const popup = addConsole();
   setupWebSocket(popup);
@@ -11,7 +12,7 @@ function createWebSocketUrl() {
 }
 
 function setupWebSocket(popup = null) {
-  const ws = new WebSocket(createWebSocketUrl());
+  ws = new WebSocket(createWebSocketUrl());
 
   ws.addEventListener('error', (error) => {
     console.error('WebSocket Error:', error);

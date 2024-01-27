@@ -11,6 +11,7 @@ export default class RenderTemplatePromptCommand extends Command {
     this.tools = null;
     this.messages = null;
     this.sequence = null;
+    this.use_embedding = null;
     this.data_sources = null;
     this.collectionName = null;
     this.getPromptTemplateCommand = new GetPromptTemplateCommand();
@@ -41,6 +42,7 @@ export default class RenderTemplatePromptCommand extends Command {
     this.collectionName = templateResponse.collectionName;
     this.data_sources = templateResponse.data_sources;
     this.sequence = templateResponse.sequence;
+    this.use_embedding = templateResponse.use_embedding;
     if (this.messages) {
       //user messages should be last
       this.messages.sort((a, b) => (a.role === 'user') ? 1 : ((b.role === 'user') ? -1 : 0));

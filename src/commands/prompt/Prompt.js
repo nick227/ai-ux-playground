@@ -11,6 +11,7 @@ export default class Prompt extends Command {
     this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params);
     this.data_sources = null;
     this.sequence = null;
+    this.use_embedding = null;
   }
 
   async init() {
@@ -21,5 +22,6 @@ export default class Prompt extends Command {
     this.tool_choice = this.renderTemplatePromptCommand?.tool_choice;
     this.data_sources = this.renderTemplatePromptCommand?.data_sources;
     this.sequence = this.renderTemplatePromptCommand?.sequence;
+    this.use_embedding = this.renderTemplatePromptCommand?.use_embedding;
   }
 }

@@ -2,6 +2,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const WebSocket = require('ws');
 import { RenderSnapshotCommand } from './src/commands/build/index.js';
+import { ClearChatHistoryCommand } from './src/commands/query/index.js';
 
 export default function startWebSocket(httpServer, app, expressSession) {
   const wss = new WebSocket.Server({ server: httpServer });
@@ -14,7 +15,11 @@ export default function startWebSocket(httpServer, app, expressSession) {
     });
 
     ws.on('message', (message) => {
-      console.log(`Received: ${message}`);
+      if(message.toString() === 'clearHistory'){
+        const clearChatHistoryCommand = new ClearChatHistoryCommand();
+        clearChatHistoryCommand.execute(req.session.id);
+        ws.send('Clear chat history');
+      }
     });
 
     ws.on('error', (error) => {

@@ -1,0 +1,1 @@
+Ask the user questions to gather more information. Consider previous messages in your response. 

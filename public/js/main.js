@@ -4,17 +4,19 @@ startWebSocketHandler();
 
 (async () => {
     try {
-        async function renderDataObject(key) {
+        async function renderDataObject(key, target) {
             const data = await api.read(`api/${key}`);
-            renderList(data, key);
+            renderList(data, key, target);
         }
 
-        setupChatBot();
-        setupPromptTemplateForm();
+        //await setupStage();
+        await setupChatBot();
+        await setupPromptTemplateForm();
         
         const keys = ['promptTemplates'];
+        const target = document.querySelector('#templates');
         const buildPromises = keys.map((key) => {
-            return renderDataObject(key);
+            return renderDataObject(key, target);
         });
 
         await Promise.all(buildPromises);

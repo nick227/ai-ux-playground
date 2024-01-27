@@ -17,7 +17,11 @@ const routes = collectionNames.reduce((acc, endpoint) => {
     type: 'get',
     path: '/api/chatgpt/:endpoint?',
     fn: chatGptControllers
-  }, 
+  }, {
+    type: 'post',
+    path: '/api/chatgpt/:endpoint?',
+    fn: chatGptControllers
+  }
 ]);
 
 export default routes;

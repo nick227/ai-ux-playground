@@ -1,10 +1,14 @@
-async function requestChatGpt(prompt, template=null){
-  
+async function requestChatGpt(prompt, template=null) {
   try {
-    const url = new URL('/api/chatgpt', window.location.origin);
-    url.searchParams.append('prompt', prompt);
-    url.searchParams.append('template', template);
-    const response = await fetch(url);
+    const url = '/api/chatgpt';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ prompt: prompt, template: template })
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

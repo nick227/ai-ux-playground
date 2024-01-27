@@ -3,7 +3,7 @@ function createHtmlElement(options) {
     if(!options){
         return document.createElement('div');
     }
-    let elementType, className, css, cssStates, textContent, title, attributes, children, src, htmlContent;
+    let elementType, className, css, cssStates, textContent, title, attributes, children, src, htmlContent, id;
 
     if (typeof options === 'string') {
         elementType = options;
@@ -11,7 +11,7 @@ function createHtmlElement(options) {
         cssStates = attributes = {};
         children = [];
     } else {
-        ({ elementType, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src, htmlContent } = options);
+        ({ elementType, id, className, css, cssStates = {}, textContent, title, attributes = {}, children = [], src, htmlContent } = options);
     }
 
     const el = document.createElement(elementType);
@@ -21,10 +21,10 @@ function createHtmlElement(options) {
         el.innerHTML = htmlContent;
     }
     if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'header'].includes(elementType)) {
-        el.textContent = textContent || 'Lorem Ipsum';
+        el.textContent = textContent;
     }
     if (['button'].includes(elementType)) {
-        el.textContent = textContent || 'click me';
+        el.textContent = textContent || '';
     }
     if (elementType === 'img' && !attributes.href && !src) {
         el.src = 'https://picsum.photos/200';
@@ -34,6 +34,9 @@ function createHtmlElement(options) {
     }
     if (title) {
         el.title = title;
+    }
+    if (id) {
+        el.id = id;
     }
 
     setAttributes(el, attributes);

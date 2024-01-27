@@ -9,18 +9,18 @@ import { InsertToDBCommand } from '../query/index.js';
 class RenderSnapshotCommand extends Command {
     execute(sessionId) {
         this.sessionId = sessionId;
-        const filePathHtml = this.getFileContent('../../../snapshot/test.html');
-        const filePathCss = this.getFileContent('../../../snapshot/test.css');
+        const filePathHtml = this.getFileContent('../../../snapshot/page.html');
+        const filePathCss = this.getFileContent('../../../snapshot/page.css');
         this.saveToDatabase(filePathHtml, filePathCss);
     }
 
     saveToDatabase(html, css) {
         const insertToDBCommand = new InsertToDBCommand();
-        const data = {
-            html: html,
+        const data = [{
             css: css,
+            html: html,
             sessionId: this.sessionId
-        }
+        }]
         insertToDBCommand.execute(data, 'snapshots');
     }
 

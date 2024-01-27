@@ -6,16 +6,6 @@ import startWebSocket from './startWebSocket.js';
 import startApiListeners from './startApiListeners.js';
 import 'module-alias/register.js';
 
-
-import { LocalIndex } from 'vectra';
-
-const index = new LocalIndex('./embeddings/index');
-
-if (!await index.isIndexCreated()) {
-  await index.createIndex();
-}
-
-
 dotenv.config();
 
 const app = express();
