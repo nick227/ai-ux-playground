@@ -58,7 +58,7 @@ function getCombinedStyles() {
     return combinedStyles;
 }
 
-window.onload = () => {
+function takeSnapshot() {
     setTimeout(() => {
     const website = document.body.cloneNode(true);
     const bodyClone = getBodyHtmlWithInlineStyles(website);
@@ -66,4 +66,4 @@ window.onload = () => {
     console.log(bodyClone);
     console.log(combinedStyles);
     }, 2000);
-};
+}

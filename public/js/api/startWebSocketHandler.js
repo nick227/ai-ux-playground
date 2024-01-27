@@ -1,8 +1,3 @@
-let ws = null;
-function startWebSocketHandler() {
-  const popup = addConsole();
-  setupWebSocket(popup);
-}
 
 function createWebSocketUrl() {
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';

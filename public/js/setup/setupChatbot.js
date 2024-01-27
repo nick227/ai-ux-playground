@@ -1,5 +1,5 @@
 let isDragging = false;
-let welcomeMessage = false;
+let welcomeMessage = true;//set to false to enable
 let isChatBotSetup = false;
 
 const clearLocalStorage = false;
@@ -19,92 +19,96 @@ async function setupChatBot() {
             {
                 type: 'div',
                 className: 'chatbot-input',
-                children: [
-                    {
-                        type: 'h2',
-                        textContent: 'Chatbot'
-                    },
-                    {
-                        type: 'textarea',
-                        className: 'chatbot-textarea',
-                        inputType: 'textarea',
-                        placeholder: 'Talk to me',
-                        event: [{
-                            type: 'input',
-                            handler: handleChatbotInput,
-                        }, {
-                            type: 'keydown',
-                            handler: handleChatbotKeyDown,
-                        }, {
-                            type: 'drop',
-                            handler: handleDrop,
-                        }, {
-                            type: 'dragleave',
-                            handler: handleDragLeave,
-                        }, {
-                            type: 'dragover',
-                            handler: handleDragOver,
-                        }, {
-                            type: 'mousedown',
-                            handler: handleMouseDown,
-                        }]
-                    },{
-                        type: 'button',
-                        className: 'chatbot-submit',
-                        inputType: 'submit',
-                        textContent: 'go',
-                        event: {
-                            type: 'click',
-                            handler: handleChatbotSubmit
-                        }
-                    }, 
-                    {
-                        type: 'div',
-                        className: 'chatbot-controls',
-                        children: [
-                            {
-                                type: 'select',
-                                className: 'chatbot-picker',
-                                options: promptTemplatesTypes,
-                                event: {
-                                    type: 'change',
-                                    handler: e => setCurrentDataSourceValue(e.target.value)
-                                }
+                children: [{
+                    type: 'div',
+                    className: 'chatbot-input-inner',
+                    children: [
+                        {
+                            type: 'h2',
+                            textContent: 'Chatbot'
+                        },
+                        {
+                            type: 'select',
+                            className: 'chatbot-picker',
+                            options: promptTemplatesTypes,
+                            event: {
+                                type: 'change',
+                                handler: e => setCurrentDataSourceValue(e.target.value)
+                            }
+                        }, 
+                        {
+                            type: 'textarea',
+                            className: 'chatbot-textarea',
+                            inputType: 'textarea',
+                            placeholder: 'Talk to me',
+                            event: [{
+                                type: 'input',
+                                handler: handleChatbotInput,
                             }, {
-                                type: 'div',
-                                className: 'chatbot-uploader',
-                                children: [{
-                                    type: 'input',
-                                    inputType: 'file',
-                                    id: 'data-source-file',
-                                }, {
-                                    type: 'a',
-                                    className: 'chatbot-upload',
-                                    textContent: 'upload',
-                                    event: {
-                                        type: 'click',
-                                        handler: handleUploadDataSource
-                                    }
-                                }, {
-                                    type: 'div',
-                                    className: 'chatbot-data-source-container',
-                                    children: [{
-                                        type: 'div',
-                                        className: 'chatbot-data-source-list'
-                                    }
-                                    ]
-                                }]
+                                type: 'keydown',
+                                handler: handleChatbotKeyDown,
                             }, {
-                                type: 'button',
-                                className: 'chatbot-clear',
-                                textContent: 'clear',
-                                event: [{
-                                    type: 'click',
-                                    handler: handleChatbotClear
-                                }]
+                                type: 'drop',
+                                handler: handleDrop,
+                            }, {
+                                type: 'dragleave',
+                                handler: handleDragLeave,
+                            }, {
+                                type: 'dragover',
+                                handler: handleDragOver,
+                            }, {
+                                type: 'mousedown',
+                                handler: handleMouseDown,
                             }]
-                    }
-                ]
+                        },{
+                            type: 'button',
+                            className: 'chatbot-submit',
+                            inputType: 'submit',
+                            textContent: 'go',
+                            event: {
+                                type: 'click',
+                                handler: handleChatbotSubmit
+                            }
+                        }, 
+                        {
+                            type: 'div',
+                            className: 'chatbot-controls',
+                            children: [{
+                                    type: 'div',
+                                    className: 'chatbot-uploader',
+                                    children: [{
+                                        type: 'input',
+                                        inputType: 'file',
+                                        id: 'data-source-file',
+                                    }, {
+                                        type: 'a',
+                                        className: 'chatbot-upload',
+                                        textContent: 'upload',
+                                        event: {
+                                            type: 'click',
+                                            handler: handleUploadDataSource
+                                        }
+                                    }, {
+                                        type: 'div',
+                                        className: 'chatbot-data-source-container',
+                                        children: [{
+                                            type: 'div',
+                                            className: 'chatbot-data-source-list'
+                                        }
+                                        ]
+                                    }]
+                                }, {
+                                    type: 'button',
+                                    className: 'chatbot-clear',
+                                    textContent: 'clear',
+                                    event: [{
+                                        type: 'click',
+                                        handler: handleChatbotClear
+                                    }]
+                                }]
+                        }
+                    ]
+                }]
             },
             {
                 type: 'div',
@@ -155,7 +159,7 @@ async function setupChatBot() {
     }
 
     function handleChatbotInput(e) {
-        const textarea = getChatbotTextarea();
+        const textarea = document.querySelector('.chatbot-textarea');
         textarea.style.height = 'auto';
         let maxHeight = window.innerHeight || document.documentElement.clientHeight;
         let newHeight = Math.min(textarea.scrollHeight, maxHeight);
@@ -170,46 +174,42 @@ async function setupChatBot() {
         }
     }
 
-    function getChatbotTextarea() {
-        return document.querySelector('.chatbot-textarea');
-    }
-
-    function getTemplateTypeValue() {
-        return document.querySelector('.chatbot-picker').value;
-    }
-
-    function getPromptFromTextarea(textarea) {
-        return textarea.value;
-    }
-
-    function clearTextarea(textarea) {
-        textarea.value = '';
-    }
-
     function extractFieldHtml(field) {
         return `<label>${field.label}<${field.type} style="${field.css}"></${field.type}></label>`;
     }
 
-    async function handleChatbotSubmit(e) {
-        const textarea = getChatbotTextarea();
-        const prompt = getPromptFromTextarea(textarea);
+    function validatePrompt(prompt) {
         if (!prompt) {
             alert('Please enter a prompt');
-            return;
-        };
-        const templateTypeValue = getTemplateTypeValue();
-        clearTextarea(textarea);
+            return false;
+        }
+        return true;
+    }
+    
+    function resetTextarea(textarea) {
+        textarea.value = '';
         textarea.style.height = 'auto';
+    }
+
+    async function handleChatbotSubmit(e) {
+        const textarea = document.querySelector('.chatbot-textarea');
+        const prompt = textarea.value;
+        if (!validatePrompt(prompt)) {
+            return;
+        }
+        resetTextarea(textarea);
         addToOutput(prompt, 'You');
         saveMessageToLocalStorage(prompt, 'You');
-
+    
+        toggleLoading();
+        const templateTypeValue = document.querySelector('.chatbot-picker').value;
         const data = await requestChatGpt(prompt, templateTypeValue);
-        console.log('data', data)
         handleChatbotResults(data);
+        toggleLoading();
     }
 
     function handleChatbotResults(data) {
-        toggleLoading();
+        console.log('data', data);
         if (data.commands && Array.from(data.commands)) {
             executeCommands(data.commands);
         }
@@ -218,11 +218,10 @@ async function setupChatBot() {
             let img = document.createElement('img');
             img.src = 'data:image/png;base64,' + data.data[0].b64_json;
             addToOutput(img, 'ChatGpt');
-            saveMessageToLocalStorage('[ai-image]', 'ChatGpt');
+            saveMessageToLocalStorage('[image]', 'ChatGpt');
         } else {
             displayChatbotResponse(data);
         }
-        toggleLoading();
     }
 
     async function displayChatbotResponse(data) {
@@ -230,7 +229,7 @@ async function setupChatBot() {
         response = typeof response === 'object' ? JSON.stringify(response, null, 2) : response;
         if (response) {
             addToOutput(response, 'ChatGpt');
-            saveMessageToLocalStorage(JSON.stringify(response), 'ChatGpt');
+            saveMessageToLocalStorage(response, 'ChatGpt');
         }
 
         if (data.commands && data.commands.length > 0) {
@@ -287,9 +286,10 @@ async function setupChatBot() {
             loading.remove();
             return;
         } else {
+            const html = `Thinking...`;
             const loading = createHtmlElement('div');
             loading.className = 'chatbot-loading';
-            loading.textContent = 'Thinking...';
+            loading.innerHTML = html;
             prependElementToOutput(loading);
         }
     }
@@ -323,6 +323,8 @@ async function setupChatBot() {
         const inner = createHtmlElement('div');
         container.className = 'chatbot-output-message';
         container.classList.add(sender.toLowerCase());
+        inner.className = 'chatbot-message';
+        inner.classList.add(sender.toLowerCase());
 
         const avatarContainer = createHtmlElement('div');
         avatarContainer.className = 'chatbot-avatar-container';
@@ -381,19 +383,39 @@ async function setupChatBot() {
         let regex = /```(\w*?)([\s\S]+?)```/g;
         let match = regex.exec(text);
         while (match) {
-            let language = match[1] || 'plaintext';
             let code = match[2].trim();
+            let language = match[1] || getLanguageFromString(code) || 'plaintext';
+            if(language === 'html') {
+                code = convertHtmlToEntities(code);
+            }
             text = text.replace(match[0], `<code class="language-${language}"><button onclick="copyCodeToClipboard(this)">copy</button><pre>${code}</pre></code>`);
             match = regex.exec(text);
         }
         return text;
     }
 
-    function escapeHtml(html) {
-        var text = document.createTextNode(html);
-        var p = document.createElement('p');
-        p.appendChild(text);
-        return p.innerHTML;
+    function convertHtmlToEntities(html){
+        const entities = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return html.replace(/[&<>"'`=\/]/g, (s) => entities[s]);
+    }
+
+    function getLanguageFromString(str) {
+        const languages = ['html', 'css', 'javascript', 'plaintext', 'scss', 'python'];
+        for (let language of languages) {
+            if (str.startsWith(language)) {
+                return language;
+            }
+        }
+        return null;
     }
 
     window.copyCodeToClipboard = function (btn) {
@@ -466,15 +488,13 @@ async function setupChatBot() {
         if(output.children.length > 0){
             prompt = 'Hello I have come here before so please welcome me back, if possible remind me what we were working on.';
         }
-        console.log('prompt', prompt)
         
         const data = await requestChatGpt(prompt, 'welcome');
-        console.log('data', data)
         handleChatbotResults(data);
     }
 
     const chatbotElements = createElements(chatbotConfig);
-    const target = document.querySelector('#workbench');
+    const target = document.querySelector('#chatbot');
     target.append(...chatbotElements);
     loadMessages();
     handleWelcomeMessage();

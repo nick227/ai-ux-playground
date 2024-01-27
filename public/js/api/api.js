@@ -13,7 +13,6 @@ const api = {
   async read(route, queryParams = {}) {
     const queryString = new URLSearchParams(queryParams).toString();
     const url = `${route}?${queryString}`;
-    console.log(url)
     const response = await fetch(url, {
       method: 'GET',
     });

@@ -35,6 +35,8 @@ export default class RenderTemplatePromptCommand extends Command {
 
   async loadTemplates() {
     const templateResponse = await this.getPromptTemplateCommand.execute(this.templateType);
+    console.log('templateResponse', templateResponse)
+    console.log('templateType', this.templateType)
     this.messages = templateResponse.messages;
     this.prompt = templateResponse.prompt;
     this.tools = templateResponse.tools;

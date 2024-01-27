@@ -27,9 +27,6 @@ function createHtmlElement(options) {
     if (['button'].includes(elementType)) {
         el.textContent = textContent || '';
     }
-    if (elementType === 'img' && !attributes.href && !src) {
-        el.src = 'https://picsum.photos/200';
-    }
     if (elementType === 'img' && src) {
         el.src = src;
     }
@@ -43,7 +40,6 @@ function createHtmlElement(options) {
     setAttributes(el, attributes);
     setStyle(el, css);
     addListeners(el, cssStates, attributes, css);
-    //handleSpecialElements(el, elementType, attributes);
 
     // Recursively append children
     children.forEach(childOptions => {
@@ -69,7 +65,7 @@ function setAttributes(el, attributes) {
 
 
 const handleSpecialElements = (el, elementType, attributes) => {
-    if (elementType === 'select') {
+    if (elementType === 'select' && el.options.length === 0) {
         const options = [1, 2, 3, 4, 5];
         options.forEach((optionValue) => {
             const option = document.createElement('option');
@@ -80,6 +76,9 @@ const handleSpecialElements = (el, elementType, attributes) => {
     }
     if (elementType === 'a') {
         el.href = attributes.href || 'javascript:void(0);';
+    }
+    if (elementType === 'img' && !attributes.href && !src) {
+        el.src = 'https://picsum.photos/200';
     }
 };
 

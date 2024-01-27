@@ -1,12 +1,4 @@
-function addOpener(popup) {
-  document.querySelector('.showPopup').addEventListener('click', function () {
-    if (!popup || popup.closed) {
-      addConsole();
-      return;
-    }
-    popup.focus();
-  });
-}
+
 function addConsole() {
 
   const width = 600;

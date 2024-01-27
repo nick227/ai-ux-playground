@@ -1,3 +1,14 @@
+async function loadTemplateList() {
+    const keys = ['promptTemplates'];
+    const target = document.querySelector('#templates');
+    const buildPromises = keys.map((key) => {
+        return renderDataObject(key, target);
+    });
+
+    await Promise.all(buildPromises);
+    await new Promise(resolve => setTimeout(resolve, 2500));
+}
+
 async function setupPromptTemplateForm() {
     const title = createHtmlElement('h2');
     const desc = createHtmlElement('p');

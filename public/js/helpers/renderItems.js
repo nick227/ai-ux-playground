@@ -160,3 +160,8 @@ function createElementFromConfig(config) {
 
   return element;
 }
+
+async function renderDataObject(key, target) {
+  const data = await api.read(`api/${key}`);
+  renderList(data, key, target);
+}
