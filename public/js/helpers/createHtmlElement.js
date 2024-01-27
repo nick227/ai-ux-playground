@@ -16,6 +16,7 @@ function createHtmlElement(options) {
 
     const el = document.createElement(elementType);
     el.className = className || '';
+    
     el.textContent = textContent || '';
     if (htmlContent) {
         el.innerHTML = htmlContent;

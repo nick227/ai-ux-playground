@@ -89,11 +89,6 @@ code button {
     margin-right: auto;
 }
 
-.chatbot-controls button {
-    width: 150px;
-    padding: 0;
-}
-
 form button {
     width: 100%;
 }
@@ -113,60 +108,65 @@ code {
     position: relative;
 }
 
-.current-page {
+.current-page, .sample-area {
     background-color: #ccc;
     content: "";
     width: 100%;
     min-height: 350px;
+    display: none !important;
 }
 
 .chatbot {
     position: relative;
-    width: 100%;
+    width: 96%;
+    padding: 0 2%;
     height: auto;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     resize: vertical;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid lightgray;
-}
-
-.chatbot-submit{
-    width: 100px;
-    float: right;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 60px;
+    border-radius: var(--border-radius);
+    box-shadow: 0px 0 13px 13px rgba(0, 0, 0, 0.12);
 }
 
 .chatbot-input {
-    width: 100%;
-    height: auto;
+    width: 40%;
+    height: 55vh;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .chatbot-output {
-    width: 100%;
+    width: 58%;
+    height: 60vh;
+    padding: 0 1%;
+    padding-top: 40px;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 75vh;
     resize: vertical;
-    margin-top: 60px;
+}
+
+.chatbot-controls {
+    width: 100%;
+    margin-top: auto;
+}
+
+.chatbot-controls button {
+    width: 150px;
     padding: 0;
 }
 
-.chatbot-clear {
+.chatbot-picker {
+    width: 100%;
+    height: 40px;
+    font-size: 1.2em;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     cursor: pointer;
-    width: 66px;
-    height: 33px;
-    border-radius: var(--border-radius);
-    z-index: 2332;
-    background: gray;
-    opacity: 0;
-    float: right;
-}
-
-.chatbot-output:hover .chatbot-clear {
-    opacity: 1;
 }
 
 .chatbot-textarea {
@@ -180,23 +180,20 @@ code {
     animation: fadeIn 2s cubic-bezier(0.075, 0.82, 0.165, 1);
     animation-fill-mode: forwards;
     padding-bottom: 25px;
+    min-height: 260px;
 }
 
-.chatbot-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.chatbot-submit{
     width: 100%;
-    margin-top: 20px;
+    float: right;
+    margin-top: 15px;
 }
 
-.chatbot-picker {
-    height: 40px;
-    font-size: 1.2em;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.chatbot-clear {
     cursor: pointer;
+    border-radius: var(--border-radius);
+    z-index: 2332;
+    background: gray;
 }
 
 .chatbot-download-button {
@@ -240,25 +237,12 @@ code {
     background-color: transparent;
 }
 
-.chatbot-output-message>div:nth-child(2) {
-    flex-grow: 1;
-}
-
 .chatbot-output p.chatgpt {
     background-color: aquamarine;
-    width: 92%
 }
 
 .chatbot-output p.you {
     background-color: lightyellow;
-}
-
-.chatbot-output h6.you {
-    text-align: right;
-}
-
-.chatbot-output p.you {
-    min-width: 200px;
 }
 
 .chatbot-output-message {
@@ -267,29 +251,41 @@ code {
     animation-fill-mode: forwards;
     padding-bottom: 10px;
     margin-bottom: 10px;
+    width: 96%;
+    animation: fadeIn 1s forwards;
 }
 
-.chatbot-output-message.you>div {
-    flex-grow: 0.85;
-    margin-right: 20px;
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
+
 
 .chatbot-output-message.you {
-    flex-direction: row-reverse;
+ flex-direction: row-reverse;   
+}
+
+.chatbot-output-message.you .chatbot-avatar-container {
+ margin-left: 5px;
+ margin-right: 0px;
 }
 
 .chatbot-avatar-container {
-    width: 40px;
+    width: 35px;
     height: 62px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 .chatbot-avatar {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background-color: #ccc;
 }
@@ -304,9 +300,8 @@ code {
 }
 
 .chatbot-uploader a {
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
-    background-color: whitesmoke;
 }
 
 .chatbot-uploader a:hover {
@@ -327,7 +322,6 @@ a.chatbot-upload {
 }
 
 .chatbot-data-source-container {
-    background: #fefefe;
     padding: 5px;
     border-radius: var(--border-radius);
 }

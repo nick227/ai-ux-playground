@@ -18,12 +18,12 @@ export default class GetDataSourceCommand extends Command {
     async execute(filename) {
         await this.load(filename);
         await this.pdfExecute();
-        await this.fileExecute();
+        await this.fileRead();
 
-        return this.formatResults(results);
+        return this.formatResults(this.results);
     }
 
-    async fileExecute() {
+    async fileRead() {
         if (this.extension !== 'pdf') {
             const fileData = await fs.readFile(this.filePath);
             this.results = this.formatResults(fileData.toString());
