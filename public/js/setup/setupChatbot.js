@@ -204,7 +204,6 @@ async function setupChatBot() {
     }
 
     function handleChatbotResults(data) {
-        console.log('data', data);
         if (data.commands && Array.from(data.commands)) {
             executeCommands(data.commands);
         }
@@ -253,10 +252,19 @@ async function setupChatBot() {
         }
     }
 
+    function handleDownloadButtonClick(e, sender) {
+        console.log('wtf')
+        const isImage = handleImageDownload(e);
+        console.log('?? ', isImage);
+        if (!isImage) {
+            handleTextDownload(e);
+        }
+    }
+
     function handleImageDownload(e) {
         const message = e.target.closest('.chatbot-output-message');
         const messageText = message.querySelector('.chatbot-output-message p');
-        const img = messageText.querySelector('img');
+        const img = messageText.querySelector('img.chatbot-output-image');
         if (img) {
             const src = img.src;
             const mime = src.split(',')[0].split(':')[1].split(';')[0];
@@ -277,30 +285,21 @@ async function setupChatBot() {
         return false;
     }
 
-
     function handleTextDownload(e) {
-        console.log('ks')
+        console.log('handleTextDownload')
         const message = e.target.closest('.chatbot-output-message');
         const messageText = message.querySelector('.chatbot-output-message p');
-        const text = messageText.innerText;
-        let filename = makeFileNameSafe(text) + '.txt';
+        const text = messageText.innerHTML;
+        const promptText = message.dataset.prompt;
+        let filename = makeFileNameSafe(promptText) + '.html';
         filename = prompt('Please enter a filename', `${filename}`);
         if (!filename) {
             return false;
         }
         const link = document.createElement('a');
-        link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+        link.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
         link.download = filename;
         link.click();
-    }
-
-    function handleDownloadButtonClick(e, sender) {
-        console.log('wtf')
-        const isImage = handleImageDownload(e);
-        console.log(isImage);
-        if (!isImage) {
-            handleTextDownload(e);
-        }
     }
 
     function makeFileNameSafe(filename) {
@@ -351,6 +350,7 @@ async function setupChatBot() {
         const prompt = getPromptValue();
         console.log('generating image', prompt);
         let img = document.createElement('img');
+        img.className = 'chatbot-output-image';
         img.src = 'data:image/png;base64,' + data.data[0].b64_json;
         img.dataset.prompt = prompt;
         return img;
@@ -411,6 +411,9 @@ async function setupChatBot() {
         const inner = createHtmlElement('div');
         container.className = 'chatbot-output-message';
         container.classList.add(sender.toLowerCase());
+        const prompt = getPromptValue();
+        container.dataset.prompt = prompt;
+
         inner.className = 'chatbot-message';
         inner.classList.add(sender.toLowerCase());
 

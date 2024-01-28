@@ -29,7 +29,8 @@ function executeCommands(commands) {
                 publish(command.value, command.targetNodeId);
                 break;
             default:
-                console.error(`Unknown command: ${command.command}`);
+                style(command.css, command.nodeId);
+                break;
         }
     });
 }

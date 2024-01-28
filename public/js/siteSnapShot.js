@@ -11,15 +11,15 @@ const keepContent = [
     'p',
     'span',
     'label',
-    'section',
-    'div',
-    'a',
+    'a',/*
     'li',
     'pre',
+    'section',
+    'div',
     'option',
-    'body'
+    'body'*/
 ];
-const maxContentCharacterCount = 25;
+const maxContentCharacterCount = 5;
 
 function processNode(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
@@ -35,6 +35,17 @@ function processNode(node) {
     } else if (node.nodeType === Node.TEXT_NODE) {
         truncateTextContent(node);
     }
+}
+
+function removeExtraContent(body) {
+    const selectorsToRemove = ["#templates"];
+    selectorsToRemove.forEach(selector => {
+        const elementToRemove = body.querySelector(selector);
+        if (elementToRemove) {
+            elementToRemove.parentNode.removeChild(elementToRemove);
+        }
+    });
+
 }
 
 function removeStyleTags(element) {
@@ -127,6 +138,7 @@ function getStyles() {
 }
 
 function getHtml(bodyClone) {
+    removeExtraContent(bodyClone);
     processNode(bodyClone);
     return bodyClone.outerHTML.replace(/\s+/g, ' ');
 }

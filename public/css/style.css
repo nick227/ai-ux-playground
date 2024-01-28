@@ -32,10 +32,6 @@ body > section {
     max-height: 100%;
 }
 
-#demo {
-    display: none;
-}
-
 input {
     padding: 4px 8px;
 }

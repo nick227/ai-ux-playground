@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         await setupChatBot();
         await setupPromptTemplateForm();
         await loadTemplateList();
+        warnOnPageExit();
         
         setupDemo();
         setupToggleButtons();

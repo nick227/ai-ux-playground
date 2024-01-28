@@ -32,7 +32,7 @@ class ChatGptTextRequest extends Command {
     const totalChars = JSON.stringify(options).length;
     const estimatedInputTokens = Math.ceil(totalChars / 3.75);
     let newMaxToken = this.maxTokens - estimatedInputTokens;
-    newMaxToken = Math.max(newMaxToken, 0);
+    newMaxToken = Math.max(newMaxToken, 10);
     options.max_tokens = newMaxToken;
 
     console.log("\n");

@@ -67,7 +67,7 @@ console.log('sending', typeof this.results, this.results);
   }
 
   async loadMessages() {
-    const staticDataSources = ['chatHistory', 'snapshots', 'documentation'];
+    const staticDataSources = ['chatHistory', 'snapshots'];
     console.log('this.prompt.data_sources', this.prompt.data_sources)
     if (this.prompt.data_sources && this.prompt.data_sources.includes('chatHistory')) {
       const chatHistory = await this.getChatHistoryCommand.execute(this.req.session.id);
