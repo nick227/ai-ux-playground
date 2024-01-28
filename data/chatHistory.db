@@ -1,2 +1,0 @@
-{"role":"user","content":"make the body of my page background red","sessionId":"W3VGBRAZTFqDxXv2WvKQU_8JS0aijmDE","timestamp":{"$$date":1706439460365},"_id":"ZSqdo4fz6O4ngT6U"}
-{"role":"assistant","content":"{\n  \"commands\": [\n    {\n      \"command\": \"style\",\n      \"value\": \"background-color: red\",\n      \"nodeId\": \"body\"\n    }\n  ]\n}","sessionId":"W3VGBRAZTFqDxXv2WvKQU_8JS0aijmDE","timestamp":{"$$date":1706439460365},"_id":"wFirR8YrJ7C1Wq1u"}

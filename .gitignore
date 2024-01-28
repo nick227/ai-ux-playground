@@ -2,4 +2,7 @@
 node_modules/
 generated/
 data/chatgptTransactions.db
+data/chatHistory.db
+data/snapshots.db
+data/dataSources.db
 llama/
