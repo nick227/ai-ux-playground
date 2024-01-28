@@ -1,5 +1,5 @@
+let showWelcomeMessage = false;
 let isDragging = false;
-let welcomeMessage = true;//set to false to enable
 let isChatBotSetup = false;
 
 const clearLocalStorage = false;
@@ -35,7 +35,7 @@ async function setupChatBot() {
                                 type: 'change',
                                 handler: e => setCurrentDataSourceValue(e.target.value)
                             }
-                        }, 
+                        },
                         {
                             type: 'textarea',
                             className: 'chatbot-textarea',
@@ -60,7 +60,7 @@ async function setupChatBot() {
                                 type: 'mousedown',
                                 handler: handleMouseDown,
                             }]
-                        },{
+                        }, {
                             type: 'button',
                             className: 'chatbot-submit',
                             inputType: 'submit',
@@ -69,43 +69,48 @@ async function setupChatBot() {
                                 type: 'click',
                                 handler: handleChatbotSubmit
                             }
-                        }, 
+                        },
                         {
                             type: 'div',
                             className: 'chatbot-controls',
                             children: [{
-                                    type: 'div',
-                                    className: 'chatbot-uploader',
-                                    children: [{
-                                        type: 'input',
-                                        inputType: 'file',
-                                        id: 'data-source-file',
-                                    }, {
-                                        type: 'a',
-                                        className: 'chatbot-upload',
-                                        textContent: 'upload',
-                                        event: {
-                                            type: 'click',
-                                            handler: handleUploadDataSource
-                                        }
-                                    }, {
-                                        type: 'div',
-                                        className: 'chatbot-data-source-container',
-                                        children: [{
-                                            type: 'div',
-                                            className: 'chatbot-data-source-list'
-                                        }
-                                        ]
-                                    }]
-                                }, {
-                                    type: 'button',
-                                    className: 'chatbot-clear',
-                                    textContent: 'clear',
-                                    event: [{
-                                        type: 'click',
-                                        handler: handleChatbotClear
-                                    }]
+                                type: 'a',
+                                className: 'chatbot-clear',
+                                title: 'Deletes chat history',
+                                children: [{
+                                    type: 'i',
+                                    className: 'fas fa-trash-alt'
+                                }
+                                ],
+                                event: [{
+                                    type: 'click',
+                                    handler: handleChatbotClear
                                 }]
+                            }, {
+                                type: 'div',
+                                className: 'chatbot-uploader',
+                                children: [{
+                                    type: 'input',
+                                    inputType: 'file',
+                                    id: 'data-source-file',
+                                }, {
+                                    type: 'a',
+                                    className: 'chatbot-upload',
+                                    textContent: 'upload',
+                                    event: {
+                                        type: 'click',
+                                        handler: handleUploadDataSource
+                                    }
+                                }, {
+                                    type: 'div',
+                                    className: 'chatbot-data-source-container',
+                                    children: [{
+                                        type: 'div',
+                                        className: 'chatbot-data-source-list'
+                                    }
+                                    ]
+                                }]
+                            }]
                         }
                     ]
                 }]
@@ -118,7 +123,7 @@ async function setupChatBot() {
         ]
     }
     ];
-
+    //handlers
     function handleChatbotClear(e) {
         const confirm = window.confirm('Are you sure you want to clear the chat history?');
         if (!confirm) {
@@ -135,14 +140,22 @@ async function setupChatBot() {
         }
     }
 
-    function addToOutput(html, sender) {
-        const messageElement = createMessageElement(html, sender);
-        prependElementToOutput(messageElement);
-    }
+    async function handleWelcomeMessage() {
+        if (!showWelcomeMessage) {
+            return;
+        }
 
-    function setCurrentDataSourceValue(value) {
-        localStorage.setItem('defaultOptionValue', value);
-        displayChatbotResponse({ commands: [{ command: `change to ${value}` }] });
+        const output = document.querySelector('.chatbot-output');
+        let prompt = 'Hello for the first time';
+
+        if (output.children.length > 0) {
+            prompt = 'Hello again.';
+        }
+        const defaultOption = localStorage.getItem('defaultOptionValue') || 'main';
+        prompt += `You have ${defaultOption} personality`;
+
+        const data = await requestChatGpt(prompt, 'welcome');
+        handleChatbotResults(data);
     }
 
     function handleMouseDown(event) {
@@ -174,38 +187,20 @@ async function setupChatBot() {
         }
     }
 
-    function extractFieldHtml(field) {
-        return `<label>${field.label}<${field.type} style="${field.css}"></${field.type}></label>`;
-    }
-
-    function validatePrompt(prompt) {
-        if (!prompt) {
-            alert('Please enter a prompt');
-            return false;
-        }
-        return true;
-    }
-    
-    function resetTextarea(textarea) {
-        textarea.value = '';
-        textarea.style.height = 'auto';
-    }
-
     async function handleChatbotSubmit(e) {
-        const textarea = document.querySelector('.chatbot-textarea');
-        const prompt = textarea.value;
+        const prompt = getPromptValue();
         if (!validatePrompt(prompt)) {
             return;
         }
-        resetTextarea(textarea);
         addToOutput(prompt, 'You');
         saveMessageToLocalStorage(prompt, 'You');
-    
+
         toggleLoading();
         const templateTypeValue = document.querySelector('.chatbot-picker').value;
         const data = await requestChatGpt(prompt, templateTypeValue);
         handleChatbotResults(data);
         toggleLoading();
+        resetTextarea();
     }
 
     function handleChatbotResults(data) {
@@ -214,33 +209,11 @@ async function setupChatBot() {
             executeCommands(data.commands);
         }
         if (typeof data === 'object' && data.data && data.data[0].b64_json) {
-            console.log('image detected')
-            let img = document.createElement('img');
-            img.src = 'data:image/png;base64,' + data.data[0].b64_json;
+            const img = generateImage(data);
             addToOutput(img, 'ChatGpt');
             saveMessageToLocalStorage('[image]', 'ChatGpt');
         } else {
             displayChatbotResponse(data);
-        }
-    }
-
-    async function displayChatbotResponse(data) {
-        let response = data.response || data.html || data.translation || data.json || data.promptObjects;
-        response = typeof response === 'object' ? JSON.stringify(response, null, 2) : response;
-        if (response) {
-            addToOutput(response, 'ChatGpt');
-            saveMessageToLocalStorage(response, 'ChatGpt');
-        }
-
-        if (data.commands && data.commands.length > 0) {
-            saveMessageToLocalStorage(JSON.stringify(data.commands), 'Commands');
-            addToOutput(JSON.stringify(data.commands), 'Commands');
-        }
-
-        if (data.fields && data.fields.length > 0) {
-            const fieldHtml = data.fields.map(field => extractFieldHtml(field)).join('');
-            saveMessageToLocalStorage(fieldHtml, 'Fields');
-            addToOutput(fieldHtml, 'Fields');
         }
     }
 
@@ -280,6 +253,130 @@ async function setupChatBot() {
         }
     }
 
+    function handleImageDownload(e) {
+        const message = e.target.closest('.chatbot-output-message');
+        const messageText = message.querySelector('.chatbot-output-message p');
+        const img = messageText.querySelector('img');
+        if (img) {
+            const src = img.src;
+            const mime = src.split(',')[0].split(':')[1].split(';')[0];
+            const extension = mime.split('/')[1];
+            let filename = makeFileNameSafe(img.dataset.prompt);
+            filename = prompt('Please enter a filename', `${filename}.${extension}`);
+            if (!filename) {
+                return true;
+            }
+            const blob = dataURItoBlob(src);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            return true;
+        }
+        return false;
+    }
+
+
+    function handleTextDownload(e) {
+        console.log('ks')
+        const message = e.target.closest('.chatbot-output-message');
+        const messageText = message.querySelector('.chatbot-output-message p');
+        const text = messageText.innerText;
+        let filename = makeFileNameSafe(text) + '.txt';
+        filename = prompt('Please enter a filename', `${filename}`);
+        if (!filename) {
+            return false;
+        }
+        const link = document.createElement('a');
+        link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+        link.download = filename;
+        link.click();
+    }
+
+    function handleDownloadButtonClick(e, sender) {
+        console.log('wtf')
+        const isImage = handleImageDownload(e);
+        console.log(isImage);
+        if (!isImage) {
+            handleTextDownload(e);
+        }
+    }
+
+    function makeFileNameSafe(filename) {
+        console.log('safe', filename)
+        return filename.replace(/[\/\\?%*:|"<>]/g, '-').substring(0, 40);
+    }
+
+    function prependElementToOutput(element) {
+        const output = document.querySelector('.chatbot-output');
+        output.scrollTop = 0;
+        output.insertBefore(element, output.firstChild);
+    }
+
+    function extractFieldHtml(field) {
+        return `<label>${field.label}<${field.type} style="${field.css}"></${field.type}></label>`;
+    }
+
+    function validatePrompt(prompt) {
+        if (!prompt) {
+            alert('Please enter a prompt');
+            return false;
+        }
+        return true;
+    }
+
+    function resetTextarea() {
+        const textarea = document.querySelector('.chatbot-textarea');
+        textarea.value = '';
+        textarea.style.height = 'auto';
+    }
+
+    function getPromptValue() {
+        const textarea = document.querySelector('.chatbot-textarea');
+        return textarea.value;
+    }
+
+    function getLanguageFromString(str) {
+        const languages = ['html', 'css', 'javascript', 'plaintext', 'scss', 'python'];
+        for (let language of languages) {
+            if (str.startsWith(language)) {
+                return language;
+            }
+        }
+        return null;
+    }
+
+    function generateImage(data) {
+        const prompt = getPromptValue();
+        console.log('generating image', prompt);
+        let img = document.createElement('img');
+        img.src = 'data:image/png;base64,' + data.data[0].b64_json;
+        img.dataset.prompt = prompt;
+        return img;
+
+    }
+
+    async function displayChatbotResponse(data) {
+        let response = data.response || data.html || data.translation || data.json || data.promptObjects;
+        response = typeof response === 'object' ? JSON.stringify(response, null, 2) : response;
+        if (response) {
+            addToOutput(response, 'ChatGpt');
+            saveMessageToLocalStorage(response, 'ChatGpt');
+        }
+
+        if (data.commands && data.commands.length > 0) {
+            saveMessageToLocalStorage(JSON.stringify(data.commands), 'Commands');
+            addToOutput(JSON.stringify(data.commands), 'Commands');
+        }
+
+        if (data.fields && data.fields.length > 0) {
+            const fieldHtml = data.fields.map(field => extractFieldHtml(field)).join('');
+            saveMessageToLocalStorage(fieldHtml, 'Fields');
+            addToOutput(fieldHtml, 'Fields');
+        }
+    }
+
     function toggleLoading() {
         const loading = document.querySelector('.chatbot-loading');
         if (loading) {
@@ -298,24 +395,15 @@ async function setupChatBot() {
         localStorage.removeItem('messages');
     }
 
-    function handleDownloadButtonClick(e, sender) {
-        const message = e.target.closest('.chatbot-output-message');
-        const messageText = message.querySelector('.chatbot-output-message p');
-        let text = messageText.dataset.value;
-        text = text.replace(/\\n/g, '\n');
-        var today = new Date();
-        var time = today.getHours() + "." + today.getMinutes();
-        var date = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
-        let filename = sender + "-" + date + "." + time;
-
-        filename = prompt('Please enter a filename', `${filename}.txt`);
-        if (!filename) return;
-        const blob = new Blob([text], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
     }
 
     function createMessageElement(html, sender) {
@@ -385,7 +473,7 @@ async function setupChatBot() {
         while (match) {
             let code = match[2].trim();
             let language = match[1] || getLanguageFromString(code) || 'plaintext';
-            if(language === 'html') {
+            if (language === 'html') {
                 code = convertHtmlToEntities(code);
             }
             text = text.replace(match[0], `<code class="language-${language}"><button onclick="copyCodeToClipboard(this)">copy</button><pre>${code}</pre></code>`);
@@ -394,7 +482,7 @@ async function setupChatBot() {
         return text;
     }
 
-    function convertHtmlToEntities(html){
+    function convertHtmlToEntities(html) {
         const entities = {
             '&': '&amp;',
             '<': '&lt;',
@@ -408,16 +496,6 @@ async function setupChatBot() {
         return html.replace(/[&<>"'`=\/]/g, (s) => entities[s]);
     }
 
-    function getLanguageFromString(str) {
-        const languages = ['html', 'css', 'javascript', 'plaintext', 'scss', 'python'];
-        for (let language of languages) {
-            if (str.startsWith(language)) {
-                return language;
-            }
-        }
-        return null;
-    }
-
     window.copyCodeToClipboard = function (btn) {
         const parentElm = btn.closest('p');
         let code = parentElm.dataset.value;
@@ -428,12 +506,6 @@ async function setupChatBot() {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-    }
-
-    function prependElementToOutput(element) {
-        const output = document.querySelector('.chatbot-output');
-        output.scrollTop = 0;
-        output.insertBefore(element, output.firstChild);
     }
 
     function saveMessageToLocalStorage(text, sender) {
@@ -454,7 +526,7 @@ async function setupChatBot() {
             return;
         }
         dataSourceList.innerHTML = '';
-        addDataSource(dataSourceList, 3, { name: 'snapshots', path: 'uploads/snapshots/page.html' }, 0);
+        addDataSource(dataSourceList, 3, { name: 'snapshots', path: 'api/snapshots' }, 0);
         addDataSource(dataSourceList, 3, { name: 'chatHistory', path: 'api/chatHistory' }, 0);
         const dataSources = await api.read('api/dataSources'/*, { projection: JSON.stringify({ name: 1 }) }*/);
         dataSources.forEach((dataSource, index) => {
@@ -462,6 +534,11 @@ async function setupChatBot() {
             addDataSource(dataSourceList, dataSources.length, dataSource, index);
         });
 
+    }
+
+    function addToOutput(html, sender) {
+        const messageElement = createMessageElement(html, sender);
+        prependElementToOutput(messageElement);
     }
 
     function addDataSource(dataSourceList, dataSourcesLen, dataSource, index) {
@@ -478,25 +555,30 @@ async function setupChatBot() {
         }
     }
 
-    async function handleWelcomeMessage(){
-        if(welcomeMessage){
-            return;
-        }
-        const output = document.querySelector('.chatbot-output');
-        let prompt = 'Hello for the first time';
-
-        if(output.children.length > 0){
-            prompt = 'Hello I have come here before so please welcome me back, if possible remind me what we were working on.';
-        }
-        
-        const data = await requestChatGpt(prompt, 'welcome');
-        handleChatbotResults(data);
+    function setCurrentDataSourceValue(value) {
+        localStorage.setItem('defaultOptionValue', value);
+        handleWelcomeMessage();
+        displayChatbotResponse({ commands: [{ command: `change to ${value}` }] });
     }
 
-    const chatbotElements = createElements(chatbotConfig);
-    const target = document.querySelector('#chatbot');
-    target.append(...chatbotElements);
-    loadMessages();
-    handleWelcomeMessage();
-    await loadDataSources();
+    function setupDispatchListener() {
+        window.addEventListener('speak', (event) => {
+            const data = event.detail;
+            if (data) {
+                handleChatbotResults(data);
+            }
+        });
+    }
+
+    async function init() {
+        const chatbotElements = createElements(chatbotConfig);
+        const target = document.querySelector('#chatbot');
+        target.append(...chatbotElements);
+        loadMessages();
+        handleWelcomeMessage();
+        await loadDataSources();
+        setupDispatchListener();
+    }
+
+    init();
 }

@@ -83,9 +83,6 @@ console.log('sending', typeof this.results, this.results);
       for (let datasource of this.prompt.data_sources) {
         if (!staticDataSources.includes(datasource)) {
           const dynamicData = await this.getDataSourceCommand.execute(datasource);
-          console.log('!!! datasource', datasource)
-          console.log('!! dynamicData', dynamicData)
-          console.log('---')
           this.updateMessages(dynamicData);
         }
       }

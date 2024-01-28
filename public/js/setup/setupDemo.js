@@ -1,13 +1,11 @@
 const demoHtml = `
-<h6 class="toggle" data-target=".sample-area">sample area</h6>
+<h6 class="toggle" data-node-id="sample-zdmecc-00v00Axe3" data-target=".sample-area">sample area</h6>
 <div class="sample-area" data-node-id="sample-3"
     style="display: flex; align-items: center; width: 100%;border-radius:10px; justify-content: center; background-color: #1E1E1E; color: white;">
     <img data-node-id="sample-4" loading="lazy" src="https://source.unsplash.com/random" alt="Image" style="margin: 10px;width:50%; height: 400px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
     <div data-node-id="sample-16" style="width:50%;">
-        <h1 data-node-id="sample-5" style="margin: 10px;">Lorem Ipsum!</h1>
-        <p data-node-id="sample-6" style="margin: 10px;">Dolor sit amet consectetur adipisicing elit. Tempora quos
-            unde,
-            dicta laudantium minus nobis dolore. Nostrum praesentium molestias, vel dolor nulla delectus modi, illo
+        <h1 data-node-id="sample-5" style="margin: 10px;color:white;">Lorem Epsn!</h1>
+        <p data-node-id="sample-6" style="margin: 10px;">Nostrum praesentium molestias, vel dolor nulla delectus modi, illo
             recusandae minus, illum tempore blanditiis!</p>
         <div data-node-id="sample-123">
             <label data-node-id="sample-7" for="input1" style="margin: 10px;">Label 1

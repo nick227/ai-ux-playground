@@ -9,9 +9,9 @@ import { InsertToDBCommand } from '../query/index.js';
 class RenderSnapshotCommand extends Command {
     execute(sessionId) {
         this.sessionId = sessionId;
-        const filePathHtml = this.getFileContent('../../../snapshot/page.html');
-        const filePathCss = this.getFileContent('../../../snapshot/page.css');
-        this.saveToDatabase(filePathHtml, filePathCss);
+        const filePathHtml = this.getFileContent('../../../snapshots/page.html');
+        //const filePathCss = this.getFileContent('../../../snapshots/page.css');
+        this.saveToDatabase(filePathHtml, "");
     }
 
     saveToDatabase(html, css) {

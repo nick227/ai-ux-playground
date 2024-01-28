@@ -34,8 +34,19 @@ function executeCommands(commands) {
     });
 }
 
+function speak(message) {
+    const event = new CustomEvent('speak', { detail: { response: message } });
+    console.log('dispatch', event);
+    window.dispatchEvent(event);
+}
+
 function edit(value, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+    if (!targetElement) {
+        errorMessage(targetNodeId);
+        return;
+
+    }
     let parsedValue;
     try {
         parsedValue = JSON.parse(value);
@@ -54,7 +65,7 @@ function edit(value, targetNodeId) {
 function style(value, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
     if (!targetElement) {
-        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        errorMessage(targetNodeId);
         return;
     }
     value.split(';').reduce((_, style) => {
@@ -68,7 +79,7 @@ function style(value, targetNodeId) {
 function append(value, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
     if (!targetElement) {
-        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        errorMessage(targetNodeId);
         return;
     }
     targetElement.innerHTML += value;
@@ -77,7 +88,7 @@ function append(value, targetNodeId) {
 function remove(_, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
     if (!targetElement) {
-        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        errorMessage(targetNodeId);
         return;
     }
     targetElement.parentNode.removeChild(targetElement);
@@ -86,7 +97,7 @@ function remove(_, targetNodeId) {
 function prepend(value, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
     if (!targetElement) {
-        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        errorMessage(targetNodeId);
         return;
     }
     targetElement.innerHTML = value + targetElement.innerHTML;
@@ -95,10 +106,14 @@ function prepend(value, targetNodeId) {
 function insert(value, targetNodeId) {
     const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
     if (!targetElement) {
-        console.error(`Element with data-node-id ${targetNodeId} not found`);
+        errorMessage(targetNodeId);
         return;
     }
     targetElement.outerHTML = value;
+}
+
+function errorMessage(targetNodeId) {
+    speak(`Element with data-node-id ${targetNodeId} not found`);
 }
 
 function publish(_, __) {

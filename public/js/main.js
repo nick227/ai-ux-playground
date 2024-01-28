@@ -2,11 +2,10 @@
 document.addEventListener('DOMContentLoaded', async (event) => {
     try {
 
-        await setupChatBot();
-
         const popup = addConsole();
         setupWebSocket(popup);
         
+        await setupChatBot();
         await setupPromptTemplateForm();
         await loadTemplateList();
         
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         setupToggleButtons();
         document.querySelector('.loading-spinner').classList.toggle('hidden');
 
-        takeSnapshot();
+        //snapshot();
 
     } catch (error) {
         console.error('An error occurred:', error);

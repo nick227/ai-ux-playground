@@ -13,7 +13,7 @@ function createListItem(item, key) {
 function createInputField() {
     const inputField = document.createElement('input');
     inputField.type = 'text';
-    inputField.placeholder = 'Filter items...';
+    inputField.placeholder = 'search prompts';
     return inputField;
 }
 
@@ -88,35 +88,7 @@ async function handleDeleteButton(html, item) {
       html.remove();
     };
   }
-
-
 }
-
-function renderStage(stageData) {
-  if (Array.isArray(stageData)) {
-    stageData.forEach(data => renderStage(data));
-    return;
-  }
-
-  const stageContents = createHtmlElement(stageData);
-  let stage = document.querySelector('.stage');
-
-  if (stage) {
-    stage.prepend(stageContents);
-  } else {
-    stage = createHtmlElement({ elementType: 'div', className: 'stage' });
-    stage.appendChild(stageContents);
-    document.body.appendChild(stage);
-  }
-}
-
-
-function prependToStage(html) {
-  const stage = document.querySelector('.stage');
-  stage.prepend(html);
-}
-
-
 
 function createElements(configs) {
   return configs.map(config => {
@@ -157,7 +129,6 @@ function createElementFromConfig(config) {
   function getDefaultOptionValue() {
       return localStorage.getItem('defaultOptionValue') || 'main';
   }
-
   return element;
 }
 

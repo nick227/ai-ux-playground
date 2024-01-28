@@ -2,6 +2,7 @@ async function loadTemplateList() {
     const keys = ['promptTemplates'];
     const target = document.querySelector('#templates');
     const buildPromises = keys.map((key) => {
+        console.log(key)
         return renderDataObject(key, target);
     });
 
@@ -10,27 +11,17 @@ async function loadTemplateList() {
 }
 
 async function setupPromptTemplateForm() {
-    const title = createHtmlElement('h2');
-    const desc = createHtmlElement('p');
-    const form = createHtmlElement('form');
-    const textarea = createHtmlElement({ elementType: 'textarea' });
-    const submit = createHtmlElement('button');
-    textarea.placeholder = 'Enter prompt template';
-    submit.textContent = 'Submit';
-    title.textContent = 'Create prompt template';
-    desc.innerHTML = 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>';
-    desc.className = 'description';
-    title.className = 'title';
-    submit.type = 'submit';
-    form.appendChild(title);
-    form.appendChild(desc);
-    form.appendChild(textarea);
-    form.appendChild(submit);
-    form.addEventListener('submit', handleFormSubmit);
-    textarea.addEventListener('input', () => setupTextAreaHeight(textarea));
-    textarea.addEventListener('keydown', fixTabPress);
-    const target = document.querySelector('#templates');
-    target.prepend(form);
+    const [title, desc, form, textarea, submit] = ['h2', 'p', 'form', { elementType: 'textarea' }, 'button'].map(createHtmlElement);
+    Object.assign(textarea, { placeholder: 'Enter prompt template', oninput: () => setupTextAreaHeight(textarea), onkeydown: fixTabPress });
+    Object.assign(submit, { textContent: 'Submit', type: 'submit' });
+    Object.assign(title, { textContent: 'Create prompt template', className: 'title' });
+    Object.assign(desc, {
+        innerHTML: 'The required type property is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>',
+        className: 'description'
+    });
+    [title, desc, textarea, submit].forEach(el => form.appendChild(el));
+    form.onsubmit = handleFormSubmit;
+    document.querySelector('section#templates').prepend(form);
     addScrollToTopButton();
 }
 
