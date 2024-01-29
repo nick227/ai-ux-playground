@@ -2,6 +2,8 @@
 import chatGptControllers from '../src/controllers/chatGptControllers.js';
 import apiHandlers from '../src/controllers/apiControllers.js';
 import { collectionNames, methods } from '../src/constants.js';
+import multer from 'multer';
+const upload = multer();
 
 const routes = collectionNames.reduce((acc, endpoint) => {
   methods.forEach(method => {
@@ -20,7 +22,8 @@ const routes = collectionNames.reduce((acc, endpoint) => {
   }, {
     type: 'post',
     path: '/api/chatgpt/:endpoint?',
-    fn: chatGptControllers
+    fn: chatGptControllers,
+    middleware: upload.single('image')
   }
 ]);
 

@@ -19,6 +19,27 @@
     width: 95%;
 }
 
+.chatbot-upload {
+    width: 100%;
+    margin-top: 10px;
+    background: dodgerblue;
+}
+
+.chatbot-image-upload-input {
+    display: none;
+}
+
+.chatbot-upload-list > div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+}
+
+.chatbot-upload-list > div:hover {
+    color: darkred;
+    cursor: pointer;
+}
+
 .chatbot-output {
     position: relative;
     width: 59%;
@@ -27,7 +48,7 @@
     margin-left: 1%;
     overflow-x: hidden;
     z-index: 0;
-    max-height: 50vh;
+    max-height: 70vh;
     overflow-y: auto;
 }
 
@@ -39,7 +60,7 @@
 }
 
 .chatbot-controls {
-    margin-top: 80px;
+    margin-top: 20px;
     width: 100%;
 }
 
@@ -74,18 +95,22 @@
     margin: 15px 0;
 }
 
-.chatbot-submit{
+.chatbot-submit {
     width: 100%;
     float: right;
 }
 
 .chatbot-clear {
     cursor: pointer;
-    float: right;
+    margin-top: 20px;
+    white-space: nowrap;
+    height: 33px;
+    background: gray;
+    padding: 0 20px;
 }
 
 .chatbot-clear:hover {
-    color: darkred;
+    background: darkred;
 }
 
 .chatbot-download-button {
@@ -142,7 +167,8 @@
     animation-fill-mode: forwards;
 }
 
-.chatbot-message.chatgpt, .chatbot-message.commands {
+.chatbot-message.chatgpt,
+.chatbot-message.commands {
     flex-grow: 0.88;
 }
 
@@ -184,26 +210,24 @@ h6.you {
     text-align: right;
 }
 
-.chatbot-uploader {
+.chatbot-datasource-upload {
     margin-top: 10px;
 }
 
-.chatbot-uploader input {
+.chatbot-datasource-upload input {
     width: 202px;
     margin-right: 10px;
 }
 
-.chatbot-uploader a {
-    text-decoration: none;
+.chatbot-datasource-upload button {
+    background-color: darkgray;
+    padding: 0 20px;
+}
+
+.chatbot-datasource-upload a {
+    text-decoration: underline;
     cursor: pointer;
-}
-
-.chatbot-uploader a:hover {
-    background-color: aqua;
-}
-
-a.chatbot-upload {
-    padding: 1px 3px;
+    padding: 0px 3px;
     border-radius: 2px;
 }
 

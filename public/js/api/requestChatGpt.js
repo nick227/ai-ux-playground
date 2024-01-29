@@ -1,12 +1,16 @@
-async function requestChatGpt(prompt, template=null) {
+async function requestChatGpt(prompt, template=null, image=null) {
   try {
     const url = '/api/chatgpt';
+    const formData = new FormData();
+    formData.append('prompt', prompt);
+    formData.append('template', template);
+    formData.append('image', image); 
+    console.log("form data:")
+    console.log('image',image)
+    console.log(formData)
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ prompt: prompt, template: template })
+      body: formData 
     });
 
     if (!response.ok) {

@@ -3,12 +3,14 @@ import { RenderTemplateCommand } from './index.js';
 import Command from '../Command.js';
 
 export default class RenderTemplatePromptCommand extends Command {
-  constructor(templateType, params) {
+  constructor(templateType, params, file=null) {
     super();
     this.templateType = templateType;
     this.params = params;
+    this.file = file;
     this.prompt = null;
     this.tools = null;
+    this.model = null;
     this.messages = null;
     this.sequence = null;
     this.use_embedding = null;
@@ -27,6 +29,7 @@ export default class RenderTemplatePromptCommand extends Command {
       await this.loadTemplates();
       this.renderFunctions(this.tools, this.params);
       this.renderTemplates(this.params);
+      this.checkImageAttachment();
     } catch (error) {
       console.error('Error initializing prompt template:', error);
       throw error;
@@ -35,8 +38,6 @@ export default class RenderTemplatePromptCommand extends Command {
 
   async loadTemplates() {
     const templateResponse = await this.getPromptTemplateCommand.execute(this.templateType);
-    console.log('templateResponse', templateResponse)
-    console.log('templateType', this.templateType)
     this.messages = templateResponse.messages;
     this.prompt = templateResponse.prompt;
     this.tools = templateResponse.tools;
@@ -45,10 +46,36 @@ export default class RenderTemplatePromptCommand extends Command {
     this.data_sources = templateResponse.data_sources;
     this.sequence = templateResponse.sequence;
     this.use_embedding = templateResponse.use_embedding;
+    this.sortMessages();
+  }
+
+  sortMessages() {
     if (this.messages) {
-      //user messages should be last
       this.messages.sort((a, b) => (a.role === 'user') ? 1 : ((b.role === 'user') ? -1 : 0));
     }
+  }
+
+  checkImageAttachment() {
+if (this.file && this.messages) {
+  this.model = 'gpt-4-vision-preview';
+  const lastUserMessage = this.messages.find(message => message.role === 'user');
+  
+  const base64Image = Buffer.from(this.file.buffer).toString('base64');
+
+  const newContentObject = [{
+    "type": "text",
+    "text": lastUserMessage.content
+  }, {
+    "type": "image_url",
+    "image_url": {
+      "url": `data:${this.file.mimetype};base64,${base64Image}`
+    }
+  }];
+
+  console.log("+-+-+-+-+-+-+-+--+-+")
+  console.log("newContentObject", newContentObject)
+  lastUserMessage.content = newContentObject;
+}
   }
 
   renderTemplates(params) {

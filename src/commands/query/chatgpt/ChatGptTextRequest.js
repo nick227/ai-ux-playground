@@ -4,6 +4,10 @@ import { SavePromptResultCommand } from '../index.js';
 import sendSocketMsgToClient from '../../../sendSocketMsgToClient.js';
 dotenv.config();
 
+//https://platform.openai.com/docs/guides/vision
+//https://community.openai.com/t/using-image-url-in-images-edits-request/27247/43?page=3
+//https://gist.github.com/abrichr/259b83b72fe0055d4f27ca9b3d387bc7
+
 class ChatGptTextRequest extends Command {
   constructor(openaiInstance, req = null) {
     super();
@@ -23,11 +27,15 @@ class ChatGptTextRequest extends Command {
     };
 
     const options = {
-      model: this.model,
+      model: prompt.model || this.model,
       messages: messages,
       ...(prompt.tools && { tools: prompt.tools }),
       ...(prompt.tool_choice && { tool_choice: tool_choice })
     };
+
+    console.log('options:')
+    console.log(options);
+    console.log("========")
 
     const totalChars = JSON.stringify(options).length;
     const estimatedInputTokens = Math.ceil(totalChars / 3.75);

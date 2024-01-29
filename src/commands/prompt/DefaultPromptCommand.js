@@ -8,8 +8,9 @@ export default class DefaultPromptCommand extends Command {
     super();
     this.req = req;
     this.res = res;
+    this.file = req.file;
     this.urlParams = req.body || req.query;
-    this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "main", { prompt: this.urlParams.prompt });
+    this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "main", { prompt: this.urlParams.prompt }, this.file);
     this.queryChatGptCommand = new QueryCommands.QueryChatGptCommand(this.req);
     this.insertToDBCommand = new QueryCommands.InsertToDBCommand();
     this.getChatHistoryCommand = new QueryCommands.GetChatHistoryCommand();
@@ -38,7 +39,6 @@ export default class DefaultPromptCommand extends Command {
         await this.saveHistory();
       }
       sendSocketMsgToClient(JSON.stringify(this.results, null, 2), this.req);
-console.log('sending', typeof this.results, this.results);
       this.res.send(this.results);
     } catch (error) {
       console.error(error);
@@ -52,14 +52,17 @@ console.log('sending', typeof this.results, this.results);
   }
 
   async loadResults() {
+    //ai image generation
     if (this.prompt.templateType === 'ai_image_request') {
       this.results = await this.queryChatGptCommand.executeImage(this.prompt.prompt);
       return;
     } 
+    //default request
     if (!this.prompt.use_embedding) {
       this.results = await this.queryChatGptCommand.execute(this.prompt);
       return;
     }
+    //special embeddings
     if (this.prompt.use_embedding) {
       console.log('this.prompt.use_embedding', this.prompt.use_embedding);
       return;
@@ -68,7 +71,6 @@ console.log('sending', typeof this.results, this.results);
 
   async loadMessages() {
     const staticDataSources = ['chatHistory', 'snapshots'];
-    console.log('this.prompt.data_sources', this.prompt.data_sources)
     if (this.prompt.data_sources && this.prompt.data_sources.includes('chatHistory')) {
       const chatHistory = await this.getChatHistoryCommand.execute(this.req.session.id);
       this.prompt.messages.unshift(...chatHistory);

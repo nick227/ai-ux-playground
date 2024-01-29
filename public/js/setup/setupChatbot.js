@@ -1,3 +1,5 @@
+import { reset } from "module-alias";
+
 let showWelcomeMessage = false;
 let isDragging = false;
 let isChatBotSetup = false;
@@ -64,38 +66,47 @@ async function setupChatBot() {
                             type: 'button',
                             className: 'chatbot-submit',
                             inputType: 'submit',
-                            textContent: 'go',
+                            textContent: 'speak',
                             event: {
                                 type: 'click',
                                 handler: handleChatbotSubmit
                             }
-                        },
-                        {
+                        }, {
+                            type: 'button',
+                            className: 'chatbot-upload',
+                            inputType: 'button',
+                            children: [
+                                {
+                                    type: 'i',
+                                    className: 'fas fa-upload'
+                                }
+                            ],
+                            event: {
+                                type: 'click',
+                                handler: handleChatbotUpload
+                            }
+                        }, {
+                            type: 'div',
+                            className: 'chatbot-upload-list',
+                        }, {
+                            type: 'input',
+                            inputType: 'file',
+                            className: 'chatbot-image-upload-input',
+                        }, {
                             type: 'div',
                             className: 'chatbot-controls',
                             children: [{
-                                type: 'a',
-                                className: 'chatbot-clear',
-                                title: 'Deletes chat history',
-                                children: [{
-                                    type: 'i',
-                                    className: 'fas fa-trash-alt'
-                                }
-                                ],
-                                event: [{
-                                    type: 'click',
-                                    handler: handleChatbotClear
-                                }]
+                                type: 'h6',
+                                textContent: 'Datasources'
                             }, {
                                 type: 'div',
-                                className: 'chatbot-uploader',
+                                className: 'chatbot-datasource-upload',
                                 children: [{
                                     type: 'input',
                                     inputType: 'file',
                                     id: 'data-source-file',
                                 }, {
                                     type: 'a',
-                                    className: 'chatbot-upload',
                                     textContent: 'upload',
                                     event: {
                                         type: 'click',
@@ -111,6 +122,15 @@ async function setupChatBot() {
                                     ]
                                 }]
                             }]
+                        }, {
+                            type: 'button',
+                            className: 'chatbot-clear',
+                            title: 'Deletes chat history',
+                            textContent: 'clear history',
+                            event: [{
+                                type: 'click',
+                                handler: handleChatbotClear
+                            }]
                         }
                     ]
                 }]
@@ -124,6 +144,46 @@ async function setupChatBot() {
     }
     ];
     //handlers
+    function handleChatbotUpload() {
+        const uploadList = document.querySelector('.chatbot-upload-list');
+        if (uploadList.children.length > 0) {
+            alert('Sorry one image at a time!');
+            return;
+        }
+        const fileInput = document.querySelector('.chatbot-image-upload-input');
+        fileInput.accept = 'image/png, image/jpeg';
+        fileInput.click();
+        fileInput.addEventListener('change', handleFileChange);
+    }
+
+    function handleFileChange(e) {
+        const fileList = e.target.files;
+        if (fileList.length > 0) {
+            const file = fileList[0];
+            if (file.type.startsWith('image/')) {
+                updateUploadList(file.name);
+            }
+        }
+    }
+
+    function updateUploadList(fileName) {
+        const uploadList = document.querySelector('.chatbot-upload-list');
+        uploadList.innerHTML = '';
+        if (fileName) {
+            const fileElement = document.createElement('div');
+            fileElement.textContent = fileName;
+            fileElement.addEventListener('click', () => handleFileDelete(fileName));
+            uploadList.appendChild(fileElement);
+        }
+    }
+
+    function handleFileDelete(fileName) {
+        if (confirm(`Do you want to delete ${fileName}?`)) {
+            const fileInput = document.querySelector('.chatbot-image-upload-input');
+            fileInput.value = '';
+            updateUploadList('');
+        }
+    }
     function handleChatbotClear(e) {
         const confirm = window.confirm('Are you sure you want to clear the chat history?');
         if (!confirm) {
@@ -197,7 +257,9 @@ async function setupChatBot() {
 
         toggleLoading();
         const templateTypeValue = document.querySelector('.chatbot-picker').value;
-        const data = await requestChatGpt(prompt, templateTypeValue);
+        const imageUploadFile = getChatBotImageUploadFileName();
+        console.log('imageUploadFile', imageUploadFile)
+        const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile);
         handleChatbotResults(data);
         toggleLoading();
         resetTextarea();
@@ -329,6 +391,19 @@ async function setupChatBot() {
         const textarea = document.querySelector('.chatbot-textarea');
         textarea.value = '';
         textarea.style.height = 'auto';
+    }
+
+    function resetUploadImage(fileInput) {
+        fileInput.value = '';
+        const list = document.querySelector('.chatbot-data-source-list');
+        list.innerHTML = '';
+    }
+
+    function getChatBotImageUploadFileName() {
+        const fileInput = document.querySelector('.chatbot-image-upload-input');
+        const file = fileInput.files[0]; 
+        resetUploadImage(fileInput);
+        return file; 
     }
 
     function getPromptValue() {

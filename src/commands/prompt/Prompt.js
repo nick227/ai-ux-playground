@@ -2,19 +2,21 @@ import { RenderTemplatePromptCommand } from '../build/index.js';
 import Command from '../Command.js';
 
 export default class Prompt extends Command {
-  constructor(prompt, templateType = null, params = []) {
+  constructor(prompt, templateType = null, params = [], file=null) {
     super();
     this.messages = [];
     this.prompt = prompt;
     this.params = params;
+    this.file = file;
     this.templateType = templateType;
-    this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params);
+    this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params, this.file);
     this.data_sources = null;
     this.sequence = null;
+    this.model = null;
     this.use_embedding = null;
   }
 
-  async init() {
+  async init(file=null) {
     await this.renderTemplatePromptCommand.execute();
     this.prompt = this.prompt ? this.prompt : this.renderTemplatePromptCommand?.prompt;
     this.tools = this.renderTemplatePromptCommand?.tools;
@@ -22,6 +24,7 @@ export default class Prompt extends Command {
     this.tool_choice = this.renderTemplatePromptCommand?.tool_choice;
     this.data_sources = this.renderTemplatePromptCommand?.data_sources;
     this.sequence = this.renderTemplatePromptCommand?.sequence;
+    this.model = this.renderTemplatePromptCommand?.model;
     this.use_embedding = this.renderTemplatePromptCommand?.use_embedding;
   }
 }
