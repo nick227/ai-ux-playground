@@ -1,5 +1,3 @@
-import { reset } from "module-alias";
-
 let showWelcomeMessage = false;
 let isDragging = false;
 let isChatBotSetup = false;

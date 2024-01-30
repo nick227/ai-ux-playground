@@ -5,6 +5,7 @@
 //{"command":"edit","value":{src:'https://source.unsplash.com/random'},"targetNodeId":5}
 
 function executeCommands(commands) {
+    console.log('commands', commands)
     commands.forEach(command => {
         switch (command.command) {
             case 'append':

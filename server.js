@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import session from 'express-session';
-import compression from 'compression';
-import expressMinify from 'express-minify';
+//import compression from 'compression';
+//import expressMinify from 'express-minify';
 import cors from 'cors'; 
 import startWebSocket from './startWebSocket.js';
 import startApiListeners from './startApiListeners.js';
@@ -27,8 +27,8 @@ const expressSession = session({
 });
 
 app.use(expressSession);
-app.use(compression());
-app.use(expressMinify());
+//app.use(compression());
+//app.use(expressMinify());
 app.use(express.static('./public'));
 
 const server = startApiListeners(app);
