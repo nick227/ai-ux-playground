@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         setupWebSocket(popup);
         
         await setupChatBot();
-        await setupPromptTemplateForm();
-        await loadTemplateList();
+        //await setupPromptTemplateForm();
+        //await loadTemplateList();
         warnOnPageExit();
         
         setupDemo();

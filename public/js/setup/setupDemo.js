@@ -1,38 +1,31 @@
-const demoHtml = `
-<h6 class="toggle" data-node-id="sample-zdmecc-00v00Axe3" data-target=".sample-area">sample area</h6>
-<div class="sample-area" data-node-id="sample-3"
-    style="display: flex; align-items: center; width: 100%;border-radius:10px; justify-content: center; background-color: #1E1E1E; color: white;">
-    <img data-node-id="sample-4" loading="lazy" src="https://source.unsplash.com/random" alt="Image" style="margin: 10px;width:50%; height: 400px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-    <div data-node-id="sample-16" style="width:50%;">
-        <h1 data-node-id="sample-5" style="margin: 10px;color:white;">Lorem Epsn!</h1>
-        <p data-node-id="sample-6" style="margin: 10px;">Nostrum praesentium molestias, vel dolor nulla delectus modi, illo
-            recusandae minus, illum tempore blanditiis!</p>
-        <div data-node-id="sample-123">
-            <label data-node-id="sample-7" for="input1" style="margin: 10px;">Label 1
-                <input data-node-id="sample-8" id="input1" type="text" style="margin: 10px;">
-            </label>
+const demoHtml = `<div data-node-id="node01" style="height:100vh; width:100%; padding:0;margin:0;overflow: hidden;">
+    <section data-node-id="node02" style="background: white; height: 55%; width: 80%; margin: 2% auto;padding: 2%;border-radius:15px;">
+        <div style="height: 49%; width: 100%; margin-bottom:1%; display: flex; justify-content: center; align-items: center;" data-node-id="node03">
+            <div data-node-id="node04" style="width: 48%; padding: 0 1%;">
+                <h1 style="font-size: 30px; margin: 0;font-family:monospace;" data-node-id="node05">My Cool Website</h1>
+                <p style="color: fuchsia;font-size:18px;line-height:1.5;font-family:monospace;" data-node-id="node06">Lorem Adipisicing culpa nisi anim excepteur Lorem occaecat.</p>
+            </div>
+            <div data-node-id="node07" style="width: 48%; padding: 0 1%;text-align:center;">
+                <img src="https://placehold.co/200" style="" data-node-id="node08">
+            </div>
         </div>
-        <div data-node-id="sample-124">
-            <label data-node-id="sample-9" for="input2" style="margin: 10px;">Label 2
-                <input data-node-id="sample-10" id="input2" type="text" style="margin: 10px;">
-            </label>
+        <div style="height: 50%; width: 100%; display: flex; justify-content: center; align-items: center;" data-node-id="node09">
+            <div data-node-id="node10" style="text-align: center; width: 48%; padding: 0 1%;text-align:center;">
+                <img src="https://placehold.co/200x100" style="" data-node-id="node11">
+            </div>
+            <div data-node-id="node12" style="width: 48%; padding: 0 1%;">
+                <h1 style="margin: 0;font-family:monospace;" data-node-id="node13">Contact Info</h1>
+                <label for="input1" style="display: block;font-family:monospace;" data-node-id="node14">Name</label>
+                <input type="text" id="input1" name="input1" style="width: 100%; margin-bottom: 10px; border:1px solid gray; padding: 3px; border-radius:5px;" data-node-id="node15">
+                <label for="input2" style="display: block;font-family:monospace;" data-node-id="node16">Address</label>
+                <input type="text" id="input2" name="input2" style="width: 100%; border:1px solid gray; padding: 3px; border-radius:5px;" data-node-id="node17">
+            </div>
         </div>
-        <div data-node-id="sample-125">
-            <label data-node-id="sample-11" for="input3" style="margin: 10px;">Label 3
-                <input data-node-id="sample-12" id="input3" type="text" style="margin: 10px;">
-            </label>
-        </div>
-        <div data-node-id="sample-32" style="flex: 2; display: flex; align-items: center;">
-            <button data-node-id="sample-13"
-                style="margin: 10px;background:darkred;padding:0 10px; border-radius: 5px;">cancel</button>
-            <button data-node-id="sample-14"
-                style="margin: 10px;background:green;padding:0 10px; border-radius: 5px;">submit</button>
-        </div>
-    </div>
+    </section>
 </div>
 `;
 
 function setupDemo(){
     const demoElm = document.querySelector('#demo');
-    demoElm.innerHTML = demoHtml;
+    demoElm.innerHTML= demoHtml;
 }

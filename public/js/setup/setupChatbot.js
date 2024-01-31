@@ -18,15 +18,16 @@ async function setupChatBot() {
         children: [
             {
                 type: 'div',
+                className: 'chatbot-output',
+                children: []
+            },
+            {
+                type: 'div',
                 className: 'chatbot-input',
                 children: [{
                     type: 'div',
                     className: 'chatbot-input-inner',
                     children: [
-                        {
-                            type: 'h2',
-                            textContent: 'Chatbot'
-                        },
                         {
                             type: 'select',
                             className: 'chatbot-picker',
@@ -61,28 +62,32 @@ async function setupChatBot() {
                                 handler: handleMouseDown,
                             }]
                         }, {
-                            type: 'button',
-                            className: 'chatbot-submit',
-                            inputType: 'submit',
-                            textContent: 'speak',
-                            event: {
-                                type: 'click',
-                                handler: handleChatbotSubmit
-                            }
-                        }, {
-                            type: 'button',
-                            className: 'chatbot-upload',
-                            inputType: 'button',
-                            children: [
-                                {
-                                    type: 'i',
-                                    className: 'fas fa-upload'
+                            type: 'div',
+                            className: 'row',
+                            children: [{
+                                type: 'button',
+                                className: 'chatbot-upload',
+                                inputType: 'button',
+                                children: [
+                                    {
+                                        type: 'i',
+                                        className: 'fas fa-upload'
+                                    }
+                                ],
+                                event: {
+                                    type: 'click',
+                                    handler: handleChatbotUpload
                                 }
-                            ],
-                            event: {
-                                type: 'click',
-                                handler: handleChatbotUpload
-                            }
+                            }, {
+                                type: 'button',
+                                className: 'chatbot-submit',
+                                inputType: 'submit',
+                                textContent: 'speak',
+                                event: {
+                                    type: 'click',
+                                    handler: handleChatbotSubmit
+                                }
+                            }]
                         }, {
                             type: 'div',
                             className: 'chatbot-upload-list',
@@ -132,11 +137,6 @@ async function setupChatBot() {
                         }
                     ]
                 }]
-            },
-            {
-                type: 'div',
-                className: 'chatbot-output',
-                children: []
             }
         ]
     }
@@ -256,7 +256,6 @@ async function setupChatBot() {
         toggleLoading();
         const templateTypeValue = document.querySelector('.chatbot-picker').value;
         const imageUploadFile = getChatBotImageUploadFileName();
-        console.log('imageUploadFile', imageUploadFile)
         const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile);
         handleChatbotResults(data);
         toggleLoading();
@@ -313,9 +312,7 @@ async function setupChatBot() {
     }
 
     function handleDownloadButtonClick(e, sender) {
-        console.log('wtf')
         const isImage = handleImageDownload(e);
-        console.log('?? ', isImage);
         if (!isImage) {
             handleTextDownload(e);
         }
@@ -346,7 +343,6 @@ async function setupChatBot() {
     }
 
     function handleTextDownload(e) {
-        console.log('handleTextDownload')
         const message = e.target.closest('.chatbot-output-message');
         const messageText = message.querySelector('.chatbot-output-message p');
         const text = messageText.innerHTML;
@@ -363,14 +359,13 @@ async function setupChatBot() {
     }
 
     function makeFileNameSafe(filename) {
-        console.log('safe', filename)
         return filename.replace(/[\/\\?%*:|"<>]/g, '-').substring(0, 40);
     }
 
-    function prependElementToOutput(element) {
+    function addToChatOutput(element) {
         const output = document.querySelector('.chatbot-output');
-        output.scrollTop = 0;
-        output.insertBefore(element, output.firstChild);
+        output.appendChild(element);
+        output.scrollTop = output.scrollHeight;
     }
 
     function extractFieldHtml(field) {
@@ -399,9 +394,9 @@ async function setupChatBot() {
 
     function getChatBotImageUploadFileName() {
         const fileInput = document.querySelector('.chatbot-image-upload-input');
-        const file = fileInput.files[0]; 
+        const file = fileInput.files[0];
         resetUploadImage(fileInput);
-        return file; 
+        return file;
     }
 
     function getPromptValue() {
@@ -421,7 +416,6 @@ async function setupChatBot() {
 
     function generateImage(data) {
         const prompt = getPromptValue();
-        console.log('generating image', prompt);
         let img = document.createElement('img');
         img.className = 'chatbot-output-image';
         img.src = 'data:image/png;base64,' + data.data[0].b64_json;
@@ -440,7 +434,7 @@ async function setupChatBot() {
 
         if (data.commands && data.commands.length > 0) {
             saveMessageToLocalStorage(JSON.stringify(data.commands), 'Commands');
-            addToOutput(JSON.stringify(data.commands), 'Commands');
+            addToOutput(`${JSON.stringify(data.commands)}`, 'Commands');
         }
 
         if (data.fields && data.fields.length > 0) {
@@ -460,7 +454,7 @@ async function setupChatBot() {
             const loading = createHtmlElement('div');
             loading.className = 'chatbot-loading';
             loading.innerHTML = html;
-            prependElementToOutput(loading);
+            addToChatOutput(loading);
         }
     }
 
@@ -519,8 +513,12 @@ async function setupChatBot() {
         if (html instanceof Node) {
             messageText.appendChild(html);
         } else {
-            const formattedHtml = formatHtml(html);
-            messageText.innerHTML = formattedHtml;
+            if (sender.toLowerCase() === 'commands') {
+                messageText.textContent = html;
+            } else {
+                const formattedHtml = formatHtml(html);
+                messageText.innerHTML = formattedHtml;
+            }
             messageText.dataset.value = html;
         }
         if (sender.toLowerCase() === 'chatgpt') {
@@ -614,7 +612,7 @@ async function setupChatBot() {
 
     function addToOutput(html, sender) {
         const messageElement = createMessageElement(html, sender);
-        prependElementToOutput(messageElement);
+        addToChatOutput(messageElement);
     }
 
     function addDataSource(dataSourceList, dataSourcesLen, dataSource, index) {

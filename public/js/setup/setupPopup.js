@@ -70,7 +70,6 @@ section#main > .message {
   max-height: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  border-bottom: 2px solid gray;
   color: white;
   }
   @keyframes slideFade {

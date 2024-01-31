@@ -53,7 +53,7 @@ class ChatGptTextRequest extends Command {
       await savePromptResult.execute(completion, null, this.req.session.id);
       sendSocketMsgToClient(JSON.stringify(completion, null, 2), this.req);
       const results = this.getResponse(completion);
-      console.log('success!');
+      console.log('success!', typeof results);
       return results;
     } catch (error) {
       sendSocketMsgToClient("Error sending prompt to ChatGPT: " + error, this.req);
@@ -66,6 +66,7 @@ class ChatGptTextRequest extends Command {
     if (!completion || !Array.isArray(completion.choices) || completion.choices.length === 0) {
       throw new Error('Invalid completion object');
     }
+    console.log("completion", completion);
 
     const choice = completion.choices[0];
     if (choice?.message?.tool_calls) {

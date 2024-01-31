@@ -5,9 +5,6 @@ async function requestChatGpt(prompt, template=null, image=null) {
     formData.append('prompt', prompt);
     formData.append('template', template);
     formData.append('image', image); 
-    console.log("form data:")
-    console.log('image',image)
-    console.log(formData)
     const response = await fetch(url, {
       method: 'POST',
       body: formData 
@@ -18,6 +15,7 @@ async function requestChatGpt(prompt, template=null, image=null) {
     }
 
     const data = await response.json();
+    console.log('data', data);  
     return data;
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);

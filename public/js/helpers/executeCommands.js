@@ -1,33 +1,58 @@
-//{"command":"style","value":"background-color: blue","targetNodeId":"69"}
-//{"command":"append","value":"<div>hello</div>","targetNodeId":"20"}
-//{"command":"remove","value":null,"targetNodeId":"20"}
-//{"command":"publish","value":null,"targetNodeId":null}
-//{"command":"edit","value":{src:'https://source.unsplash.com/random'},"targetNodeId":5}
+//{"command":"style","value":"background-color: blue","nodeId":"69"}
+//{"command":"append","value":"<div>hello</div>","nodeId":"20"}
+//{"command":"remove","value":null,"nodeId":"20"}
+//{"command":"publish","value":null,"nodeId":null}
+//{"command":"edit","value":{src:'https://source.unsplash.com/random'},"nodeId":5}
+const commandsf = [
+    {
+        "command": "style",
+        "value": "background: red;",
+        "nodeId": "node01"
+    }
+]
+
+const commands1 = [
+    {
+        "command": "style",
+        "value": "body { background-image: url('https://source.unsplash.com/random/space'); background-size: cover; }",
+        "nodeId": "body"
+    }
+];
+const commdands = [{ "command": "style", 
+                    "value": "background-image: radial-gradient(circle, #FFFFFF 1px, transparent 1px), radial-gradient(circle, #FFFFFF 1px, transparent 1px);background-size: 20px 20px;background-position: 0 0, 10px 10px;", 
+                    "nodeId": "body" }];
+
+
+const commands = [{ "command": "edit", "value": "{ \"textContent\": \"What is up\" }", "nodeId": "node05" }];
+
+setTimeout(() => {
+    executeCommands(commands);
+}, 2345);
 
 function executeCommands(commands) {
     console.log('commands', commands)
     commands.forEach(command => {
         switch (command.command) {
             case 'append':
-                append(command.value, command.targetNodeId);
+                append(command.value, command.nodeId);
                 break;
             case 'prepend':
-                prepend(command.value, command.targetNodeId);
+                prepend(command.value, command.nodeId);
                 break;
             case 'remove':
-                remove(command.value, command.targetNodeId);
+                remove(command.value, command.nodeId);
                 break;
             case 'insert':
-                insert(command.value, command.targetNodeId);
+                insert(command.value, command.nodeId);
                 break;
             case 'style':
-                style(command.value, command.targetNodeId);
+                style(command.value, command.nodeId);
                 break;
             case 'edit':
-                edit(command.value, command.targetNodeId);
+                edit(command.value, command.nodeId);
                 break;
             case 'publish':
-                publish(command.value, command.targetNodeId);
+                publish(command.value, command.nodeId);
                 break;
             default:
                 style(command.css, command.nodeId);
@@ -36,25 +61,35 @@ function executeCommands(commands) {
     });
 }
 
+function getTargetElement(nodeId) {
+    const currentNode = document.querySelector("#demo");
+    const targetElement = currentNode.querySelector(`[data-node-id="${nodeId}"]`);
+    return targetElement;
+}
+
 function speak(message) {
     const event = new CustomEvent('speak', { detail: { response: message } });
-    console.log('dispatch', event);
     window.dispatchEvent(event);
 }
 
-function edit(value, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function edit(value, nodeId) {
+    console.log(typeof value, value)
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
-
     }
     let parsedValue;
-    try {
-        parsedValue = JSON.parse(value);
-    } catch (e) {
+    if (typeof value === 'string') {
+        try {
+            parsedValue = JSON.parse(value);
+        } catch (e) {
+            parsedValue = value;
+        }
+    } else {
         parsedValue = value;
     }
+    console.log(typeof parsedValue, parsedValue)
     if (typeof parsedValue === 'object') {
         Object.keys(parsedValue).forEach(key => {
             targetElement[key] = parsedValue[key];
@@ -64,58 +99,63 @@ function edit(value, targetNodeId) {
     }
 }
 
-function style(value, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function style(value, nodeId) {
+    console.log('style', value, nodeId)
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
     }
-    value.split(';').reduce((_, style) => {
-        const [property, styleValue] = style.split(':');
+    const styles = value.split(';');
+    for (let i = 0; i < styles.length; i++) {
+        const style = styles[i];
+        const splitStyle = style.split(':');
+        const property = splitStyle.shift().trim();
+        const styleValue = splitStyle.join(':').trim();
         if (property && styleValue) {
-            targetElement.style[property.trim()] = styleValue.trim();
+            targetElement.style[property] = styleValue;
         }
-    }, {});
+    }
 }
 
-function append(value, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function append(value, nodeId) {
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
     }
-    targetElement.innerHTML += value;
+    targetElement.insertAdjacentHTML('beforeend', value);
 }
 
-function remove(_, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function remove(_, nodeId) {
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
     }
     targetElement.parentNode.removeChild(targetElement);
 }
 
-function prepend(value, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function prepend(value, nodeId) {
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
     }
-    targetElement.innerHTML = value + targetElement.innerHTML;
+    targetElement.insertAdjacentHTML('afterbegin', value);
 }
 
-function insert(value, targetNodeId) {
-    const targetElement = document.querySelector(`[data-node-id="${targetNodeId}"]`);
+function insert(value, nodeId) {
+    const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
-        errorMessage(targetNodeId);
+        errorMessage(nodeId);
         return;
     }
     targetElement.outerHTML = value;
 }
 
-function errorMessage(targetNodeId) {
-    speak(`Element with data-node-id ${targetNodeId} not found`);
+function errorMessage(nodeId) {
+    speak(`Element with data-node-id ${nodeId} not found`);
 }
 
 function publish(_, __) {
