@@ -2,19 +2,13 @@
 document.addEventListener('DOMContentLoaded', async (event) => {
     try {
 
-        const popup = addConsole();
-        setupWebSocket(popup);
+        //setupPopupConsole();
         
         await setupChatBot();
-        //await setupPromptTemplateForm();
-        //await loadTemplateList();
-        warnOnPageExit();
-        
-        setupDemo();
-        setupToggleButtons();
-        document.querySelector('.loading-spinner').classList.toggle('hidden');
+        await setupPromptTemplateForm();
+        await loadTemplateList();
 
-        //snapshot();
+        document.querySelector('.loading-spinner').classList.toggle('hidden');
 
     } catch (error) {
         console.error('An error occurred:', error);

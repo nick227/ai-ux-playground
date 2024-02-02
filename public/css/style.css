@@ -39,12 +39,7 @@ body > section {
     justify-content: center;
     align-items: center;
     background-color: gray;
-  border-radius: var(--border-radius);
-}
-
-#demo > section {
-    width: 100%;
-    height: 100%;
+    border-radius: var(--border-radius);
 }
 
 input {

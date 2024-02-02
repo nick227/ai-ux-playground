@@ -34,7 +34,7 @@ async function setupChatBot() {
                             options: promptTemplatesTypes,
                             event: {
                                 type: 'change',
-                                handler: e => setCurrentDataSourceValue(e.target.value)
+                                handler: e => handleChangeChatBot(e.target.value)
                             }
                         },
                         {
@@ -209,7 +209,7 @@ async function setupChatBot() {
         if (output.children.length > 0) {
             prompt = 'Hello again.';
         }
-        const defaultOption = localStorage.getItem('defaultOptionValue') || 'main';
+        const defaultOption = localStorage.getItem('currentChatBot') || 'main';
         prompt += `You have ${defaultOption} personality`;
 
         const data = await requestChatGpt(prompt, 'welcome');
@@ -629,8 +629,8 @@ async function setupChatBot() {
         }
     }
 
-    function setCurrentDataSourceValue(value) {
-        localStorage.setItem('defaultOptionValue', value);
+    function handleChangeChatBot(value) {
+        localStorage.setItem('currentChatBot', value);
         handleWelcomeMessage();
         displayChatbotResponse({ commands: [{ command: `change to ${value}` }] });
     }

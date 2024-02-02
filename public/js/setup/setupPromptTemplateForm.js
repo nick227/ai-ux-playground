@@ -32,6 +32,7 @@ async function setupPromptTemplateForm() {
     form.onsubmit = handleFormSubmit;
     document.querySelector('section#templates').prepend(form);
     addScrollToTopButton();
+    warnOnPageExit();
 }
 
 async function handleFormSubmit(event) {

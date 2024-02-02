@@ -1,24 +1,31 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const WebSocket = require('ws');
-import { RenderSnapshotCommand } from './src/commands/build/index.js';
-import { ClearChatHistoryCommand } from './src/commands/query/index.js';
+import webSocketHandlers from './webSocketHandlers.js';
 
 export default function startWebSocket(httpServer, app, expressSession) {
   const wss = new WebSocket.Server({ server: httpServer });
-  const renderSnapshotCommand = new RenderSnapshotCommand();
+
   app.set('wss', wss);
+
   wss.on('connection', (ws, req) => {
     expressSession(req, {}, () => {
-      ws.id = req.session.id;
-      renderSnapshotCommand.execute(req.session.id);
+      ws.sessionId = req.session.id;
+      webSocketHandlers.saveSnapShot(ws);
     });
 
     ws.on('message', (message) => {
-      if(message.toString() === 'clearHistory'){
-        const clearChatHistoryCommand = new ClearChatHistoryCommand();
-        clearChatHistoryCommand.execute(req.session.id);
-        ws.send('Clear chat history');
+      if (message.toString() === 'clearHistory') {
+        webSocketHandlers.clearHistory(ws);
+        return;
+      }
+      try {
+        const parsedMessage = JSON.parse(message);
+        if (parsedMessage.html) {
+          webSocketHandlers.saveSnapShot(ws, parsedMessage.html);
+        }
+      } catch (error) {
+        ws.send('Error parsing message');
       }
     });
 

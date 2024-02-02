@@ -87,3 +87,41 @@ section#main > .message {
   }
 }
 `;
+
+
+function setupPopupConsole() {
+  const popup = addConsole();
+
+  let messageQueue = [];
+  let isProcessing = false;
+
+  async function processQueue() {
+    if (isProcessing) return;
+    isProcessing = true;
+    if (popup) {
+      while (messageQueue.length > 0) {
+        const event = messageQueue.shift();
+        const popupBody = popup.document.body.querySelector('section#main');
+        const newElement = popup.document.createElement('div');
+        newElement.className = 'message';
+        const pre = popup.document.createElement('pre');
+        pre.textContent = event.data;
+        newElement.appendChild(pre);
+
+        if (popupBody.firstChild) {
+          popupBody.insertBefore(newElement, popupBody.firstChild);
+        } else {
+          popupBody.appendChild(newElement);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1111));
+      }
+    }
+    isProcessing = false;
+  }
+
+  ws.addEventListener('message', async (event) => {
+    messageQueue.push(event);
+    processQueue();
+  });
+}

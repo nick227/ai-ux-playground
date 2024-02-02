@@ -137,9 +137,9 @@ export default class DB {
 
     async _update(query, update) {
         const schema = schemas[this.dbName];
-        if (!this.validateSchema(update, schema)) {
-            throw new Error('Invalid schema');
-        }
+        //if (!this.validateSchema(update, schema)) {
+           // throw new Error('Invalid schema');
+        //}
 
         return await this.db.updateAsync(query, update, {});
     }
@@ -173,5 +173,19 @@ export default class DB {
         } catch (err) {
             throw new Error(err);
         }
+    }
+
+    exists(key, value) {
+        return new Promise((resolve, reject) => {
+            const query = {};
+            query[key] = value;
+            this.db.count(query, (err, count) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(count > 0);
+                }
+            });
+        });
     }
 }

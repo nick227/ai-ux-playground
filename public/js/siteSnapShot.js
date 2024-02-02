@@ -1,23 +1,150 @@
 let snapShotCurrentId = 0;
-const keepAttributes = ['src', 'style', 'class', 'id', 'title', 'href', 'data-node-id'];
+const keepAttributes = [
+    "class",
+    "id",
+    "style",
+    "src",
+    "href",
+    "alt",
+    "width",
+    "height",
+    "disabled",
+    "value",
+    "title",
+    "type",
+    "rel",
+    "target",
+    "action",
+    "method",
+    "placeholder",
+    "checked",
+    "selected",
+    "required",
+    "readonly",
+    "maxlength",
+    "min",
+    "max",
+    "pattern",
+    "autocomplete",
+    "autofocus",
+    "download",
+    "colspan",
+    "rowspan",
+    "for",
+    "name",
+    "data-node-id"];
+
 const keepContent = [
-    'button',
-    'h1',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'h6',
-    'p',
-    'span',
-    'label',
-    'a',/*
-    'li',
-    'pre',
-    'section',
-    'div',
-    'option',
-    'body'*/
+    "html",
+    "head",
+    "body",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "noscript",
+    "template",
+    "section",
+    "nav",
+    "article",
+    "aside",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "header",
+    "footer",
+    "p",
+    "hr",
+    "pre",
+    "blockquote",
+    "ol",
+    "ul",
+    "li",
+    "dl",
+    "dt",
+    "dd",
+    "figure",
+    "figcaption",
+    "main",
+    "div",
+    "a",
+    "em",
+    "strong",
+    "small",
+    "s",
+    "cite",
+    "q",
+    "dfn",
+    "abbr",
+    "data",
+    "time",
+    "code",
+    "var",
+    "samp",
+    "kbd",
+    "sub",
+    "sup",
+    "i",
+    "b",
+    "u",
+    "mark",
+    "ruby",
+    "rt",
+    "rp",
+    "bdi",
+    "bdo",
+    "span",
+    "br",
+    "wbr",
+    "ins",
+    "del",
+    "img",
+    "iframe",
+    "embed",
+    "object",
+    "param",
+    "video",
+    "audio",
+    "source",
+    "track",
+    "canvas",
+    "map",
+    "area",
+    "svg",
+    "math",
+    "table",
+    "caption",
+    "colgroup",
+    "col",
+    "tbody",
+    "thead",
+    "tfoot",
+    "tr",
+    "td",
+    "th",
+    "form",
+    "fieldset",
+    "legend",
+    "label",
+    "input",
+    "button",
+    "select",
+    "datalist",
+    "optgroup",
+    "option",
+    "textarea",
+    "keygen",
+    "output",
+    "progress",
+    "meter",
+    "details",
+    "summary",
+    "menuitem",
+    "menu"
 ];
 const maxContentCharacterCount = 5;
 
@@ -28,7 +155,6 @@ function processNode(node) {
         removeStyleTags(element);
         removeAttributes(element);
         removeSvgContent(element);
-        //addNodeId(element);
         Array.from(element.childNodes).forEach(processNode);
     } else if (node.nodeType === Node.COMMENT_NODE) {
         removeComments(node);
@@ -45,7 +171,6 @@ function removeExtraContent(body) {
             elementToRemove.parentNode.removeChild(elementToRemove);
         }
     });
-
 }
 
 function removeStyleTags(element) {
@@ -140,15 +265,14 @@ function getStyles() {
 function getHtml(bodyClone) {
     removeExtraContent(bodyClone);
     processNode(bodyClone);
-    return bodyClone.outerHTML.replace(/\s+/g, ' ');
+    return bodyClone.innerHTML.replace(/\s+/g, ' ');
 }
 
-function snapshot() {
-    setTimeout(() => {
-        const element = document.body.cloneNode(true);
-        const html = getHtml(element);
-        const styles = getStyles(element);
-        console.log(html);
-        console.log(styles);
-    }, 4000);
+async function getSnapshot(element) {
+    await setTimeout(() => { }, 4000);
+    const html = getHtml(element);
+    console.log('got demo html:', html);
+    return {
+        html
+    };
 }

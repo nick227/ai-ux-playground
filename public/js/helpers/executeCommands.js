@@ -18,9 +18,11 @@ const commands1 = [
         "nodeId": "body"
     }
 ];
-const commdands = [{ "command": "style", 
-                    "value": "background-image: radial-gradient(circle, #FFFFFF 1px, transparent 1px), radial-gradient(circle, #FFFFFF 1px, transparent 1px);background-size: 20px 20px;background-position: 0 0, 10px 10px;", 
-                    "nodeId": "body" }];
+const commdands = [{
+    "command": "style",
+    "value": "background-image: radial-gradient(circle, #FFFFFF 1px, transparent 1px), radial-gradient(circle, #FFFFFF 1px, transparent 1px);background-size: 20px 20px;background-position: 0 0, 10px 10px;",
+    "nodeId": "body"
+}];
 
 
 const commands = [{ "command": "edit", "value": "{ \"textContent\": \"What is up\" }", "nodeId": "node05" }];
@@ -30,7 +32,7 @@ setTimeout(() => {
 }, 2345);
 
 function executeCommands(commands) {
-    console.log('commands', commands)
+    console.log("commands", commands);
     commands.forEach(command => {
         switch (command.command) {
             case 'append':
@@ -54,11 +56,18 @@ function executeCommands(commands) {
             case 'publish':
                 publish(command.value, command.nodeId);
                 break;
-            default:
+            case 'style':
                 style(command.css, command.nodeId);
+                break;
+            default:
+                console.log(`Invalid `);
                 break;
         }
     });
+
+    if (commands && commands.length > 0) {
+        dispatchEvent('snapshot');
+    }
 }
 
 function getTargetElement(nodeId) {
@@ -73,7 +82,6 @@ function speak(message) {
 }
 
 function edit(value, nodeId) {
-    console.log(typeof value, value)
     const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
         errorMessage(nodeId);

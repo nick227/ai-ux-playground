@@ -7,11 +7,12 @@ import { dirname, join } from 'path';
 import { InsertToDBCommand } from '../query/index.js';
 
 class RenderSnapshotCommand extends Command {
-    execute(sessionId) {
+    execute(sessionId, html=null) {
         this.sessionId = sessionId;
-        const filePathHtml = this.getFileContent('../../../snapshots/page.html');
-        const filePathCss = this.getFileContent('../../../snapshots/page.css');
-        this.saveToDatabase(filePathHtml, filePathCss);
+        const fileHtmlContents = html ? html : this.getFileContent('../../../snapshots/page.html');
+        const fileCssContents = this.getFileContent('../../../snapshots/page.css');
+        
+        this.saveToDatabase(fileHtmlContents, fileCssContents);
     }
 
     saveToDatabase(html, css) {
@@ -21,7 +22,7 @@ class RenderSnapshotCommand extends Command {
             html: html,
             sessionId: this.sessionId
         }]
-        insertToDBCommand.execute(data, 'snapshots');
+        insertToDBCommand.execute(data, 'snapshots', this.sessionId);
     }
 
     getFileContent(path) {
