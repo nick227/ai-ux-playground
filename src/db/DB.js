@@ -113,7 +113,7 @@ export default class DB {
 
     }
 
-    upsert() {
+    upsert(query, updateDoc) {
         return new Promise((resolve, reject) => {
             this.queue.push(callback => {
                 this._upsert(query, updateDoc).then(resolve).catch(reject).finally(callback);
@@ -122,8 +122,34 @@ export default class DB {
     }
 
     async _upsert(query, updateDoc) {
-        const updateAsync = util.promisify(this.db.update.bind(this.db));
-        const result = await updateAsync(query, updateDoc, { upsert: true });
+        const schema = schemas[this.dbName];
+        // if (!this.validateSchema(updateDoc, schema)) {
+        //     throw new Error('Invalid schema');
+        // }
+
+        const result = await this.db.updateAsync(query, { $set: updateDoc }, { upsert: true });
+        return result;
+    }
+
+    replace(query, updateDoc) {
+        return new Promise((resolve, reject) => {
+            this.queue.push(callback => {
+                this._replace(query, updateDoc).then(resolve).catch(reject).finally(callback);
+            });
+        });
+    }
+
+    async _replace(query, updateDoc) {
+        const findAsync = util.promisify(this.db.findOne.bind(this.db));
+        const removeAsync = util.promisify(this.db.remove.bind(this.db));
+        const insertAsync = util.promisify(this.db.insert.bind(this.db));
+
+        const existingDoc = await findAsync(query);
+        if (existingDoc) {
+            await removeAsync(query);
+        }
+
+        const result = await insertAsync(updateDoc);
         return result;
     }
 
@@ -138,7 +164,7 @@ export default class DB {
     async _update(query, update) {
         const schema = schemas[this.dbName];
         //if (!this.validateSchema(update, schema)) {
-           // throw new Error('Invalid schema');
+        // throw new Error('Invalid schema');
         //}
 
         return await this.db.updateAsync(query, update, {});

@@ -3,11 +3,12 @@ import { RenderTemplateCommand } from './index.js';
 import Command from '../Command.js';
 
 export default class RenderTemplatePromptCommand extends Command {
-  constructor(templateType, params, file=null) {
+  constructor(templateType, params, files = null) {
+    console.log("templateType", templateType)
     super();
     this.templateType = templateType;
     this.params = params;
-    this.file = file;
+    this.files = files;
     this.prompt = null;
     this.tools = null;
     this.model = null;
@@ -56,26 +57,23 @@ export default class RenderTemplatePromptCommand extends Command {
   }
 
   checkImageAttachment() {
-if (this.file && this.messages) {
-  this.model = 'gpt-4-vision-preview';
-  const lastUserMessage = this.messages.find(message => message.role === 'user');
-  
-  const base64Image = Buffer.from(this.file.buffer).toString('base64');
+    if (this.files && this.files['image'] && this.files['image'][0] && this.messages) {
+      this.model = 'gpt-4-vision-preview';
+      const lastUserMessage = this.messages.find(message => message.role === 'user');
 
-  const newContentObject = [{
-    "type": "text",
-    "text": lastUserMessage.content
-  }, {
-    "type": "image_url",
-    "image_url": {
-      "url": `data:${this.file.mimetype};base64,${base64Image}`
+      const base64Image = Buffer.from(this.files['image'][0].buffer).toString('base64');
+
+      const newContentObject = [{
+        "type": "text",
+        "text": lastUserMessage.content
+      }, {
+        "type": "image_url",
+        "image_url": {
+          "url": `data:${this.files['image'][0].mimetype};base64,${base64Image}`
+        }
+      }];
+      lastUserMessage.content = newContentObject;
     }
-  }];
-
-  console.log("+-+-+-+-+-+-+-+--+-+")
-  console.log("newContentObject", newContentObject)
-  lastUserMessage.content = newContentObject;
-}
   }
 
   renderTemplates(params) {

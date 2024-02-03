@@ -7,9 +7,9 @@ const webSocketHandlers = {
         clearChatHistoryCommand.execute(ws.sessionId);
         ws.send('Cleared chat history');
     },
-    saveSnapShot: function (ws, html=null) {
+    saveSnapShot: async function (ws, html=null) {
         const renderSnapshotCommand = new RenderSnapshotCommand();
-        renderSnapshotCommand.execute(ws.sessionId, html);
+        await renderSnapshotCommand.execute(ws.sessionId, html);
         ws.send('Saved snapshot');
     }
 };

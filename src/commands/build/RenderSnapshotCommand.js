@@ -4,15 +4,22 @@ import nlp from 'compromise/one';
 import cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { InsertToDBCommand } from '../query/index.js';
+import { InsertToDBCommand, ReplaceDBCommand } from '../query/index.js';
+import DB from "../../db/DB.js";
 
 class RenderSnapshotCommand extends Command {
-    execute(sessionId, html=null) {
+    async execute(sessionId, html = null) {
         this.sessionId = sessionId;
         const fileHtmlContents = html ? html : this.getFileContent('../../../snapshots/page.html');
         const fileCssContents = this.getFileContent('../../../snapshots/page.css');
-        
-        this.saveToDatabase(fileHtmlContents, fileCssContents);
+
+        const db = new DB(`snapshots.db`);
+        const exists = sessionId && await db.exists('sessionId', sessionId);
+        if (exists) {
+            this.updateDatabase(fileHtmlContents, fileCssContents);
+        } else {
+            this.saveToDatabase(fileHtmlContents, fileCssContents);
+        }
     }
 
     saveToDatabase(html, css) {
@@ -23,6 +30,20 @@ class RenderSnapshotCommand extends Command {
             sessionId: this.sessionId
         }]
         insertToDBCommand.execute(data, 'snapshots', this.sessionId);
+    }
+
+    updateDatabase(html, css) {
+        //todo change to update
+        const replaceDBCommand = new ReplaceDBCommand();
+        const data = [{
+            css: css,
+            html: html,
+            sessionId: this.sessionId
+        }]
+        console.log('----------------------');
+        console.log('update: ', data);
+        const query = { sessionId: this.sessionId };
+        replaceDBCommand.execute(data, 'snapshots', query);
     }
 
     getFileContent(path) {
@@ -57,36 +78,36 @@ class RenderSnapshotCommand extends Command {
             }
             frequencyMap[token]++;
         });
-    
+
         let mostFrequentToken = Object.keys(frequencyMap).reduce((a, b) => frequencyMap[a] > frequencyMap[b] ? a : b);
-    
+
         return mostFrequentToken;
     }
 
-extractElements($) {
-    const sections = [];
+    extractElements($) {
+        const sections = [];
 
-    $('section').each((sectionIndex, sectionElement) => {
-        const section = [];
-        $(sectionElement).find('*').each((elementIndex, element) => {
-            const processedElement = this.processElement($, element, section);
-            if (processedElement) {
-                let filteredElement = {};
-                for (let [key, value] of Object.entries(processedElement)) {
-                    if (value !== '' && value !== undefined && !(Array.isArray(value) && value.length === 0) && !(typeof value === 'object' && Object.keys(value).length === 0)) {
-                        filteredElement[key] = value;
+        $('section').each((sectionIndex, sectionElement) => {
+            const section = [];
+            $(sectionElement).find('*').each((elementIndex, element) => {
+                const processedElement = this.processElement($, element, section);
+                if (processedElement) {
+                    let filteredElement = {};
+                    for (let [key, value] of Object.entries(processedElement)) {
+                        if (value !== '' && value !== undefined && !(Array.isArray(value) && value.length === 0) && !(typeof value === 'object' && Object.keys(value).length === 0)) {
+                            filteredElement[key] = value;
+                        }
+                    }
+                    if (Object.keys(filteredElement).length > 0) {
+                        section.push(filteredElement);
                     }
                 }
-                if (Object.keys(filteredElement).length > 0) {
-                    section.push(filteredElement);
-                }
-            }
+            });
+            sections.push(section);
         });
-        sections.push(section);
-    });
 
-    return sections;
-}
+        return sections;
+    }
 
     processElement($, element, elements) {
         const processedElement = {

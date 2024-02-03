@@ -14,9 +14,3 @@ ws.addEventListener('error', (error) => {
 ws.addEventListener('open', () => {
     ws.send('Hello from client');
 });
-
-listenForEvent('snapshot', async function (detail) {
-    const demo = document.querySelector("#demo").cloneNode(true);
-    const snapshot = await getSnapshot(demo);
-    ws.send(JSON.stringify(snapshot));
-});

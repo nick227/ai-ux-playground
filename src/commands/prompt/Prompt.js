@@ -2,21 +2,21 @@ import { RenderTemplatePromptCommand } from '../build/index.js';
 import Command from '../Command.js';
 
 export default class Prompt extends Command {
-  constructor(prompt, templateType = null, params = [], file=null) {
+  constructor(prompt, templateType = null, params = [], files=null) {
     super();
     this.messages = [];
     this.prompt = prompt;
     this.params = params;
-    this.file = file;
+    this.files = files;
     this.templateType = templateType;
-    this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params, this.file);
+    this.renderTemplatePromptCommand = new RenderTemplatePromptCommand(this.templateType, this.params, this.files);
     this.data_sources = null;
     this.sequence = null;
     this.model = null;
     this.use_embedding = null;
   }
 
-  async init(file=null) {
+  async init() {
     await this.renderTemplatePromptCommand.execute();
     this.prompt = this.prompt ? this.prompt : this.renderTemplatePromptCommand?.prompt;
     this.tools = this.renderTemplatePromptCommand?.tools;

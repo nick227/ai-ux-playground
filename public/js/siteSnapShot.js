@@ -146,7 +146,7 @@ const keepContent = [
     "menuitem",
     "menu"
 ];
-const maxContentCharacterCount = 5;
+const maxContentCharacterCount = 1500;
 
 function processNode(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
@@ -185,7 +185,6 @@ function truncateTextContent(node) {
     const shouldKeepContent = keepContent.includes(parentNodeName.toLowerCase());
 
     if (isTextNode && !shouldKeepContent) {
-        console.log('clearing', parentNodeName);
         node.nodeValue = '';
         return;
     }
@@ -262,16 +261,15 @@ function getStyles() {
     return combinedStyles;
 }
 
-function getHtml(bodyClone) {
-    removeExtraContent(bodyClone);
-    processNode(bodyClone);
-    return bodyClone.innerHTML.replace(/\s+/g, ' ');
+function getHtml(element) {
+    removeExtraContent(element);
+    processNode(element);
+    return element.innerHTML.replace(/\s+/g, ' ');
 }
 
 async function getSnapshot(element) {
     await setTimeout(() => { }, 4000);
     const html = getHtml(element);
-    console.log('got demo html:', html);
     return {
         html
     };

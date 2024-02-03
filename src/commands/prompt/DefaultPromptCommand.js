@@ -8,9 +8,9 @@ export default class DefaultPromptCommand extends Command {
     super();
     this.req = req;
     this.res = res;
-    this.file = req.file;
+    this.files = req.files;
     this.urlParams = req.body || req.query;
-    this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "main", { prompt: this.urlParams.prompt }, this.file);
+    this.prompt = new Prompt(this.urlParams.prompt, this.urlParams.template || "intent", { prompt: this.urlParams.prompt }, this.files);
     this.queryChatGptCommand = new QueryCommands.QueryChatGptCommand(this.req);
     this.insertToDBCommand = new QueryCommands.InsertToDBCommand();
     this.getChatHistoryCommand = new QueryCommands.GetChatHistoryCommand();
@@ -99,9 +99,10 @@ export default class DefaultPromptCommand extends Command {
 
   async handleSequence() {
     this.prompt.sequence = false;
+    this.prompt.messages = [];
     const intent = JSON.parse(this.results).intent;
     if (intent) {
-      this.prompt = new Prompt(this.prompt, intent, { prompt: this.prompt.prompt });
+      this.prompt = new Prompt(this.prompt.prompt, intent, { prompt: this.prompt.prompt });
       await this.prompt.init();
       await this.loadMessages();
       await this.loadResults();

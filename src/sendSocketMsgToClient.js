@@ -1,5 +1,5 @@
 export default function sendSocketMsgToClient(message, req) {
-    if(!req.app || !message){
+    if (!req.app || !message) {
         return;
     }
     const wss = req.app.get('wss');

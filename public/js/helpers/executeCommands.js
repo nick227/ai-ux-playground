@@ -27,9 +27,9 @@ const commdands = [{
 
 const commands = [{ "command": "edit", "value": "{ \"textContent\": \"What is up\" }", "nodeId": "node05" }];
 
-setTimeout(() => {
-    executeCommands(commands);
-}, 2345);
+//setTimeout(() => {
+    //executeCommands(commands);
+//}, 2345);
 
 function executeCommands(commands) {
     console.log("commands", commands);
@@ -60,19 +60,25 @@ function executeCommands(commands) {
                 style(command.css, command.nodeId);
                 break;
             default:
-                console.log(`Invalid `);
+                style(command.css, command.nodeId);
+                console.log(`Invalid command: ${command.command}`);
                 break;
         }
     });
 
     if (commands && commands.length > 0) {
-        dispatchEvent('snapshot');
+        setTimeout(() => {
+            dispatchEvent('updateRemoteSnapshot');
+        }, 100)
     }
 }
 
 function getTargetElement(nodeId) {
     const currentNode = document.querySelector("#demo");
     const targetElement = currentNode.querySelector(`[data-node-id="${nodeId}"]`);
+    if(!targetElement){
+        alert('no target element', nodeId);
+    }
     return targetElement;
 }
 
@@ -97,7 +103,6 @@ function edit(value, nodeId) {
     } else {
         parsedValue = value;
     }
-    console.log(typeof parsedValue, parsedValue)
     if (typeof parsedValue === 'object') {
         Object.keys(parsedValue).forEach(key => {
             targetElement[key] = parsedValue[key];

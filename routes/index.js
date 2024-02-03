@@ -23,7 +23,7 @@ const routes = collectionNames.reduce((acc, endpoint) => {
     type: 'post',
     path: '/api/chatgpt/:endpoint?',
     fn: chatGptControllers,
-    middleware: upload.single('image')
+    middleware: upload.fields([{ name: 'image', maxCount: 1 }, { name: 'voice', maxCount: 1 }])
   }
 ]);
 

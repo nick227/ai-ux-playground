@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         await setupChatBot();
         await setupPromptTemplateForm();
         await loadTemplateList();
+        setupDemo();
 
         document.querySelector('.loading-spinner').classList.toggle('hidden');
 

@@ -36,9 +36,8 @@ body > section {
     margin: 5vh 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: gray;
+    background-color: indigo;
     border-radius: var(--border-radius);
 }
 

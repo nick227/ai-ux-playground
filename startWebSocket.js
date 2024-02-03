@@ -11,7 +11,6 @@ export default function startWebSocket(httpServer, app, expressSession) {
   wss.on('connection', (ws, req) => {
     expressSession(req, {}, () => {
       ws.sessionId = req.session.id;
-      webSocketHandlers.saveSnapShot(ws);
     });
 
     ws.on('message', (message) => {

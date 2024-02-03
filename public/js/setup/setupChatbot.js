@@ -31,6 +31,7 @@ async function setupChatBot() {
                         {
                             type: 'select',
                             className: 'chatbot-picker',
+                            defaultValue: localStorage.getItem('currentChatBot') || 'intent',
                             options: promptTemplatesTypes,
                             event: {
                                 type: 'change',
@@ -209,8 +210,6 @@ async function setupChatBot() {
         if (output.children.length > 0) {
             prompt = 'Hello again.';
         }
-        const defaultOption = localStorage.getItem('currentChatBot') || 'main';
-        prompt += `You have ${defaultOption} personality`;
 
         const data = await requestChatGpt(prompt, 'welcome');
         handleChatbotResults(data);
@@ -590,7 +589,7 @@ async function setupChatBot() {
 
     function loadMessages() {
         const messages = JSON.parse(localStorage.getItem('messages')) || [];
-        const lastMessages = messages.slice(-10);
+        const lastMessages = messages.slice(-100);
         lastMessages.forEach(message => addToOutput(message.text, message.sender));
     }
 

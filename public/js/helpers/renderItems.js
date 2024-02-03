@@ -114,7 +114,7 @@ function createElementFromConfig(config) {
       element.addEventListener(config.event.type, config.event.handler);
   }
   if (config.options && config.type === 'select') {
-      let defaultOptionValue = getDefaultOptionValue();
+      let defaultOptionValue = config.defaultValue;
       for (let optionValue of config.options) {
           const optionElement = document.createElement('option');
           optionElement.value = optionValue;
@@ -124,10 +124,6 @@ function createElementFromConfig(config) {
           }
           element.appendChild(optionElement);
       }
-  }
-
-  function getDefaultOptionValue() {
-      return localStorage.getItem('defaultOptionValue') || 'main';
   }
   return element;
 }

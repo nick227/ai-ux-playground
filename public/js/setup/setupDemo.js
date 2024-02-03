@@ -1,5 +1,5 @@
-const demoHtml = `<body data-node-id="node01" style="height:100vh; width:100%; padding:0;margin:0;">
-    <section data-node-id="node02" style="background: brown; height: 55%; width: 80%; margin: 2% auto;padding: 2%;border-radius:15px;">
+const demoHtml = `<div data-node-id="body" style="overflow-y:scroll;height:100%; background: white; width:100%; padding:0;margin:0;">
+    <section class="section-row" data-node-id="node02" style="background: darkgray; height: 55%; width: 80%; margin: 2% auto;padding: 2%;border-radius:15px;">
         <div style="height: 49%; width: 100%; margin-bottom:1%; display: flex; justify-content: center; align-items: center;" data-node-id="node03">
             <div data-node-id="node04" style="width: 48%; padding: 0 1%;">
                 <h1 style="font-size: 30px; margin: 0;font-family:monospace;" data-node-id="node05">My Cool Website</h1>
@@ -22,12 +22,11 @@ const demoHtml = `<body data-node-id="node01" style="height:100vh; width:100%; p
             </div>
         </div>
     </section>
-</body>
+</div>
 `;
 
 function setupDemo(){
     const demoElm = document.querySelector('#demo');
     demoElm.innerHTML= demoHtml;
+    dispatchEvent('updateRemoteSnapshot');
 }
-
-setupDemo();
