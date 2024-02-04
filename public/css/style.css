@@ -14,10 +14,10 @@ body {
     background: whitesmoke;
 }
 
-body > section {
+body>section {
     min-width: 640px;
     width: 100%;
-    margin: 60px auto;
+    margin: 20px auto;
     padding-bottom: 120px;
     border-bottom: 1px solid darkgray;
     animation: fadeIn 2s;
@@ -41,9 +41,15 @@ body > section {
     border-radius: var(--border-radius);
 }
 
+#templates {
+    border-top: 5px solid purple;
+    padding-top: 40px;
+}
+
 input {
     padding: 4px 8px;
 }
+
 input,
 select,
 textarea {

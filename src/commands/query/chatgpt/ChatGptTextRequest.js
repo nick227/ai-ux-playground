@@ -20,6 +20,7 @@ class ChatGptTextRequest extends Command {
 
   async execute(prompt) {
     sendSocketMsgToClient("Request OpenAI: " + prompt.templateType, this.req);
+    let results = { response: null };
     const messages = prompt.messages || [{ role: 'user', content: prompt.prompt }];
     const tool_choice = {
       "type": "function",
@@ -50,23 +51,24 @@ class ChatGptTextRequest extends Command {
     try {
       const completion = await this.openai.chat.completions.create(options);
       const savePromptResult = new this.SavePromptResultCommand();
-      await savePromptResult.execute(completion, null, this.req.session.id);
       sendSocketMsgToClient(JSON.stringify(completion, null, 2), this.req);
-      const results = this.getResponse(completion);
+      results = this.getResponse(completion);
       console.log('success!', typeof results);
-      return results;
+
+      // save to database
+      await savePromptResult.execute(JSON.stringify(completion), prompt, this.req.session.id);
     } catch (error) {
       sendSocketMsgToClient("Error sending prompt to ChatGPT: " + error, this.req);
       console.error("Error sending prompt to ChatGPT:", error);
-      throw new Error('Failed to get response from OpenAI.');
     }
+    return results;
   }
 
   getResponse(completion) {
     if (!completion || !Array.isArray(completion.choices) || completion.choices.length === 0) {
-      throw new Error('Invalid completion object');
+      console.error("Invalid completion object:", completion);
+      return {};
     }
-    console.log("completion", completion);
 
     const choice = completion.choices[0];
     if (choice?.message?.tool_calls) {

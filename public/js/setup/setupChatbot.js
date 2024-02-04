@@ -18,8 +18,13 @@ async function setupChatBot() {
         children: [
             {
                 type: 'div',
-                className: 'chatbot-output',
-                children: []
+                className: 'chatbot-output-wrapper',
+                children: [
+                    {
+                        type: 'div',
+                        className: 'chatbot-output',
+                        children: []
+                    }]
             },
             {
                 type: 'div',
@@ -135,6 +140,14 @@ async function setupChatBot() {
                                 type: 'click',
                                 handler: handleChatbotClear
                             }]
+                        }, {
+                            type: 'div',
+                            style: 'float:right;',
+                            children: [{
+                                type: 'a',
+                                href: './activity',
+                                textContent: 'Activity'
+                            }]
                         }
                     ]
                 }]
@@ -173,6 +186,9 @@ async function setupChatBot() {
             fileElement.textContent = fileName;
             fileElement.addEventListener('click', () => handleFileDelete(fileName));
             uploadList.appendChild(fileElement);
+        } else {
+            const fileInput = document.querySelector('.chatbot-image-upload-input');
+            fileInput.value = '';
         }
     }
 
@@ -188,6 +204,7 @@ async function setupChatBot() {
         if (!confirm) {
             return;
         }
+        updateUploadList('');
         if (ws.readyState === WebSocket.OPEN) {
             const message = 'clearHistory';
             ws.send(message.toString());
@@ -197,6 +214,24 @@ async function setupChatBot() {
         } else {
             console.error('WebSocket is not open: readyState = ' + ws.readyState);
         }
+    }
+
+    async function handleChatbotSubmit(e) {
+        const prompt = getPromptValue();
+        if (!validatePrompt(prompt)) {
+            return;
+        }
+        addToOutput(prompt, 'You');
+        saveMessageToLocalStorage(prompt, 'You');
+
+        toggleLoading();
+        const templateTypeValue = document.querySelector('.chatbot-picker').value;
+        const imageUploadFile = getChatBotImageUploadFileName();
+        const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile);
+        updateUploadList('');
+        handleChatbotResults(data);
+        toggleLoading();
+        resetTextarea();
     }
 
     async function handleWelcomeMessage() {
@@ -242,23 +277,6 @@ async function setupChatBot() {
             e.preventDefault();
             handleChatbotSubmit(e);
         }
-    }
-
-    async function handleChatbotSubmit(e) {
-        const prompt = getPromptValue();
-        if (!validatePrompt(prompt)) {
-            return;
-        }
-        addToOutput(prompt, 'You');
-        saveMessageToLocalStorage(prompt, 'You');
-
-        toggleLoading();
-        const templateTypeValue = document.querySelector('.chatbot-picker').value;
-        const imageUploadFile = getChatBotImageUploadFileName();
-        const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile);
-        handleChatbotResults(data);
-        toggleLoading();
-        resetTextarea();
     }
 
     function handleChatbotResults(data) {

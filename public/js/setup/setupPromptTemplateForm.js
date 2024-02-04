@@ -25,7 +25,7 @@ async function setupPromptTemplateForm() {
     Object.assign(submit, { textContent: 'Submit', type: 'submit' });
     Object.assign(title, { textContent: 'Create prompt template', className: 'title' });
     Object.assign(desc, {
-        innerHTML: 'Type is the unique template identifier. Every template requires either a prompt string or messages array. Use ${} to reference url parameters in your values. Set data_sources as array to side load data. Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>',
+        innerHTML: 'Type is the unique template identifier. Every template requires either a prompt string or messages array. <BR>Use ${} to reference url parameters in your values. Set data_sources as array to side load data. <BR>Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <BR>${epoch} unless otherwise set will call current epoch time. <BR><small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>',
         className: 'description'
     });
     [title, desc, textarea, submit].forEach(el => form.appendChild(el));

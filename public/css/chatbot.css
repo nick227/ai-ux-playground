@@ -9,12 +9,20 @@
   height: 100%;
 }
 
-.chatbot-output {
+.chatbot-output-wrapper {
   position: relative;
   width: 98%;
   padding: 1%;
   height: 67vh;
   z-index: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chatbot-output {
+  width: 100%;
   overflow-y: auto;
 }
 

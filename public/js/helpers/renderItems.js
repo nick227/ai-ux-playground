@@ -105,6 +105,9 @@ function createElementFromConfig(config) {
   const element = createHtmlElement(config.type);
   element.className = config.className;
   if (config.textContent) element.textContent = config.textContent;
+  if (config.href) element.href = config.href;
+  if (config.style) element.style = config.style;
+  if (config.target) element.target = config.target;
   if (config.type === 'input') element.type = config.inputType;
   if (config.placeholder) element.placeholder = config.placeholder;
   if (config.id) element.id = config.id;

@@ -28,12 +28,19 @@ export default class RenderTemplatePromptCommand extends Command {
     }
     try {
       await this.loadTemplates();
+      this.addEpochTime();
       this.renderFunctions(this.tools, this.params);
       this.renderTemplates(this.params);
       this.checkImageAttachment();
     } catch (error) {
       console.error('Error initializing prompt template:', error);
       throw error;
+    }
+  }
+
+  addEpochTime() {
+    if (!this.params.epoch) {
+      this.params.epoch = Math.floor(Date.now() / 1000);
     }
   }
 
