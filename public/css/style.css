@@ -30,10 +30,11 @@ body>section {
 }
 
 #demo {
+    position: relative;
     width: 48%;
     height: 90vh;
     padding: 1vh;
-    margin: 5vh 0;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -204,5 +205,66 @@ textarea.error {
 
     100% {
         opacity: 1;
+    }
+}
+
+
+
+.demo-loading {
+    position: absolute;
+    width: 160px;
+    margin-top: 45%;
+    margin-left: -80px;
+    text-align: center;
+    color: white;
+}
+
+.demo-loading img {
+    margin-bottom: 40px;
+    animation: flicker 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;;
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}   
+
+.progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 20px;
+    position: relative;
+    width: 100%;
+    height: 10px;
+    margin-bottom: 10px;
+}
+
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #6c63ff;
+    border-radius: 20px;
+    width: 0;
+    animation: fillProgress 3s ease-in-out forwards;
+}
+
+@keyframes fillProgress {
+    0% {
+        width: 0;
+    }
+    50% {
+        width: 75%;
+    }
+    100% {
+        width: 100%;
     }
 }

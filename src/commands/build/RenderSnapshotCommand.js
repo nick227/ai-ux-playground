@@ -39,9 +39,7 @@ class RenderSnapshotCommand extends Command {
             css: css,
             html: html,
             sessionId: this.sessionId
-        }]
-        console.log('----------------------');
-        console.log('update: ', data);
+        }];
         const query = { sessionId: this.sessionId };
         replaceDBCommand.execute(data, 'snapshots', query);
     }

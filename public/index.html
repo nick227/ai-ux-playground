@@ -13,13 +13,20 @@
     <link rel="icon" type="image/png" href="./images/creature.png">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/chatbot.css">
+    <link rel="stylesheet" type="text/css" href="./css/demo.css">
     <link rel="stylesheet" type="text/css" href="./css/templates.css">
 </head>
 <body data-node-id="body">
     <img data-node-id=="loading-spinner" class="loading-spinner" src="./images/loading.gif" alt="loading">
     <div class="row chat-container">
         <section data-node-id="chatbot" id="chatbot"></section>
-        <section data-node-id="demo" id="demo"></section>
+        <section data-node-id="demo" id="demo">
+            <div class="demo-loading">
+                <img src="./images/logo.png" alt="loading">
+                <div class="progress-bar"></div>
+                <p class="message"></p>
+            </div>
+        </section>
     </div>
     <section data-node-id="templates" id="templates"></section>
 
@@ -47,6 +54,8 @@
     
     <!-- ws-->
     <script type="text/javascript" src="./js/ws/start.js"></script>
+    <script type="text/javascript" src="./js/ws/snapshot.js"></script>
+    <script type="text/javascript" src="./js/ws/voice.js"></script>
 
     <!-- start-->
     <script type="text/javascript" src="./js/main.js"></script>

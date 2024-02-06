@@ -1,11 +1,17 @@
-.subform {
+
+
+#demo > * {
+    animation: fadeIn 0.55s forwards;
+}
+
+#demo .subform {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.subform > section {
+#demo .subform > section {
     width: 80%;
     margin: 0 auto;
     background: gray;
@@ -13,14 +19,14 @@
     border-radius: 20px;
 }
 
-.row {
+#demo .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 0;
 }
 
-.col {
+#demo .col {
     display: flex;
     padding: 20px;
     flex-direction: column;

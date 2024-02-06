@@ -3,7 +3,6 @@ import { InsertToDBCommand } from '../index.js';
 
 export default class SavePromptResultCommand extends Command {
   async execute(completion, prompt = null, sessionId = null) {
-    console.log('SavePromptResultCommand', completion);
     completion = JSON.parse(completion);
     const response = this.getResponse(completion);
     const insertToDB = new InsertToDBCommand();

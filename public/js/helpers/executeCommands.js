@@ -113,7 +113,6 @@ function edit(value, nodeId) {
 }
 
 function style(value, nodeId) {
-    console.log('style', value, nodeId)
     const targetElement = getTargetElement(nodeId);
     if (!targetElement) {
         errorMessage(nodeId);

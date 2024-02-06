@@ -2,12 +2,17 @@
 document.addEventListener('DOMContentLoaded', async (event) => {
     try {
 
-        //setupPopupConsole();
-        
+        popup = setupPopupConsole();
+        setupVoice();
+        setupDemoPreLoader();
         await setupChatBot();
         await setupPromptTemplateForm();
         await loadTemplateList();
         setupDemo();
+
+        setTimeout(() => {
+            dispatchEvent('updateRemoteSnapshot');
+        }, 120);
 
         document.querySelector('.loading-spinner').classList.toggle('hidden');
 

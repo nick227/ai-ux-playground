@@ -5,17 +5,25 @@ import webSocketHandlers from './webSocketHandlers.js';
 
 export default function startWebSocket(httpServer, app, expressSession) {
   const wss = new WebSocket.Server({ server: httpServer });
+  const clientConnections = new Map();
 
   app.set('wss', wss);
+  app.set('clientConnections', clientConnections);
 
   wss.on('connection', (ws, req) => {
     expressSession(req, {}, () => {
-      ws.sessionId = req.session.id;
+      const sessionId = req.session.id;
+      ws.sessionId = sessionId;
+      clientConnections.set(sessionId, ws);
     });
 
     ws.on('message', (message) => {
       if (message.toString() === 'clearHistory') {
         webSocketHandlers.clearHistory(ws);
+        return;
+      }
+      if (message.toString() === 'Hello from client') {
+        ws.send('Hello from server!');
         return;
       }
       try {
@@ -24,7 +32,8 @@ export default function startWebSocket(httpServer, app, expressSession) {
           webSocketHandlers.saveSnapShot(ws, parsedMessage.html);
         }
       } catch (error) {
-        ws.send('Error parsing message');
+        console.log('Error parsing message', message, error);
+        ws.send('Error parsing message', error);
       }
     });
 
@@ -33,7 +42,7 @@ export default function startWebSocket(httpServer, app, expressSession) {
     });
 
     setTimeout(() => {
-      ws.send('Hello from server');
+      ws.send('Websocket started');
     }, 1000);
   });
 

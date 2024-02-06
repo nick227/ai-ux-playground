@@ -34,14 +34,19 @@ async function setupChatBot() {
                     className: 'chatbot-input-inner',
                     children: [
                         {
-                            type: 'select',
-                            className: 'chatbot-picker',
-                            defaultValue: localStorage.getItem('currentChatBot') || 'intent',
-                            options: promptTemplatesTypes,
-                            event: {
-                                type: 'change',
-                                handler: e => handleChangeChatBot(e.target.value)
-                            }
+                            type: 'div',
+                            className: 'row',
+                            children: [
+                                {
+                                    type: 'select',
+                                    className: 'chatbot-picker',
+                                    defaultValue: localStorage.getItem('currentChatBot') || 'main_new',
+                                    options: promptTemplatesTypes,
+                                    event: {
+                                        type: 'change',
+                                        handler: e => handleChangeChatBot(e.target.value)
+                                    }
+                                }]
                         },
                         {
                             type: 'textarea',
@@ -148,6 +153,18 @@ async function setupChatBot() {
                                 href: './activity',
                                 textContent: 'Activity'
                             }]
+                        }, {
+                            type: 'div',
+                            className: 'chatbot-voice-controls',
+                            children: [{
+                                type: 'button',
+                                className: 'chatbot-voice',
+                                textContent: 'Voice',
+                                event: {
+                                    type: 'click',
+                                    handler: handleChatbotVoice
+                                }
+                            }]
                         }
                     ]
                 }]
@@ -156,6 +173,23 @@ async function setupChatBot() {
     }
     ];
     //handlers
+    function getChatBotVoiceStatus() {
+        const isSaved = localStorage.getItem('voice');
+        return `chatbot-voice ${isSaved ? 'active' : ''}`;
+    }
+
+
+    function handleChatbotVoice() {
+        const element = document.querySelector('.chatbot-voice');
+        element.classList.toggle('active');
+        localStorage.setItem('voice', element.classList.contains('active'));
+    }
+
+    function isVoiceActive() {
+        const element = document.querySelector('.chatbot-voice');
+        return element.classList.contains('active');
+    }
+
     function handleChatbotUpload() {
         const uploadList = document.querySelector('.chatbot-upload-list');
         if (uploadList.children.length > 0) {
@@ -223,11 +257,11 @@ async function setupChatBot() {
         }
         addToOutput(prompt, 'You');
         saveMessageToLocalStorage(prompt, 'You');
-
         toggleLoading();
+        const voice = isVoiceActive();
         const templateTypeValue = document.querySelector('.chatbot-picker').value;
         const imageUploadFile = getChatBotImageUploadFileName();
-        const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile);
+        const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile, voice);
         updateUploadList('');
         handleChatbotResults(data);
         toggleLoading();
@@ -405,7 +439,7 @@ async function setupChatBot() {
 
     function resetUploadImage(fileInput) {
         fileInput.value = '';
-        const list = document.querySelector('.chatbot-data-source-list');
+        const list = document.querySelector('.chatbot-upload-list');
         list.innerHTML = '';
     }
 
@@ -625,6 +659,20 @@ async function setupChatBot() {
             addDataSource(dataSourceList, dataSources.length, dataSource, index);
         });
 
+        function addDataSource(dataSourceList, dataSourcesLen, dataSource, index) {
+            const element = dataSource.path ? createHtmlElement('a') : createHtmlElement('span');
+            if (dataSource.path) {
+                element.target = '_blank';
+                element.href = `/${dataSource.path}`;
+            }
+            element.style.fontSize = '0.8rem';
+            element.textContent = dataSource.name;
+            dataSourceList.appendChild(element);
+            if (index < dataSourcesLen - 1) {
+                dataSourceList.appendChild(document.createTextNode(' '));
+            }
+        }
+
     }
 
     function addToOutput(html, sender) {
@@ -632,23 +680,8 @@ async function setupChatBot() {
         addToChatOutput(messageElement);
     }
 
-    function addDataSource(dataSourceList, dataSourcesLen, dataSource, index) {
-        const element = dataSource.path ? createHtmlElement('a') : createHtmlElement('span');
-        if (dataSource.path) {
-            element.target = '_blank';
-            element.href = `/${dataSource.path}`;
-        }
-        element.style.fontSize = '0.8rem';
-        element.textContent = dataSource.name;
-        dataSourceList.appendChild(element);
-        if (index < dataSourcesLen - 1) {
-            dataSourceList.appendChild(document.createTextNode(' '));
-        }
-    }
-
     function handleChangeChatBot(value) {
         localStorage.setItem('currentChatBot', value);
-        handleWelcomeMessage();
         displayChatbotResponse({ commands: [{ command: `change to ${value}` }] });
     }
 

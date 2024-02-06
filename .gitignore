@@ -5,3 +5,5 @@ data/chatgptTransactions.db
 data/chatHistory.db
 data/snapshots.db
 llama/
+public/audio
+public/generate

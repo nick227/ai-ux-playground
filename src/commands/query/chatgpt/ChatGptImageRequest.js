@@ -5,8 +5,9 @@ import { SavePromptResultCommand } from '../index.js';
 dotenv.config();
 
 class ChatGptImageRequest extends Command {
-  constructor(openaiInstance) {
+  constructor(openaiInstance, req) {
     super();
+    this.req = req;
     this.openai = openaiInstance;
     this.dalleModel = process.env.DALLE_MODEL;
     this.SavePromptResultCommand = SavePromptResultCommand;
@@ -29,7 +30,7 @@ class ChatGptImageRequest extends Command {
     try {
       const completion = await this.openai.images.generate(options);
       const savePromptResult = new this.SavePromptResultCommand();
-      await savePromptResult.execute(prompt, completion);
+      await savePromptResult.execute(JSON.stringify(completion), prompt, this.req.session.id);
 
       return completion;
     } catch (error) {

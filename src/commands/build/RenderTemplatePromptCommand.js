@@ -4,7 +4,6 @@ import Command from '../Command.js';
 
 export default class RenderTemplatePromptCommand extends Command {
   constructor(templateType, params, files = null) {
-    console.log("templateType", templateType)
     super();
     this.templateType = templateType;
     this.params = params;

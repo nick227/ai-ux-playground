@@ -25,7 +25,41 @@ async function setupPromptTemplateForm() {
     Object.assign(submit, { textContent: 'Submit', type: 'submit' });
     Object.assign(title, { textContent: 'Create prompt template', className: 'title' });
     Object.assign(desc, {
-        innerHTML: 'Type is the unique template identifier. Every template requires either a prompt string or messages array. <BR>Use ${} to reference url parameters in your values. Set data_sources as array to side load data. <BR>Set sequence true to initiate a decision sequence. Define tool_choice and tools to control the chatgpt response format. <BR>${epoch} unless otherwise set will call current epoch time. <BR><small><a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></small>',
+        innerHTML: `
+        <section>
+        <h3>Type</h3>
+        <p>Required unique identifier for the template.</p>
+        </section>
+        <section>
+        <h3>Prompt</h3>
+        <p>Each template must include either a prompt (string) or messages (array).</p>
+        </section>
+        <section>
+            <h3>URL Parameters</h3>
+            <p>Utilize \${} syntax for incorporating URL parameters into your values.</p>
+        </section>
+        <section>
+            <h3>Data Sources</h3>
+            <p>Define data_sources as an array to side-load external data.</p>
+        </section>
+        <section>
+            <h3>Sequence</h3>
+            <p>Set sequence to true to initiate a template sequence.</p>
+        </section>
+        <section>
+            <h3>Response Format Control</h3>
+            <p>Manage the ChatGPT response format with tool_choice and tools.</p>
+        </section>
+        <section>
+            <h3>Epoch Time</h3>
+            <p>\${epoch} defaults to epoch time unless explicitly set.</p>
+        </section> 
+    <BR>
+    <small>
+        <a target="_blank" href="https://platform.openai.com/docs/guides/function-calling">
+            https://platform.openai.com/docs/guides/function-calling
+        </a>
+    </small>`,
         className: 'description'
     });
     [title, desc, textarea, submit].forEach(el => form.appendChild(el));

@@ -34,9 +34,9 @@ class ChatGptTextRequest extends Command {
       ...(prompt.tool_choice && { tool_choice: tool_choice })
     };
 
-    console.log('options:')
-    console.log(options);
-    console.log("========")
+    //console.log('options:')
+    //console.log(options);
+    //console.log("========")
 
     const totalChars = JSON.stringify(options).length;
     const estimatedInputTokens = Math.ceil(totalChars / 3.75);
@@ -53,7 +53,7 @@ class ChatGptTextRequest extends Command {
       const savePromptResult = new this.SavePromptResultCommand();
       sendSocketMsgToClient(JSON.stringify(completion, null, 2), this.req);
       results = this.getResponse(completion);
-      console.log('success!', typeof results);
+      console.log('success!');
 
       // save to database
       await savePromptResult.execute(JSON.stringify(completion), prompt, this.req.session.id);

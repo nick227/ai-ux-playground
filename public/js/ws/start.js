@@ -6,6 +6,7 @@ function createWebSocketUrl() {
 }
 
 const ws = new WebSocket(createWebSocketUrl());
+let popup = null;
 
 ws.addEventListener('error', (error) => {
     console.error('WebSocket Error:', error);

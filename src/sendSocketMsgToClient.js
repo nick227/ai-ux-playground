@@ -1,17 +1,24 @@
+import { Readable } from 'stream';
+
 export default function sendSocketMsgToClient(message, req) {
     if (!req.app || !message) {
         return;
     }
-    const wss = req.app.get('wss');
+
+    const clientConnections = req.app.get('clientConnections');
     const sessionId = req.session.id;
-    let clientSocket;
-    wss.clients.forEach((ws) => {
-        if (ws.id === sessionId) {
-            clientSocket = ws;
-        }
-    });
+    let clientSocket = clientConnections.get(sessionId);
 
     if (clientSocket) {
-        clientSocket.send(`Socket message: ${message}`);
+        if (typeof message === 'string') {
+            clientSocket.send(`Socket message: ${message}`);
+        } else if (message instanceof Readable) {
+            message.on('data', (chunk) => {
+                clientSocket.send(chunk, { binary: true });
+            });
+            message.on('end', () => {
+                clientSocket.send('streamEnd');
+            });
+        }
     }
 }

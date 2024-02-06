@@ -88,7 +88,6 @@ section#main > .message {
 }
 `;
 
-
 function setupPopupConsole() {
   const popup = addConsole();
 
@@ -100,12 +99,12 @@ function setupPopupConsole() {
     isProcessing = true;
     if (popup) {
       while (messageQueue.length > 0) {
-        const event = messageQueue.shift();
+        const message = messageQueue.shift();
         const popupBody = popup.document.body.querySelector('section#main');
         const newElement = popup.document.createElement('div');
         newElement.className = 'message';
         const pre = popup.document.createElement('pre');
-        pre.textContent = event.data;
+        pre.textContent = message; // Changed from event.data to message
         newElement.appendChild(pre);
 
         if (popupBody.firstChild) {
@@ -120,8 +119,10 @@ function setupPopupConsole() {
     isProcessing = false;
   }
 
-  ws.addEventListener('message', async (event) => {
-    messageQueue.push(event);
-    processQueue();
-  });
+  return {
+    push: function(message) {
+      messageQueue.push(message);
+      processQueue();
+    }
+  };
 }
