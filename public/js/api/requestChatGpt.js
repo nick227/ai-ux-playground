@@ -13,12 +13,19 @@ async function requestChatGpt(prompt, template=null, image=null, voice=false) {
     });
 
     if (!response.ok) {
-      console.log(response);
-      throw new Error(`HTTP error! status: ${response.status}`);
+      console.log('api error', response);
     }
 
-    const data = await response.json();
-    return data;
+    const clone = response.clone();
+
+    try {
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log('Response is not JSON, returning as string');
+      const data = await clone.text();
+      return data;
+    }
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
   }

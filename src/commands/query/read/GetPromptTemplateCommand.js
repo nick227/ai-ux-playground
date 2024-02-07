@@ -7,7 +7,6 @@ export default class GetPromptTemplateCommand extends Command {
       throw new Error('Missing required query parameters.');
     }
     const db = new DB('promptTemplates.db');
-    //db.compactDatafile();
     return await db.findOne({ type: type });
   }
 }

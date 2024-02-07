@@ -1,5 +1,7 @@
-.chat-container {
-  min-height: 122vh;
+#chatbot {
+  width: 50%;
+  max-height: 100%;
+  margin-top: 50px;
 }
 
 .chatbot {
@@ -29,7 +31,6 @@
 .chatbot-input {
   width: 98%;
   padding: 1%;
-  height: 52vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,10 +115,6 @@
   background: gray;
   padding: 0 20px;
   width: 125px;
-}
-
-.chatbot-voice {
-  text-decoration: line-through
 }
 
 .active {
@@ -264,7 +261,7 @@ h6.you {
 }
 
 .chatbot-data-source-container {
-  padding: 5px;
+  padding: 5px 0;
   border-radius: var(--border-radius);
 }
 

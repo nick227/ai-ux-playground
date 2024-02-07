@@ -1,4 +1,6 @@
-let showWelcomeMessage = false;
+const sampleQuestions = ["What makes a form succeed", "What sections should I have?", "Why can you do for me?", "Who is Lucy?"];
+
+let showWelcomeMessage = true;
 let isDragging = false;
 let isChatBotSetup = false;
 
@@ -110,18 +112,18 @@ async function setupChatBot() {
                             type: 'div',
                             className: 'chatbot-controls',
                             children: [{
-                                type: 'h6',
-                                textContent: 'Datasources'
-                            }, {
                                 type: 'div',
                                 className: 'chatbot-datasource-upload',
                                 children: [{
+                                    type: 'label',
+                                    textContent: 'Upload data source:',
+                                }, {
                                     type: 'input',
                                     inputType: 'file',
                                     id: 'data-source-file',
                                 }, {
-                                    type: 'a',
-                                    textContent: 'upload',
+                                    type: 'i',
+                                    className: 'fas fa-upload',
                                     event: {
                                         type: 'click',
                                         handler: handleUploadDataSource
@@ -137,33 +139,37 @@ async function setupChatBot() {
                                 }]
                             }]
                         }, {
-                            type: 'button',
-                            className: 'chatbot-clear',
-                            title: 'Deletes chat history',
-                            textContent: 'clear history',
-                            event: [{
-                                type: 'click',
-                                handler: handleChatbotClear
-                            }]
-                        }, {
                             type: 'div',
-                            style: 'float:right;',
-                            children: [{
-                                type: 'a',
-                                href: './activity',
-                                textContent: 'Activity'
-                            }]
-                        }, {
-                            type: 'div',
-                            className: 'chatbot-voice-controls',
+                            className: 'row',
+                            style: 'justify-content: flex-start;',
                             children: [{
                                 type: 'button',
                                 className: 'chatbot-voice',
-                                textContent: 'Voice',
+                                textContent: 'voice',
+                                style: 'margin-right: 10px;',
                                 event: {
                                     type: 'click',
                                     handler: handleChatbotVoice
                                 }
+                            }, {
+                                type: 'button',
+                                className: 'chatbot-clear',
+                                title: 'Deletes chat history',
+                                textContent: 'clear history',
+                                event: [{
+                                    type: 'click',
+                                    handler: handleChatbotClear
+                                }]
+                            }]
+                        }, {
+                            type: 'div',
+                            className: 'chatbot-voice-controls',
+                            style: 'margin-top: 20px;',
+                            children: [{
+                                type: 'a',
+                                href: './activity',
+                                target: '_blank',
+                                textContent: 'chat history'
                             }]
                         }
                     ]
@@ -239,6 +245,7 @@ async function setupChatBot() {
             return;
         }
         updateUploadList('');
+        window.scrollTo(0, 0);
         if (ws.readyState === WebSocket.OPEN) {
             const message = 'clearHistory';
             ws.send(message.toString());
@@ -262,25 +269,15 @@ async function setupChatBot() {
         const templateTypeValue = document.querySelector('.chatbot-picker').value;
         const imageUploadFile = getChatBotImageUploadFileName();
         const data = await requestChatGpt(prompt, templateTypeValue, imageUploadFile, voice);
+        console.log("Server Response: ", typeof data, data)
         updateUploadList('');
         handleChatbotResults(data);
         toggleLoading();
         resetTextarea();
     }
 
-    async function handleWelcomeMessage() {
-        if (!showWelcomeMessage) {
-            return;
-        }
-
-        const output = document.querySelector('.chatbot-output');
-        let prompt = 'Hello for the first time';
-
-        if (output.children.length > 0) {
-            prompt = 'Hello again.';
-        }
-
-        const data = await requestChatGpt(prompt, 'welcome');
+    async function triggerRequest(templatetype, prompt='') {
+        const data = await requestChatGpt(prompt, templatetype);
         handleChatbotResults(data);
     }
 
@@ -314,14 +311,17 @@ async function setupChatBot() {
     }
 
     function handleChatbotResults(data) {
+        //execute commands
         if (data.commands && Array.from(data.commands)) {
             executeCommands(data.commands);
         }
+        //handle images
         if (typeof data === 'object' && data.data && data.data[0].b64_json) {
             const img = generateImage(data);
             addToOutput(img, 'ChatGpt');
             saveMessageToLocalStorage('[image]', 'ChatGpt');
         } else {
+        //render chat
             displayChatbotResponse(data);
         }
     }
@@ -699,10 +699,13 @@ async function setupChatBot() {
         const target = document.querySelector('#chatbot');
         target.append(...chatbotElements);
         loadMessages();
-        handleWelcomeMessage();
         await loadDataSources();
         setupDispatchListener();
     }
 
     init();
+
+    return {
+        triggerRequest: triggerRequest
+    }
 }

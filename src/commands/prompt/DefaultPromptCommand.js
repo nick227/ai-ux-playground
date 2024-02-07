@@ -24,10 +24,12 @@ export default class DefaultPromptCommand extends Command {
 
   async execute() {
     try {
+      /*
       if (!this.urlParams.prompt) {
         this.res.status(400).json({ error: 'No prompt provided.' });
         return;
       }
+      */
 
       await this.initPrompt();
       await this.loadMessages();

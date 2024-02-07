@@ -39,6 +39,13 @@ body {
   padding: 20px;
   overflow: auto;
 }
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
 .message {
   margin: 10px 0;
   padding: 10px 0;
@@ -104,7 +111,7 @@ function setupPopupConsole() {
         const newElement = popup.document.createElement('div');
         newElement.className = 'message';
         const pre = popup.document.createElement('pre');
-        pre.textContent = message; // Changed from event.data to message
+        pre.textContent = message; 
         newElement.appendChild(pre);
 
         if (popupBody.firstChild) {
@@ -121,6 +128,12 @@ function setupPopupConsole() {
 
   return {
     push: function(message) {
+      try {
+        const json = JSON.parse(message);
+        message = JSON.stringify(json, null, 2);
+      } catch (error) {
+        //do nothing message is not json
+      }
       messageQueue.push(message);
       processQueue();
     }

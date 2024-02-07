@@ -1,3 +1,8 @@
+#templates {
+    margin-top: 40px;
+    padding: 2vh;
+}
+
 .prompt-template {
     position: relative;
     padding: 10px 20px;

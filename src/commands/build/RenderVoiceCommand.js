@@ -16,7 +16,7 @@ class RenderVoiceCommand extends Command {
         super();
         this.voiceId = "LcfcDJNUP1GQjkzn1xUU";
         this.responseKeys = ["response", "html"];
-        this.maxTextLength = 200;
+        this.maxTextLength = 50;
         this.filePath = path.join(__dirname, `../../../public/audio/`);
         this.fileName = `${Date.now()}.mp3`;
         this.elevenLabsClient = new ElevenLabs({
