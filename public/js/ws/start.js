@@ -2,7 +2,9 @@ function createWebSocketUrl() {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const hostname = window.location.hostname;
     const port = window.location.port ? `:${window.location.port}` : '';
-    return `${protocol}://${hostname}${port}`;
+    const path = `${protocol}://${hostname}${port}`;
+    console.log(path);
+    return path;
 }
 
 const ws = new WebSocket(createWebSocketUrl());

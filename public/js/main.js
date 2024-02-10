@@ -1,18 +1,15 @@
 
 document.addEventListener('DOMContentLoaded', async (event) => {
     try {
-        setupDemoPreLoader();
         popup = setupPopupConsole();
+        setupDemoPreLoader();
         setupVoice();
         const chatbot = await setupChatBot();
         await setupPromptTemplateForm();
         await loadTemplateList();
         setupDemo();
         dispatchEvent('updateRemoteSnapshot');
-
-        setTimeout(() => {
-            //chatbot.triggerRequest('welcome');
-        }, 120);
+        setupWelcome(chatbot);
 
         document.querySelector('.loading-spinner').classList.toggle('hidden');
 

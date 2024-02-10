@@ -1,4 +1,4 @@
-const demoHtml = `<div data-node-id="0" class="subform">
+const demoHtml = `<div data-node-id="subform" class="subform">
     <section data-node-id="1">
     <div class="row" data-node-id="2">
     <div class="col" style="width:50%;" data-node-id="3">
@@ -43,5 +43,5 @@ function setupDemoPreLoader() {
 function setupDemo() {
     const demoElm = document.querySelector('#demo');
     clearInterval(demoPreloaderInterval);
-    demoElm.innerHTML = "";
+    demoElm.innerHTML = demoHtml;
 }
