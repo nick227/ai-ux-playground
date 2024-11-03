@@ -25,7 +25,7 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "i": "^0.3.7",
-    "langchain": "^0.0.165",
+    "langchain": "^0.3.3",
     "llamaindex": "^0.0.46",
     "module-alias": "^2.2.3",
     "mongoose": "^7.6.1",
