@@ -1,10 +1,11 @@
 # ai-ux-playground
 
-This node server exposes: 
- - Generates, executes and saves dynamic ChatGPT prompt responses
- - Generates, executes and saves dynamic ChatGPT prompt images
- - Front-end demo code
- - CRUD operations on nedb collections
+This poc demonstrates: 
+ - Updating a front-end using AI in real-time
+ - Handles image and content generation
+ - Uses prompt templates
+ - Supports multi-request sequences
+ - Includes reusable data context
 
 <b>Setup</b>
 
